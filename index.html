@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<title>Eðli vísinda Úlfs</title>
+<meta name="description" content="Námsvefur í eðlis- og efnafræði — hlustaðu, lærðu eitt hugtak í einu og æfðu þig.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{
+  --paper:#F4F1E9; --card:#FFFFFF; --ink:#2A2C31; --muted:#6A6F77;
+  --line:#E4DECF; --line-soft:#EFEADD;
+  --brand:#2F6FB0; --brand-ink:#245A90;
+  --ok:#2E8B57; --ok-bg:#E7F3EC; --err:#CF4B4B; --err-bg:#FBEBEB;
+  --shadow:0 2px 4px rgba(40,44,60,.05), 0 8px 24px rgba(40,44,60,.06);
+  --radius:18px; --fs:1.06rem; --lh:1.75;
+  --font:'Lexend', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --maxw:660px;
+  /* litróf: kaflar 1–7 (rautt → fjólublátt, eins og kápan) */
+  --c0:#E0552E; --c1:#E0902E; --c2:#2E9E5B; --c3:#159A9C;
+  --c4:#2E74D6; --c5:#5B5CE6; --c6:#8A54D0;
+  --c7:#159A9C; --c8:#2E74D6; --c9:#5B5CE6; --c10:#8A54D0; --c11:#E0552E;
+}
+:root[data-font="dys"]{ --font:'Atkinson Hyperlegible', system-ui, sans-serif; }
+:root[data-size="1"]{ --fs:1.06rem; --lh:1.75; }
+:root[data-size="2"]{ --fs:1.22rem; --lh:1.8; }
+:root[data-size="3"]{ --fs:1.4rem;  --lh:1.85; }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1B1D22; --card:#24272E; --ink:#ECE7DC; --muted:#A2A7B0;
+    --line:#343841; --line-soft:#2C3038;
+    --brand:#4FBDB4; --brand-ink:#7CD6CE;
+    --ok:#5FC98A; --ok-bg:#1E3A2A; --err:#F08A8A; --err-bg:#3A2323;
+    --shadow:0 2px 4px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1B1D22; --card:#24272E; --ink:#ECE7DC; --muted:#A2A7B0;
+  --line:#343841; --line-soft:#2C3038;
+  --brand:#4FBDB4; --brand-ink:#7CD6CE;
+  --ok:#5FC98A; --ok-bg:#1E3A2A; --err:#F08A8A; --err-bg:#3A2323;
+  --shadow:0 2px 4px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font); background:var(--paper); color:var(--ink);
+  font-size:var(--fs); line-height:var(--lh); min-height:100vh; letter-spacing:.01em; word-spacing:.04em;}
+p{max-width:62ch;}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 18px 120px;}
+.topbar{position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line-soft);}
+.topbar .row{max-width:var(--maxw); margin:0 auto; padding:12px 18px; display:flex; align-items:center; gap:12px;}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.02rem; color:var(--ink); cursor:pointer; background:none; border:0; font-family:inherit;}
+.brand .bulb{font-size:1.35rem; line-height:1;}
+.spacer{flex:1;}
+.iconbtn{background:var(--card); border:1px solid var(--line); color:var(--ink); width:44px; height:40px; border-radius:12px; font-size:1rem; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-family:inherit;}
+.iconbtn:hover{border-color:var(--brand);}
+.iconbtn[aria-pressed="true"]{background:var(--brand); color:#fff; border-color:var(--brand);}
+.settings{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin-top:14px; box-shadow:var(--shadow);}
+.settings h3{font-size:.95rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px;}
+.setrow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
+.setrow:last-child{margin-bottom:0;}
+.setrow > span{min-width:92px; font-size:.95rem; color:var(--muted);}
+.seg{display:inline-flex; background:var(--line-soft); border-radius:12px; padding:4px; gap:4px;}
+.seg button{border:0; background:none; padding:8px 14px; border-radius:9px; cursor:pointer; font-family:inherit; font-size:.95rem; color:var(--ink); font-weight:500;}
+.seg button[aria-pressed="true"]{background:var(--card); box-shadow:0 1px 2px rgba(0,0,0,.12); color:var(--brand-ink); font-weight:700;}
+.hero{padding:26px 0 6px;}
+.eyebrow{font-size:.82rem; letter-spacing:.14em; text-transform:uppercase; color:var(--brand-ink); font-weight:700; margin-bottom:10px;}
+.hero h1{font-size:1.95rem; line-height:1.2; font-weight:700; text-wrap:balance; margin-bottom:12px;}
+.hero p.lead{color:var(--muted); font-size:1.05rem;}
+.overall{display:flex; align-items:center; gap:16px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; margin-top:18px; box-shadow:var(--shadow);}
+.ring{--p:0; width:64px; height:64px; flex:none; border-radius:50%; background:conic-gradient(var(--brand) calc(var(--p)*1%), var(--line-soft) 0); display:grid; place-items:center;}
+.ring i{width:48px; height:48px; border-radius:50%; background:var(--card); display:grid; place-items:center; font-style:normal; font-weight:700; font-size:.92rem;}
+.overall .txt b{display:block; font-size:1.02rem;}
+.overall .txt span{color:var(--muted); font-size:.92rem;}
+.part-head{margin:30px 2px 4px;}
+.part-head .pt{font-size:.98rem; font-weight:700; color:var(--brand-ink); line-height:1.3;}
+.part-head .pp{font-size:.8rem; color:var(--muted);}
+.part-head .rule{height:2px; background:var(--line); border-radius:2px; margin-top:8px;}
+.chapters{display:flex; flex-direction:column; gap:12px; margin-top:12px;}
+.chapter{display:flex; align-items:center; gap:14px; width:100%; text-align:left; background:var(--card); border:1px solid var(--line); border-left:6px solid var(--cc); border-radius:16px; padding:15px 16px; cursor:pointer; font-family:inherit; color:var(--ink); box-shadow:var(--shadow); transition:transform .12s ease, border-color .12s ease;}
+.chapter:hover{transform:translateY(-2px);}
+.chapter:focus-visible{outline:3px solid var(--cc); outline-offset:2px;}
+.chapter .num{width:44px; height:44px; flex:none; border-radius:12px; display:grid; place-items:center; background:color-mix(in srgb, var(--cc) 16%, transparent); font-size:1.4rem;}
+.chapter .body{flex:1; min-width:0;}
+.chapter .body .top{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.chapter .body b{display:block; font-size:1.06rem; font-weight:600; line-height:1.3;}
+.chapter .body .kick{font-size:.9rem; color:var(--muted);}
+.page-badge{font-size:.72rem; font-weight:700; color:var(--cc); background:color-mix(in srgb,var(--cc) 13%,transparent); border-radius:99px; padding:2px 9px; white-space:nowrap;}
+.chapter .prog{display:flex; align-items:center; gap:8px; margin-top:8px;}
+.chapter .bar{flex:1; height:7px; border-radius:99px; background:var(--line-soft); overflow:hidden;}
+.chapter .bar i{display:block; height:100%; width:0; background:var(--cc); border-radius:99px;}
+.chapter .pct{font-size:.8rem; color:var(--muted); min-width:34px; text-align:right; font-variant-numeric:tabular-nums;}
+.chapter .chev{color:var(--muted); font-size:1.3rem; flex:none;}
+.chap-head{padding:20px 0 6px;}
+.back{background:none; border:0; color:var(--muted); font-family:inherit; font-size:.95rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:6px 0;}
+.back:hover{color:var(--ink);}
+.chap-title{display:flex; align-items:center; gap:12px; margin-top:8px;}
+.chap-title .icn{width:52px; height:52px; flex:none; border-radius:14px; display:grid; place-items:center; background:color-mix(in srgb, var(--cc) 18%, transparent); font-size:1.7rem;}
+.chap-title h1{font-size:1.5rem; line-height:1.2; font-weight:700; text-wrap:balance;}
+.chap-title .kicker{font-size:.8rem; letter-spacing:.1em; text-transform:uppercase; color:var(--cc); font-weight:700; display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+.tabs{display:flex; gap:8px; margin-top:18px; position:sticky; top:63px; z-index:40; background:var(--paper); padding:8px 0;}
+.tabs button{flex:1; border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:12px; padding:11px 6px; font-family:inherit; font-size:.98rem; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px;}
+.tabs button small{font-weight:500; color:var(--muted); font-size:.75rem;}
+.tabs button[aria-selected="true"]{background:var(--cc); color:#fff; border-color:var(--cc);}
+.tabs button[aria-selected="true"] small{color:rgba(255,255,255,.85);}
+.panel{margin-top:18px;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow);}
+.card + .card{margin-top:14px;}
+.bigpic h2{font-size:1.15rem; margin-bottom:10px; color:var(--brand-ink);}
+.bigpic p{margin-bottom:12px;}
+.bigpic p:last-child{margin-bottom:0;}
+.listen{display:inline-flex; align-items:center; gap:9px; background:var(--cc); color:#fff; border:0; border-radius:99px; padding:11px 18px; font-family:inherit; font-size:1rem; font-weight:600; cursor:pointer; margin-top:4px;}
+.listen:hover{filter:brightness(.96);}
+.listen.playing{background:var(--err);}
+.listen svg{width:20px; height:20px; fill:currentColor;}
+.step-meta{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
+.step-meta .of{font-size:.9rem; color:var(--muted); font-weight:600; font-variant-numeric:tabular-nums;}
+.dots{display:flex; gap:6px; flex-wrap:wrap;}
+.dots i{width:9px; height:9px; border-radius:50%; background:var(--line);}
+.dots i.on{background:var(--cc);}
+.dots i.done{background:color-mix(in srgb, var(--cc) 55%, transparent);}
+.concept .term{font-size:1.28rem; font-weight:700; line-height:1.25; margin-bottom:12px;}
+.concept .def{margin-bottom:16px;}
+.example{background:color-mix(in srgb, var(--cc) 9%, transparent); border:1px solid color-mix(in srgb, var(--cc) 22%, transparent); border-radius:14px; padding:14px 16px;}
+.example .lbl{font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--cc); margin-bottom:6px; display:flex; align-items:center; gap:6px;}
+.nav-row{display:flex; gap:10px; margin-top:18px;}
+.btn{border:0; border-radius:14px; padding:14px 18px; font-family:inherit; font-size:1.02rem; font-weight:600; cursor:pointer;}
+.btn.primary{background:var(--cc); color:#fff; flex:1;}
+.btn.primary:hover{filter:brightness(.96);}
+.btn.ghost{background:var(--card); border:1px solid var(--line); color:var(--ink);}
+.btn.ghost:hover{border-color:var(--cc);}
+.btn:disabled{opacity:.4; cursor:default;}
+.btn.wide{width:100%;}
+.flash{perspective:1200px; margin-top:6px;}
+.flash-inner{position:relative; min-height:230px; transition:transform .5s; transform-style:preserve-3d;}
+.flash.flip .flash-inner{transform:rotateY(180deg);}
+.flash-face{position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius); border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:26px; gap:12px;}
+.flash-face .side{font-size:.76rem; letter-spacing:.1em; text-transform:uppercase; font-weight:700; color:var(--cc);}
+.flash-front .q{font-size:1.4rem; font-weight:700; line-height:1.25;}
+.flash-back{transform:rotateY(180deg);}
+.flash-back .a{font-size:1.06rem;}
+.flash .tip{position:absolute; bottom:14px; left:0; right:0; text-align:center; font-size:.82rem; color:var(--muted);}
+.flash-rate{display:flex; gap:10px; margin-top:14px;}
+.flash-rate button{flex:1; border-radius:14px; padding:14px; font-family:inherit; font-size:.98rem; font-weight:600; cursor:pointer; border:1px solid var(--line); background:var(--card); color:var(--ink);}
+.flash-rate .again{border-color:var(--err); color:var(--err);}
+.flash-rate .good{border-color:var(--ok); color:var(--ok);}
+.flash-count{text-align:center; color:var(--muted); font-size:.9rem; margin-bottom:10px;}
+.qcard .qnum{font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:8px;}
+.qcard .qtext{font-size:1.18rem; font-weight:600; line-height:1.35; margin-bottom:16px;}
+.opts{display:flex; flex-direction:column; gap:10px;}
+.opt{text-align:left; border:1.5px solid var(--line); background:var(--card); color:var(--ink); border-radius:14px; padding:14px 16px; font-family:inherit; font-size:1.02rem; cursor:pointer; display:flex; align-items:center; gap:12px; line-height:1.35;}
+.opt:hover:not(:disabled){border-color:var(--cc);}
+.opt .mk{width:26px; height:26px; flex:none; border-radius:50%; border:2px solid var(--line); display:grid; place-items:center; font-weight:700; font-size:.85rem; color:var(--muted);}
+.opt.correct{border-color:var(--ok); background:var(--ok-bg);}
+.opt.correct .mk{border-color:var(--ok); background:var(--ok); color:#fff;}
+.opt.wrong{border-color:var(--err); background:var(--err-bg);}
+.opt.wrong .mk{border-color:var(--err); background:var(--err); color:#fff;}
+.opt:disabled{cursor:default;}
+.why{margin-top:14px; border-radius:14px; padding:14px 16px; font-size:.98rem; line-height:1.55; background:var(--line-soft); border:1px solid var(--line);}
+.why b{color:var(--brand-ink);}
+.qprog{height:8px; border-radius:99px; background:var(--line-soft); overflow:hidden; margin-bottom:16px;}
+.qprog i{display:block; height:100%; background:var(--cc); border-radius:99px; transition:width .3s;}
+.result{text-align:center; padding:10px 0;}
+.result .score{font-size:3rem; font-weight:700; color:var(--cc); line-height:1;}
+.result .of{color:var(--muted); font-size:1rem; margin-top:4px;}
+.result h2{margin:14px 0 6px; font-size:1.3rem;}
+.result p{color:var(--muted); margin:0 auto 18px;}
+.badge{display:inline-flex; align-items:center; gap:8px; background:color-mix(in srgb,var(--cc) 14%,transparent); color:var(--cc); border-radius:99px; padding:8px 16px; font-weight:700; font-size:.95rem; margin-top:6px;}
+.audio-note{display:flex; gap:12px; align-items:flex-start; background:color-mix(in srgb,var(--brand) 8%,transparent); border:1px dashed color-mix(in srgb,var(--brand) 40%,transparent); border-radius:14px; padding:14px 16px; margin-top:14px;}
+.audio-note .ic{font-size:1.4rem; line-height:1;}
+.audio-note div b{color:var(--brand-ink);}
+.audio-note div span{color:var(--muted); font-size:.92rem;}
+footer.foot{text-align:center; color:var(--muted); font-size:.82rem; padding:30px 18px 10px; line-height:1.6;}
+.hidden{display:none !important;}
+@media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important;}}
+</style>
+
+<header class="topbar">
+  <div class="row">
+    <button class="brand" id="homeBtn"><span class="bulb">🔬</span> Eðli vísinda</button>
+    <span class="spacer"></span>
+    <button class="iconbtn" id="setBtn" aria-pressed="false" title="Stillingar">Aa</button>
+    <button class="iconbtn" id="themeBtn" title="Ljós / dökk">🌙</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="settings" class="settings hidden">
+    <h3>Stillingar fyrir lestur</h3>
+    <div class="setrow"><span>Leturstærð</span>
+      <div class="seg" id="sizeSeg">
+        <button data-size="1" aria-pressed="true">Venjuleg</button>
+        <button data-size="2" aria-pressed="false">Stór</button>
+        <button data-size="3" aria-pressed="false">Stærst</button>
+      </div></div>
+    <div class="setrow"><span>Letur</span>
+      <div class="seg" id="fontSeg">
+        <button data-font="lex" aria-pressed="true">Lexend</button>
+        <button data-font="dys" aria-pressed="false">Læsivænt</button>
+      </div></div>
+    <div class="setrow"><span>Upplestur</span>
+      <div class="seg" id="rateSeg">
+        <button data-rate="0.8" aria-pressed="false">Hægt</button>
+        <button data-rate="1" aria-pressed="true">Venjulegt</button>
+        <button data-rate="1.15" aria-pressed="false">Hratt</button>
+      </div></div>
+  </div>
+  <div id="view"></div>
+  <footer class="foot">
+    Búið til fyrir Úlf Þór · Fylgir bókinni „Eðli vísinda – Inngangur að eðlis- og efnafræði“ (Guðrún Ragnarsdóttir &amp; Kristinn A. Guðjónsson).<br>
+    Námsefnið er skrifað upp á nýtt í einföldu máli. Hlustaðu á bókina í HBS-appinu samhliða ef hún er til.
+  </footer>
+</main>
+
+<script>
+/* Stillingar fyrir þessa síðu */
+const SITE = {
+  key: "edliVisinda_v1",
+  eyebrow: "Eðlis- og efnafræði · Borgarholtsskóli",
+  lead: "Veldu kafla hér að neðan. Kaflarnir fylgja bókinni „Eðli vísinda“. Í hverjum kafla getur þú hlustað, lært eitt hugtak í einu, æft á spjöldum og tekið stutt próf."
+};
+
+/* NÁMSEFNI — fylgir bókinni „Eðli vísinda – Inngangur að eðlis- og efnafræði“.
+   Skrifað upp á nýtt í einföldu máli með dæmum. Blaðsíðutöl vísa í bókina. */
+const CHAPTERS = [
+{
+  id:"edli", num:"🔬", cc:"--c0", part:"", page:11,
+  title:"Eðli vísinda",
+  kicker:"1. kafli",
+  listen:"1. kafli — bls. 11–41.",
+  intro:[
+    "Þessi kafli útskýrir hvað vísindi eru og hvernig vísindamenn vinna.",
+    "Þú lærir líka um mælingar, einingar og hvernig á að skrifa tölur á réttan hátt.",
+    "Í lokin sérðu hvernig hugmyndin um atómið varð til — skref fyrir skref í gegnum söguna."
+  ],
+  concepts:[
+    {t:"Hvað eru vísindi?", d:"Vísindi eru kerfisbundin leið til að skilja heiminn: við gerum athuganir, setjum fram tilgátu, prófum hana með tilraunum og drögum ályktun. Það sem stenst prófun heldur; annað er lagfært.", ex:"Ef þú heldur að planta þurfi ljós til að vaxa, þá setur þú eina í glugga og aðra í myrkur og berð saman. Það er vísindaleg aðferð."},
+    {t:"Mælieiningar og SI-kerfið", d:"Til að mælingar séu sambærilegar nota vísindamenn sama einingakerfi um allan heim: SI-kerfið. Grunneiningar eru t.d. metri (lengd), kílógramm (massi) og sekúnda (tími).", ex:"Ef einn mælir í tommum og annar í sentímetrum verður ruglingur. Þess vegna nota allir metra í vísindum."},
+    {t:"Staðalform talna", d:"Mjög stórar eða smáar tölur eru skrifaðar sem tala margfölduð með tíu í veldi. Það gerir þær læsilegri og auðveldar reikning.", ex:"Ljóshraðinn er um 300.000.000 m/s. Í staðalformi er það 3 × 10⁸ m/s — miklu styttra."},
+    {t:"Eðlismassi", d:"Eðlismassi segir hversu þétt efni er: massi á rúmmálseiningu. Formúlan er eðlismassi = massi ÷ rúmmál (t.d. g/cm³). Efni með háan eðlismassa er þungt miðað við stærð.", ex:"Blýkúla og korkur geta verið jafn stórir, en blýið er miklu þyngra — það hefur hærri eðlismassa. Þess vegna sekkur blý en korkur flýtur."},
+    {t:"Mælinákvæmni og markverðir stafir", d:"Engin mæling er fullkomlega nákvæm. Markverðir stafir sýna hversu nákvæm talan er — við skrifum ekki fleiri stafi en mælingin réttlætir.", ex:"Ef reglustika sýnir millimetra geturðu sagt 12,4 cm — en ekki 12,437 cm, því stikan er ekki svo nákvæm."},
+    {t:"Vísindaleg líkön", d:"Líkan er einföld mynd af raunveruleikanum sem hjálpar okkur að skilja hann. Líkön eru ekki „sannleikurinn“ heldur besta skýringin í bili — og þau batna með nýrri þekkingu.", ex:"Atómlíkanið hefur breyst oft: fyrst lítil kúla, svo með rafeindir á brautum. Hvert líkan var betra en það á undan."},
+    {t:"Atómkenningin verður til", d:"Hugmyndin um að allt sé búið til úr örsmáum ódeilanlegum ögnum — atómum — kom frá Forn-Grikkjum og var síðar staðfest með tilraunum. Þetta er ein mikilvægasta hugmynd vísindanna.", ex:"Demókrítos stakk upp á atómum fyrir 2400 árum. Það var svo Dalton sem gerði úr því vísindalega kenningu löngu síðar."}
+  ],
+  quiz:[
+    {q:"Hvað einkennir vísindalega aðferð?", opts:["Að giska og vona","Að gera athuganir, setja fram tilgátu og prófa hana með tilraunum","Að trúa því sem manni finnst rétt","Að spyrja engra spurninga"], a:1, why:"Vísindi byggja á athugunum, tilgátum og tilraunum — það sem stenst prófun heldur."},
+    {q:"Af hverju nota vísindamenn SI-einingakerfið?", opts:["Það er íslenskt","Svo mælingar séu sambærilegar um allan heim","Til að flækja hlutina","Það er ódýrara"], a:1, why:"Sameiginlegar einingar (metri, kg, sekúnda) gera mælingar sambærilegar hvar sem er."},
+    {q:"Hvernig er 300.000.000 skrifað í staðalformi?", opts:["3 × 10⁸","30 × 10⁶","3 × 10⁶","300 × 10⁵"], a:0, why:"Staðalform er tala á milli 1 og 10 sinnum tíu í veldi: 3 × 10⁸."},
+    {q:"Af hverju flýtur korkur en blý sekkur?", opts:["Korkur er stærri","Blý hefur hærri eðlismassa en vatn, korkur lægri","Blý er kaldara","Það er tilviljun"], a:1, why:"Efni með lægri eðlismassa en vatn flýtur; blý hefur mun hærri eðlismassa og sekkur."},
+    {q:"Hvað er vísindalegt líkan?", opts:["Fullkominn sannleikur sem breytist aldrei","Einföld mynd af raunveruleikanum sem batnar með nýrri þekkingu","Ljósmynd","Tilraun"], a:1, why:"Líkan er besta skýringin í bili — það er endurbætt þegar ný þekking kemur fram."}
+  ]
+},
+{
+  id:"hreyfing", num:"🚀", cc:"--c1", part:"", page:42,
+  title:"Hraði, hröðun, kraftur og massi",
+  kicker:"2. kafli",
+  listen:"2. kafli — bls. 42–71.",
+  intro:[
+    "Þessi kafli fjallar um hreyfingu: hvað hraði og hröðun eru og hvað fær hluti til að hreyfast.",
+    "Þú lærir um krafta, massa og þyngd, og hvernig þeir tengjast með einföldum formúlum.",
+    "Í lokin er þrýstingur, flotgeta og af hverju hlutir fljóta eða sökkva."
+  ],
+  concepts:[
+    {t:"Hraði", d:"Hraði segir hversu langt hlutur fer á tíma. Formúlan er hraði = vegalengd ÷ tími, mælt í metrum á sekúndu (m/s).", ex:"Ef þú hleypur 100 metra á 10 sekúndum er hraðinn 100 ÷ 10 = 10 m/s."},
+    {t:"Hröðun", d:"Hröðun er breyting á hraða á tíma — hversu hratt hluturinn eykur (eða minnkar) hraðann. Mælt í m/s². Ef bíll fer hraðar og hraðar er hann að hraða.", ex:"Bíll sem fer úr 0 í 20 m/s á 4 sekúndum hraðar um 5 m/s á hverri sekúndu (5 m/s²)."},
+    {t:"Þyngdarhröðun", d:"Allir hlutir falla til jarðar með sömu hröðun ef ekkert stöðvar þá: um 9,8 m/s². Þess vegna falla steinn og fjöður jafn hratt í lofttæmi.", ex:"Þegar þú sleppir bolta eykst fallhraði hans um u.þ.b. 10 m/s á hverri sekúndu vegna þyngdarhröðunar."},
+    {t:"Kraftur, massi og þyngd", d:"Kraftur er tog eða ýting, mældur í njútonum (N). Massi (kg) er hversu mikið efni er í hlut. Þyngd er krafturinn sem þyngdaraflið togar með. Lögmálið: kraftur = massi × hröðun (F = m·a).", ex:"Sami hlutur hefur sama massa á jörðu og tungli, en minni þyngd á tunglinu því þyngdaraflið er veikara þar."},
+    {t:"Uppvegnir og óuppvegnir kraftar", d:"Ef kraftar á hlut jafnast út (uppvegnir) breytist hreyfingin ekki. Ef þeir jafnast ekki (óuppvegnir) fer hluturinn af stað, hraðar eða hægir á sér.", ex:"Bók á borði stendur kyrr því þyngd hennar og stuðningur borðsins jafnast út. Ýtirðu henni fastar en núningurinn, þá rennur hún."},
+    {t:"Vinna, orka og afl", d:"Vinna er unnin þegar kraftur færir hlut: vinna = kraftur × vegalengd. Orka er geta til að vinna vinnu. Afl er hversu hratt vinnan er unnin (vinna ÷ tími), mælt í vöttum (W).", ex:"Að lyfta þungum kassa upp stiga er vinna. Að gera það hratt krefst meira afls en að gera það hægt."},
+    {t:"Þrýstingur", d:"Þrýstingur er kraftur á flatareiningu: þrýstingur = kraftur ÷ flatarmál. Sami kraftur á lítinn flöt gefur mikinn þrýsting.", ex:"Þú sekkur síður í snjó á skíðum en í skóm — skíðin dreifa þyngdinni á stærri flöt og lækka þrýstinginn."},
+    {t:"Flotgeta og uppdrif", d:"Hlutur í vökva fær uppdrif upp á við sem er jafn þungt og vökvinn sem hann ýtir frá sér (lögmál Arkímedesar). Ef uppdrifið er meira en þyngdin flýtur hluturinn.", ex:"Risastórt stálskip flýtur af því lögun þess ryður frá miklum sjó — uppdrifið verður nógu stórt til að halda því á floti."}
+  ],
+  quiz:[
+    {q:"Hver er formúlan fyrir hraða?", opts:["Hraði = tími ÷ vegalengd","Hraði = vegalengd ÷ tími","Hraði = massi × tími","Hraði = kraftur ÷ massi"], a:1, why:"Hraði = vegalengd ÷ tími, mælt í m/s."},
+    {q:"Hvað er hröðun?", opts:["Sama og hraði","Breyting á hraða á tíma","Þyngd hlutar","Kraftur á hlut"], a:1, why:"Hröðun mælir hversu hratt hraðinn breytist, í m/s²."},
+    {q:"Hvað segir lögmálið F = m·a?", opts:["Kraftur = massi × hröðun","Kraftur = massi ÷ hröðun","Massi = kraftur × hröðun","Hröðun = kraftur × massi"], a:0, why:"Krafturinn sem þarf er massinn margfaldaður með hröðuninni (F = m·a)."},
+    {q:"Af hverju sekkur þú síður í snjó á skíðum en í skóm?", opts:["Skíðin eru létt","Skíðin dreifa þyngdinni á stærri flöt og lækka þrýstinginn","Snjórinn er harðari","Skór eru þyngri"], a:1, why:"Sami kraftur á stærri flöt gefur minni þrýsting — þess vegna sekkurðu síður."},
+    {q:"Af hverju flýtur stálskip þótt stál sé þungt?", opts:["Stál er létt í vatni","Lögun þess ryður frá miklum sjó og uppdrifið heldur því á floti","Það er fullt af lofti alls staðar","Sjórinn ýtir því upp af tilviljun"], a:1, why:"Uppdrif er jafn þungt og vökvinn sem hluturinn ryður frá. Lögun skipsins ryður nógu miklu til að fljóta (Arkímedes)."}
+  ]
+},
+{
+  id:"orka", num:"⚡", cc:"--c2", part:"", page:77,
+  title:"Orkubúskapur jarðar og orkuframleiðsla",
+  kicker:"3. kafli",
+  listen:"3. kafli — bls. 77–114.",
+  intro:[
+    "Þessi kafli fjallar um orkuna sem gerir jörðina byggilega og hvaðan hún kemur.",
+    "Þú lærir um rafsegulbylgjur — ljós, útvarpsbylgjur, röntgen — sem eru allar sama fyrirbærið.",
+    "Í lokin er hvernig við framleiðum orku: vatnsafl, jarðvarmi og fleira."
+  ],
+  concepts:[
+    {t:"Orkugjafar jarðar", d:"Langstærsti orkugjafi jarðar er sólin — hún knýr veður, vinda, hafstrauma og líf. Auk þess kemur orka innan úr jörðinni (jarðvarmi) og frá aðdráttarafli tungls og sólar (sjávarföll).", ex:"Vindur verður til þegar sólin hitar loft misjafnt. Öll þessi orka á rætur í sólinni."},
+    {t:"Orkujöfnuður jarðar", d:"Jörðin tekur við orku frá sólinni og gefur frá sér varma út í geiminn. Ef jafnvægi helst er hitinn stöðugur. Raskist það — t.d. vegna gróðurhúsalofttegunda — hlýnar jörðin.", ex:"Gróðurhúsalofttegundir halda meiri varma inni, líkt og teppi. Þá hitnar jörðin — það eru gróðurhúsaáhrif."},
+    {t:"Rafsegulbylgjur og rafsegulróf", d:"Ljós, útvarpsbylgjur, örbylgjur, innrautt, útfjólublátt, röntgen og gammageislar eru allt rafsegulbylgjur — sama fyrirbærið á ólíkri tíðni. Saman mynda þær rafsegulrófið.", ex:"Örbylgjuofn, útvarp og sólarljós nota öll rafsegulbylgjur — bara á mismunandi tíðni."},
+    {t:"Sýnilegt ljós og útfjólublátt", d:"Sýnilegt ljós er örlítill hluti rófsins sem augað nemur — regnbogans litir. Útfjólublátt (UV) er orkumeira og ósýnilegt; það veldur sólbruna og getur skaðað húð.", ex:"Sólarvörn ver húðina fyrir UV-geislum sólarinnar, sem við sjáum ekki en finnum þegar við brennum."},
+    {t:"Hamskiptaorka", d:"Orka sem fer í að breyta ham efnis — t.d. bræða ís eða sjóða vatn — án þess að hitinn hækki á meðan. Orkan fer í hamskiptin sjálf, ekki í að hækka hitastigið.", ex:"Þegar ís bráðnar helst hitinn 0°C þótt þú hitir hann áfram — orkan fer í að breyta ísnum í vatn."},
+    {t:"Hringrás vatns", d:"Vatn er sífellt á hreyfingu: það gufar upp af höfum, þéttist í ský, fellur sem úrkoma og rennur aftur til sjávar. Sólin knýr þessa hringrás.", ex:"Rigningin sem fellur á Íslandi gufaði áður upp af hafinu — sama vatnið fer hringinn aftur og aftur."},
+    {t:"Orkuframleiðsla", d:"Við breytum orku í rafmagn með ýmsum leiðum: vatnsafli (fallvatn snýr hverflum), jarðvarma (gufa úr jörðu) og víðar kjarnorku. Ísland notar nær eingöngu vatnsafl og jarðvarma.", ex:"Í vatnsaflsvirkjun fellur vatn niður og snýr hverfli sem framleiðir rafmagn — hrein, endurnýjanleg orka."}
+  ],
+  quiz:[
+    {q:"Hver er langstærsti orkugjafi jarðar?", opts:["Jarðvarmi","Sólin","Vindur","Sjávarföll"], a:1, why:"Sólin knýr veður, vinda, hafstrauma og líf — langstærsti orkugjafinn."},
+    {q:"Hvað eiga ljós, útvarpsbylgjur og röntgengeislar sameiginlegt?", opts:["Þau eru öll sýnileg","Þau eru öll rafsegulbylgjur á ólíkri tíðni","Þau eru öll hættuleg","Þau ferðast öll hægar en hljóð"], a:1, why:"Öll eru þau rafsegulbylgjur — sama fyrirbærið á mismunandi tíðni (rafsegulrófið)."},
+    {q:"Hvað eru gróðurhúsaáhrif?", opts:["Þegar jörðin kólnar","Þegar lofttegundir halda varma inni og jörðin hlýnar","Þegar sólin slokknar","Þegar það rignir meira"], a:1, why:"Gróðurhúsalofttegundir halda varma inni eins og teppi, sem hlýjar jörðina."},
+    {q:"Af hverju helst hitinn 0°C á meðan ís bráðnar?", opts:["Ísinn er bilaður","Orkan fer í hamskiptin (að breyta ís í vatn), ekki í að hækka hitann","Það er engin orka","Hitinn hækkar strax"], a:1, why:"Hamskiptaorkan fer í að breyta ham efnisins — hitinn hækkar ekki fyrr en allur ísinn er bráðnaður."},
+    {q:"Hvaða orkugjafa notar Ísland mest?", opts:["Kol og olíu","Vatnsafl og jarðvarma","Kjarnorku","Vindmyllur eingöngu"], a:1, why:"Ísland framleiðir rafmagn nær eingöngu með vatnsafli og jarðvarma — endurnýjanlegum orkugjöfum."}
+  ]
+},
+{
+  id:"efnin", num:"🧪", cc:"--c3", part:"", page:121,
+  title:"Efnin allt í kringum okkur",
+  kicker:"4. kafli",
+  listen:"4. kafli — bls. 121–139.",
+  intro:[
+    "Hér byrjar efnafræðin: allt í kringum okkur er búið til úr efni.",
+    "Þú lærir hvað atóm er, í hvaða ham efni geta verið, og muninn á frumefni, efnasambandi og efnablöndu.",
+    "Í lokin er hvernig hægt er að aðgreina efni sem hafa verið blönduð saman."
+  ],
+  concepts:[
+    {t:"Atómið", d:"Atóm er minnsta eining frumefnis. Það hefur kjarna í miðju (úr róteindum og nifteindum) og rafeindir sem sveima í kring. Allt efni er búið til úr atómum.", ex:"Eitt gramm af járni inniheldur ótrúlega mörg atóm — fleiri en stjörnur á himni."},
+    {t:"Hamir efna", d:"Efni geta verið í þremur algengum hömum: föstu (fast form), fljótandi (vökvi) og gasi. Hamurinn ræðst af hita og þrýstingi.", ex:"Vatn er sama efnið í öllum hömum: ís (fast), vatn (fljótandi) og gufa (gas)."},
+    {t:"Frumefni", d:"Frumefni er efni sem er búið til úr aðeins einni tegund atóma og ekki er hægt að brjóta niður í einfaldari efni. Súrefni, járn og gull eru frumefni.", ex:"Gullhringur er úr einni tegund atóma — gulli. Þú getur ekki brotið gull niður í eitthvað einfaldara efnafræðilega."},
+    {t:"Efnasamband", d:"Efnasamband myndast þegar tvö eða fleiri frumefni tengjast efnafræðilega í fastri hlutföllum. Nýja efnið hefur allt aðra eiginleika en frumefnin.", ex:"Vatn (H₂O) er efnasamband úr vetni og súrefni — tveimur lofttegundum sem saman mynda vökva."},
+    {t:"Efnablanda", d:"Í efnablöndu eru efni blönduð saman án þess að tengjast efnafræðilega. Þau halda eiginleikum sínum og oft má aðskilja þau aftur.", ex:"Saltvatn er efnablanda: saltið og vatnið blandast en tengjast ekki — þú getur gufað vatnið upp og fengið saltið aftur."},
+    {t:"Lausn og leysni", d:"Lausn myndast þegar eitt efni leysist upp í öðru (t.d. salt í vatni). Leysni segir hversu mikið af efni getur leyst upp — heitt vatn leysir oft meira en kalt.", ex:"Sykur leysist hraðar og meira upp í heitu tei en köldu — leysnin eykst með hita."},
+    {t:"Aðgreining efna", d:"Efni í blöndu má aðskilja með aðferðum eins og síun (fast frá vökva), uppgufun (leyst efni skilið eftir) og eimingu (skilja að vökva eftir suðumarki).", ex:"Eiming er notuð til að skilja að efni í hráolíu — hvert efni sýður við sitt hitastig og er safnað sér."}
+  ],
+  quiz:[
+    {q:"Hvað er í kjarna atóms?", opts:["Aðeins rafeindir","Róteindir og nifteindir","Aðeins nifteindir","Ekkert"], a:1, why:"Kjarninn er úr róteindum og nifteindum; rafeindir sveima í kring."},
+    {q:"Hvað er frumefni?", opts:["Efni úr mörgum tegundum atóma","Efni úr aðeins einni tegund atóma","Blanda af efnum","Alltaf gas"], a:1, why:"Frumefni er búið til úr einni tegund atóma og verður ekki brotið í einfaldara efni."},
+    {q:"Vatn (H₂O) er dæmi um…", opts:["Frumefni","Efnasamband","Efnablöndu","Atóm"], a:1, why:"Vatn er efnasamband: vetni og súrefni tengd efnafræðilega í föstum hlutföllum."},
+    {q:"Saltvatn er dæmi um…", opts:["Frumefni","Efnasamband","Efnablöndu","Hreint efni"], a:2, why:"Salt og vatn blandast en tengjast ekki efnafræðilega — það er efnablanda sem má aðskilja aftur."},
+    {q:"Hvaða aðferð skilur að efni eftir suðumarki þeirra?", opts:["Síun","Eiming","Frysting","Hræring"], a:1, why:"Eiming nýtir að efni sjóða við ólíkt hitastig — þau eru soðin og safnað hvert í sínu lagi."}
+  ]
+},
+{
+  id:"lotukerfi", num:"📋", cc:"--c4", part:"", page:143,
+  title:"Lotukerfið",
+  kicker:"5. kafli",
+  listen:"5. kafli — bls. 143–166.",
+  intro:[
+    "Lotukerfið er kort yfir öll frumefnin sem til eru — eitt mikilvægasta verkfæri efnafræðinnar.",
+    "Þú lærir hvernig frumefnum er raðað og hvað sætistala, massatala og samsætur þýða.",
+    "Þú lærir líka muninn á málmum, málmleysingjum og eðalgastegundum."
+  ],
+  concepts:[
+    {t:"Lotukerfið", d:"Tafla þar sem öllum frumefnum er raðað eftir vaxandi sætistölu. Efni með svipaða eiginleika lenda í sömu dálkum, svo taflan sýnir mynstur.", ex:"Þegar þú veist hvar frumefni er í lotukerfinu geturðu spáð fyrir um hvernig það hegðar sér."},
+    {t:"Sætistala", d:"Sætistala er fjöldi róteinda í kjarna atómsins. Hún skilgreinir frumefnið — öll atóm sama frumefnis hafa sömu sætistölu.", ex:"Kolefni hefur alltaf 6 róteindir (sætistala 6). Atóm með 8 róteindir er alltaf súrefni, aldrei kolefni."},
+    {t:"Massatala", d:"Massatala er samanlagður fjöldi róteinda og nifteinda í kjarnanum. Hún segir okkur nokkurn veginn hversu þungt atómið er.", ex:"Kolefnisatóm með 6 róteindir og 6 nifteindir hefur massatöluna 12."},
+    {t:"Samsætur", d:"Samsætur eru atóm sama frumefnis með ólíkan fjölda nifteinda. Þau hafa sömu sætistölu en ólíka massatölu.", ex:"Kolefni-12 og kolefni-14 eru samsætur: bæði með 6 róteindir, en ólíkan fjölda nifteinda. Kolefni-14 er notað til aldursgreiningar."},
+    {t:"Lotur, hvel og flokkar", d:"Raðirnar í töflunni heita lotur og dálkarnir flokkar. Rafeindir raðast í hvel utan um kjarnann; efni í sama flokki hafa svipaðan fjölda ytri rafeinda og því svipaða eiginleika.", ex:"Frumefni í sama flokki (dálki) hegða sér líkt — t.d. eru öll eðalgös í sama flokki."},
+    {t:"Málmar og málmleysingjar", d:"Flest frumefni eru málmar: þeir leiða rafmagn og hita, eru gljáandi og oft sveigjanlegir. Málmleysingjar gera það ekki og eru oft gas eða brothætt föst efni.", ex:"Kopar (málmur) leiðir rafmagn og er notaður í víra. Brennisteinn (málmleysingi) er gult, brothætt duft sem leiðir ekki."},
+    {t:"Eðalgastegundir", d:"Eðalgös (t.d. helín, neon, argon) hafa fullt ytra rafeindahvel. Þess vegna eru þau mjög óhvarfgjörn — þau tengjast varla öðrum efnum.", ex:"Helín í blöðrum tengist engu og brennur ekki. Neon glóir í ljósaskiltum án þess að hvarfast."}
+  ],
+  quiz:[
+    {q:"Eftir hverju er frumefnum raðað í lotukerfinu?", opts:["Eftir lit","Eftir vaxandi sætistölu","Eftir verði","Eftir stafrófsröð"], a:1, why:"Frumefnum er raðað eftir vaxandi sætistölu (fjölda róteinda)."},
+    {q:"Hvað er sætistala?", opts:["Fjöldi nifteinda","Fjöldi róteinda í kjarna","Fjöldi rafeinda á ytra hveli","Massi atómsins"], a:1, why:"Sætistala er fjöldi róteinda — hún skilgreinir hvaða frumefni atómið er."},
+    {q:"Hvað er massatala?", opts:["Fjöldi róteinda","Fjöldi róteinda og nifteinda samanlagt","Fjöldi rafeinda","Fjöldi frumefna"], a:1, why:"Massatalan er samanlagður fjöldi róteinda og nifteinda í kjarnanum."},
+    {q:"Kolefni-12 og kolefni-14 eru…", opts:["Ólík frumefni","Samsætur sama frumefnis með ólíkan fjölda nifteinda","Efnasambönd","Málmar"], a:1, why:"Samsætur hafa sömu sætistölu (sama frumefni) en ólíka massatölu vegna ólíks fjölda nifteinda."},
+    {q:"Af hverju eru eðalgös svona óhvarfgjörn?", opts:["Þau eru köld","Þau hafa fullt ytra rafeindahvel","Þau eru þung","Þau eru sjaldgæf"], a:1, why:"Fullt ytra hvel gerir eðalgös stöðug — þau þurfa ekki að tengjast öðrum efnum."}
+  ]
+},
+{
+  id:"efnatengi", num:"🔗", cc:"--c5", part:"", page:172,
+  title:"Efni, efnatengi og heiti einfaldra efna",
+  kicker:"6. kafli",
+  listen:"6. kafli — bls. 172–188.",
+  intro:[
+    "Þessi kafli útskýrir hvað heldur atómum saman — efnatengin.",
+    "Þú lærir muninn á jónatengjum, samgildum tengjum og málmtengjum.",
+    "Í lokin lærirðu hvernig einföld efni eru nefnd og skrifuð með formúlum."
+  ],
+  concepts:[
+    {t:"Efnatengi", d:"Efnatengi eru kraftarnir sem halda atómum saman í efnasamböndum. Atóm tengjast til að verða stöðugri — oftast til að fá fullt ytra rafeindahvel.", ex:"Vetni og súrefni tengjast og mynda vatn af því saman verða þau stöðugri en ein og sér."},
+    {t:"Jónir og jónatengi", d:"Jón er atóm sem hefur tapað eða fengið rafeindir og hefur því rafhleðslu (+ eða −). Jónatengi myndast þegar jákvæð og neikvæð jón dragast saman.", ex:"Í matarsalti (NaCl) gefur natríum eina rafeind til klórs. Natríum verður jákvætt, klór neikvætt, og þau dragast saman."},
+    {t:"Sameindir og samgild tengi", d:"Í samgildu tengi deila tvö atóm rafeindum í stað þess að gefa/taka. Þannig myndast sameindir — algengt hjá málmleysingjum.", ex:"Í súrefnisgasi (O₂) deila tvö súrefnisatóm rafeindum. Vatn (H₂O) er líka með samgild tengi."},
+    {t:"Veik efnatengi milli sameinda", d:"Auk sterku tengjanna innan sameinda eru veikari kraftar milli sameinda. Þeir ráða t.d. suðumarki og hvort efni er fast, fljótandi eða gas.", ex:"Veik tengi milli vatnssameinda halda vatninu fljótandi — án þeirra myndi það sjóða við miklu lægra hitastig."},
+    {t:"Málmar og málmtengi", d:"Í málmi „fljóta“ ytri rafeindir frjálsar milli atómanna. Þessar hreyfanlegu rafeindir gera það að verkum að málmar leiða rafmagn og hita vel.", ex:"Kopar leiðir rafmagn af því rafeindir geta hreyfst frjálst gegnum hann — þess vegna er hann í rafmagnsvírum."},
+    {t:"Heiti og formúlur einfaldra efna", d:"Efnaformúla sýnir hvaða atóm og hversu mörg eru í efni. Tölurnar (undirvísar) segja fjöldann. Efni eru nefnd eftir reglum úr frumefnunum sem mynda þau.", ex:"CO₂ þýðir eitt kolefnisatóm og tvö súrefnisatóm — koltvíoxíð. H₂O er tvö vetni og eitt súrefni — vatn."}
+  ],
+  quiz:[
+    {q:"Til hvers tengjast atóm saman?", opts:["Til að verða stærri","Til að verða stöðugri (oft fullt ytra hvel)","Til að verða þyngri","Af tilviljun"], a:1, why:"Atóm tengjast til að ná stöðugra ástandi, oftast með fullu ytra rafeindahveli."},
+    {q:"Hvað er jón?", opts:["Atóm án kjarna","Atóm sem hefur tapað eða fengið rafeindir og hefur hleðslu","Tvö atóm saman","Frumefni"], a:1, why:"Jón er atóm með rafhleðslu (+ eða −) af því það tapaði eða fékk rafeindir."},
+    {q:"Hvað gerist í samgildu tengi?", opts:["Atóm gefa rafeindir alveg","Atóm deila rafeindum","Atóm bráðna","Ekkert"], a:1, why:"Í samgildu tengi deila atóm rafeindum og mynda sameind (t.d. O₂, H₂O)."},
+    {q:"Af hverju leiða málmar rafmagn vel?", opts:["Þeir eru gljáandi","Ytri rafeindir geta hreyfst frjálst milli atómanna","Þeir eru þungir","Þeir eru kaldir"], a:1, why:"Hreyfanlegar rafeindir í málmtengi flytja rafstraum — þess vegna leiða málmar rafmagn."},
+    {q:"Hvað þýðir formúlan CO₂?", opts:["Tvö kolefni og eitt súrefni","Eitt kolefni og tvö súrefni","Eitt kolefni og eitt súrefni","Tvö kolefni og tvö súrefni"], a:1, why:"Undirvísirinn 2 á eftir O þýðir tvö súrefnisatóm; C er eitt kolefni — koltvíoxíð."}
+  ]
+},
+{
+  id:"efnahvorf", num:"💥", cc:"--c6", part:"", page:194,
+  title:"Efnahvörf",
+  kicker:"7. kafli",
+  listen:"7. kafli — bls. 194–211.",
+  intro:[
+    "Efnahvarf er þegar efni breytast í ný efni — grunnurinn í allri efnafræði.",
+    "Þú lærir hvernig efnahvörf eru skrifuð með efnajöfnum og af hverju þarf að stilla þær.",
+    "Í lokin eru helstu flokkar efnahvarfa: oxun-afoxun, sýru-basa og fellingarhvörf."
+  ],
+  concepts:[
+    {t:"Hvað er efnahvarf?", d:"Í efnahvarfi rofna efnatengi og ný myndast, þannig að upphaflegu efnin (hvarfefni) breytast í ný efni (myndefni). Nýju efnin hafa aðra eiginleika.", ex:"Þegar viður brennur hvarfast hann við súrefni og breytist í ösku, reyk og gas — allt önnur efni en viðurinn var."},
+    {t:"Efnajöfnur", d:"Efnajafna er stutt leið til að skrifa efnahvarf: hvarfefni vinstra megin, ör, og myndefni hægra megin. Hún sýnir hvað breytist í hvað.", ex:"Vetni + súrefni → vatn er skrifað 2H₂ + O₂ → 2H₂O."},
+    {t:"Að stilla efnajöfnu", d:"Í efnahvarfi hvorki myndast né eyðist efni — massinn varðveitist. Þess vegna verða jafn mörg atóm af hverri tegund beggja vegna örvarinnar. Að stilla jöfnu er að láta það ganga upp.", ex:"Vinstra megin verða að vera jafn mörg súrefnisatóm og hægra megin — annars er jafnan ekki rétt stillt."},
+    {t:"Oxun og afoxun", d:"Í oxunar-afoxunarhvörfum flytjast rafeindir milli efna. Það sem tapar rafeindum oxast; það sem tekur við þeim afoxast. Þetta gerist t.d. þegar málmur ryðgar eða rafhlaða vinnur.", ex:"Þegar járn ryðgar tapar það rafeindum til súrefnis — járnið oxast og myndar ryð."},
+    {t:"Sýru-basa hvörf", d:"Sýra og basi eru andstæður. Þegar þau hvarfast saman mynda þau salt og vatn og hlutleysa hvort annað. pH-kvarðinn mælir hversu súrt eða basískt efni er (0 súrt, 14 basískt, 7 hlutlaust).", ex:"Maga­sýra er súr. Sýrubindandi tafla er basísk og hlutleysir umframsýru — sýru-basa hvarf í maganum."},
+    {t:"Fellingarhvörf", d:"Þegar tvær tærar lausnir er blandað getur myndast fast efni sem botnfellur — það kallast felling eða botnfall. Það myndast af því nýja efnið leysist ekki upp.", ex:"Blandirðu réttum lausnum saman getur skyndilega myndast skýjað botnfall — fast efni sem fellur til botns."}
+  ],
+  quiz:[
+    {q:"Hvað gerist í efnahvarfi?", opts:["Ekkert breytist","Efnatengi rofna og ný myndast svo ný efni verða til","Efni hverfa alveg","Aðeins liturinn breytist"], a:1, why:"Í efnahvarfi breytast hvarfefni í ný myndefni með nýjum eiginleikum."},
+    {q:"Hvað sýnir efnajafna?", opts:["Verð efnanna","Hvarfefni breytast í myndefni","Hitastig","Massa jarðar"], a:1, why:"Efnajafna sýnir hvarfefnin vinstra megin og myndefnin hægra megin við örina."},
+    {q:"Af hverju þarf að stilla efnajöfnu?", opts:["Til að hún líti betur út","Því massinn varðveitist — jafn mörg atóm verða beggja vegna","Það þarf ekki að stilla hana","Til að spara pláss"], a:1, why:"Efni hvorki myndast né eyðist, svo fjöldi atóma af hverri tegund verður jafn beggja vegna."},
+    {q:"Hvað gerist í oxun?", opts:["Efni tekur við rafeindum","Efni tapar rafeindum","Efni bráðnar","Efni frýs"], a:1, why:"Í oxun tapar efni rafeindum; það sem tekur við þeim afoxast (t.d. járn sem ryðgar)."},
+    {q:"Hvað myndast þegar sýra og basi hvarfast saman?", opts:["Meiri sýra","Salt og vatn","Málmur","Gas eingöngu"], a:1, why:"Sýra og basi hlutleysa hvort annað og mynda salt og vatn."}
+  ]
+}
+];
+
+/* ---- Vistun ---- */
+const store = (()=>{
+  let mem = {}; const KEY = (typeof SITE!=='undefined' && SITE.key) ? SITE.key : "mfUlfur_v2";
+  function load(){ try{ const r = localStorage.getItem(KEY); return r?JSON.parse(r):{}; }catch(e){ return mem; } }
+  function save(o){ mem=o; try{ localStorage.setItem(KEY, JSON.stringify(o)); }catch(e){} }
+  return { load, save };
+})();
+let DATA = store.load();
+if(!DATA.ch) DATA.ch = {};
+if(!DATA.prefs) DATA.prefs = {};
+function saveData(){ store.save(DATA); }
+
+const root = document.documentElement;
+function applyPrefs(){
+  const p = DATA.prefs;
+  if(p.size) root.setAttribute("data-size", p.size);
+  if(p.font==="dys") root.setAttribute("data-font","dys"); else root.removeAttribute("data-font");
+  if(p.theme) root.setAttribute("data-theme", p.theme);
+  document.querySelectorAll('#sizeSeg button').forEach(b=>b.setAttribute("aria-pressed", b.dataset.size===(p.size||"1")));
+  document.querySelectorAll('#fontSeg button').forEach(b=>b.setAttribute("aria-pressed", b.dataset.font===(p.font||"lex")));
+  document.querySelectorAll('#rateSeg button').forEach(b=>b.setAttribute("aria-pressed", b.dataset.rate===String(p.rate||1)));
+  document.getElementById('themeBtn').textContent = (p.theme==="dark") ? "☀️" : "🌙";
+}
+document.getElementById('sizeSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return; DATA.prefs.size=b.dataset.size; saveData(); applyPrefs();});
+document.getElementById('fontSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return; DATA.prefs.font=b.dataset.font; saveData(); applyPrefs();});
+document.getElementById('rateSeg').addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return; DATA.prefs.rate=parseFloat(b.dataset.rate); saveData(); applyPrefs();});
+document.getElementById('setBtn').addEventListener('click',()=>{const s=document.getElementById('settings'); const open=s.classList.toggle('hidden'); document.getElementById('setBtn').setAttribute('aria-pressed', String(!open));});
+document.getElementById('themeBtn').addEventListener('click',()=>{
+  const cur = DATA.prefs.theme; let next;
+  if(cur==="dark") next="light"; else if(cur==="light") next="dark";
+  else next = matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark";
+  DATA.prefs.theme = next; saveData(); applyPrefs();
+});
+document.getElementById('homeBtn').addEventListener('click',()=>renderHome());
+
+/* ---- Upplestur ---- */
+let isVoice = null;
+function pickVoice(){ const vs = speechSynthesis.getVoices(); isVoice = vs.find(v=>/is[-_]?IS/i.test(v.lang)) || vs.find(v=>/icelandic/i.test(v.name)) || null; }
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+let curBtn = null;
+function stopSpeak(){ if('speechSynthesis' in window) speechSynthesis.cancel(); if(curBtn){ curBtn.classList.remove('playing'); curBtn.querySelector('.lt').textContent="Hlusta"; curBtn=null; } }
+function speak(text, btn){
+  if(!('speechSynthesis' in window)){ alert("Vafrinn styður ekki upplestur."); return; }
+  if(curBtn===btn){ stopSpeak(); return; }
+  stopSpeak();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "is-IS"; if(isVoice) u.voice = isVoice; u.rate = DATA.prefs.rate || 1;
+  u.onend = ()=>{ if(curBtn===btn) stopSpeak(); };
+  curBtn = btn; btn.classList.add('playing'); btn.querySelector('.lt').textContent="Stöðva";
+  speechSynthesis.speak(u);
+}
+function listenBtn(text){
+  const b = document.createElement('button'); b.className = "listen";
+  b.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg><span class="lt">Hlusta</span>';
+  b.addEventListener('click',()=>speak(text,b)); return b;
+}
+
+const view = document.getElementById('view');
+function chProg(ch){
+  const rec = DATA.ch[ch.id] || {}; const learned = (rec.learned||[]).length;
+  const total = ch.concepts.length; const quizDone = rec.quizBest!=null ? 1 : 0;
+  const pct = Math.round(((learned + quizDone) / (total + 1)) * 100);
+  return {pct, learned, total, quizBest:rec.quizBest};
+}
+function esc(s){ return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* ---- FORSÍÐA ---- */
+function renderHome(){
+  stopSpeak(); window.scrollTo(0,0);
+  let done=0; CHAPTERS.forEach(ch=>{ done+=chProg(ch).pct; });
+  const overall = Math.round(done/CHAPTERS.length);
+  const hour = new Date().getHours();
+  const greet = hour<11?"Góðan daginn":hour<18?"Góðan dag":"Gott kvöld";
+  const S = (typeof SITE!=='undefined') ? SITE : {};
+  let html = `
+  <section class="hero">
+    <div class="eyebrow">${esc(S.eyebrow||'Námsvefur')}</div>
+    <h1>${greet}, Úlfur! Hvað lærum við í dag?</h1>
+    <p class="lead">${esc(S.lead||'Veldu kafla hér að neðan. Kaflarnir fylgja bókinni. Í hverjum kafla getur þú hlustað, lært eitt hugtak í einu, æft á spjöldum og tekið stutt próf.')}</p>
+  </section>
+  <div class="overall">
+    <div class="ring" style="--p:${overall}"><i>${overall}%</i></div>
+    <div class="txt"><b>Heildarframvinda</b>
+      <span>${overall===0?"Þú ert að byrja — flott!":overall<100?"Haltu áfram, þú ert á góðri leið.":"Vá! Þú hefur klárað allt. 🎉"}</span>
+    </div>
+  </div>`;
+  let curPart = null;
+  html += `<div class="chapters">`;
+  CHAPTERS.forEach((ch,i)=>{
+    if(ch.part && ch.part !== curPart){
+      curPart = ch.part;
+      html += `</div><div class="part-head"><div class="pt">${esc(ch.part)}</div>${ch.partPage?`<div class="pp">frá bls. ${ch.partPage}</div>`:''}<div class="rule"></div></div><div class="chapters">`;
+    }
+    const p = chProg(ch);
+    html += `
+    <button class="chapter" style="--cc:${'var('+ch.cc+')'}" data-i="${i}">
+      <span class="num">${ch.num}</span>
+      <span class="body">
+        <span class="top"><span class="kick">${esc(ch.kicker)}</span><span class="page-badge">bls. ${ch.page}</span></span>
+        <b>${esc(ch.title)}</b>
+        <span class="prog"><span class="bar"><i style="width:${p.pct}%"></i></span><span class="pct">${p.pct}%</span></span>
+      </span>
+      <span class="chev">›</span>
+    </button>`;
+  });
+  html += `</div>`;
+  view.innerHTML = html;
+  view.querySelectorAll('.chapter').forEach(el=>el.addEventListener('click',()=>renderChapter(+el.dataset.i)));
+}
+
+/* ---- KAFLASÍÐA ---- */
+let cur = { i:0, tab:'lera', step:0 };
+function renderChapter(i, tab){
+  stopSpeak(); window.scrollTo(0,0);
+  cur.i = i; cur.tab = tab||'lera';
+  const ch = CHAPTERS[i]; const p = chProg(ch);
+  let html = `
+  <div class="chap-head" style="--cc:${'var('+ch.cc+')'}">
+    <button class="back" id="backBtn">‹ Til baka í kafla</button>
+    <div class="chap-title">
+      <span class="icn">${ch.num}</span>
+      <div>
+        <div class="kicker">${esc(ch.kicker)} <span class="page-badge">bls. ${ch.page}</span></div>
+        <h1>${esc(ch.title)}</h1>
+      </div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="lera" aria-selected="${cur.tab==='lera'}">Læra<small>${p.learned}/${p.total} hugtök</small></button>
+      <button role="tab" data-tab="spjold" aria-selected="${cur.tab==='spjold'}">Spjöld<small>æfing</small></button>
+      <button role="tab" data-tab="prof" aria-selected="${cur.tab==='prof'}">Próf<small>${p.quizBest!=null?('best '+p.quizBest+'/'+ch.quiz.length):ch.quiz.length+' sp.'}</small></button>
+    </div>
+  </div>
+  <div class="panel" id="panel"></div>`;
+  view.innerHTML = html;
+  document.getElementById('backBtn').addEventListener('click',renderHome);
+  view.querySelectorAll('[role=tab]').forEach(b=>b.addEventListener('click',()=>{ renderChapter(i, b.dataset.tab); }));
+  if(cur.tab==='lera') renderLearn();
+  else if(cur.tab==='spjold') renderFlash();
+  else renderQuiz();
+}
+
+function renderLearn(){
+  const ch = CHAPTERS[cur.i]; const panel = document.getElementById('panel');
+  const rec = DATA.ch[ch.id] || (DATA.ch[ch.id]={learned:[]});
+  cur.step = 0; draw();
+  function dots(activeIdx){ let h=""; for(let k=0;k<ch.concepts.length;k++){ let cls = k<activeIdx ? "done" : (k===activeIdx?"on":""); h+=`<i class="${cls}"></i>`; } return h; }
+  function draw(){
+    const s = cur.step;
+    if(s===0){
+      const introText = ch.title+". "+ch.intro.join(" ");
+      panel.innerHTML = `
+      <div class="card bigpic" style="--cc:${'var('+ch.cc+')'}">
+        <h2>Stóra myndin</h2>
+        ${ch.intro.map(p=>`<p>${esc(p)}</p>`).join("")}
+        <div id="listenSlot" style="margin-top:6px"></div>
+        <div class="audio-note"><span class="ic">🎧</span><div><b>Hlustaðu líka á bókina</b><br><span>${esc(ch.listen)}</span></div></div>
+      </div>
+      <div class="step-meta" style="--cc:${'var('+ch.cc+')'}"><span class="of">Yfirlit</span><span class="dots">${dots(-1)}</span></div>
+      <div class="nav-row"><button class="btn primary wide" style="--cc:${'var('+ch.cc+')'}" id="startL">Byrja á hugtökunum ›</button></div>`;
+      document.getElementById('listenSlot').appendChild(listenBtn(introText));
+      document.getElementById('startL').addEventListener('click',()=>{cur.step=1; draw(); window.scrollTo(0,0);});
+    } else {
+      const ci = s-1; const c = ch.concepts[ci];
+      if(!rec.learned.includes(ci)){ rec.learned.push(ci); saveData(); }
+      const speakText = c.t+". "+c.d+" Dæmi: "+c.ex;
+      panel.innerHTML = `
+      <div class="card concept" style="--cc:${'var('+ch.cc+')'}">
+        <div class="term">${esc(c.t)}</div>
+        <p class="def">${esc(c.d)}</p>
+        <div class="example"><div class="lbl">💬 Dæmi úr daglegu lífi</div><div>${esc(c.ex)}</div></div>
+        <div id="listenSlot" style="margin-top:16px"></div>
+      </div>
+      <div class="step-meta" style="--cc:${'var('+ch.cc+')'}"><span class="of">Hugtak ${ci+1} af ${ch.concepts.length}</span><span class="dots">${dots(ci)}</span></div>
+      <div class="nav-row">
+        <button class="btn ghost" id="prevL">‹ Til baka</button>
+        ${ ci+1 < ch.concepts.length ? `<button class="btn primary" style="--cc:${'var('+ch.cc+')'}" id="nextL">Næsta hugtak ›</button>` : `<button class="btn primary" style="--cc:${'var('+ch.cc+')'}" id="toQuiz">Ég er tilbúinn í próf ›</button>` }
+      </div>`;
+      document.getElementById('listenSlot').appendChild(listenBtn(speakText));
+      document.getElementById('prevL').addEventListener('click',()=>{ stopSpeak(); cur.step--; draw(); window.scrollTo(0,0);});
+      const nx=document.getElementById('nextL'); if(nx) nx.addEventListener('click',()=>{ stopSpeak(); cur.step++; draw(); window.scrollTo(0,0);});
+      const tq=document.getElementById('toQuiz'); if(tq) tq.addEventListener('click',()=>{ stopSpeak(); renderChapter(cur.i,'prof'); });
+      const tabBtn = document.querySelector('[data-tab="lera"] small'); if(tabBtn) tabBtn.textContent = `${rec.learned.length}/${ch.concepts.length} hugtök`;
+    }
+  }
+}
+
+function renderFlash(){
+  const ch = CHAPTERS[cur.i]; const panel = document.getElementById('panel');
+  let order = ch.concepts.map((c,idx)=>idx); let pos = 0; draw();
+  function draw(){
+    if(pos >= order.length){
+      panel.innerHTML = `<div class="card result" style="--cc:${'var('+ch.cc+')'}"><div style="font-size:2.4rem">🎉</div><h2>Vel gert!</h2><p>Þú fórst í gegnum öll ${ch.concepts.length} spjöldin.</p><div class="nav-row"><button class="btn ghost" id="again">Æfa aftur</button><button class="btn primary" style="--cc:${'var('+ch.cc+')'}" id="toQuiz">Taka próf ›</button></div></div>`;
+      document.getElementById('again').addEventListener('click',renderFlash);
+      document.getElementById('toQuiz').addEventListener('click',()=>renderChapter(cur.i,'prof'));
+      return;
+    }
+    const idx = order[pos]; const c = ch.concepts[idx];
+    panel.innerHTML = `
+    <div class="flash-count">Spjald ${pos+1} af ${order.length}</div>
+    <div class="flash" id="flash" style="--cc:${'var('+ch.cc+')'}"><div class="flash-inner">
+      <div class="flash-face flash-front"><div class="side">Hugtak</div><div class="q">${esc(c.t)}</div><div class="tip">Ýttu á spjaldið til að sjá skýringu</div></div>
+      <div class="flash-face flash-back"><div class="side">Skýring</div><div class="a">${esc(c.d)}</div></div>
+    </div></div>
+    <div id="rateSlot"></div>`;
+    const flash = document.getElementById('flash'); let flipped=false;
+    flash.addEventListener('click',()=>{ flipped=!flipped; flash.classList.toggle('flip',flipped); if(flipped) showRate(); });
+    function showRate(){
+      if(document.getElementById('rateRow')) return;
+      const slot=document.getElementById('rateSlot');
+      slot.innerHTML = `<div class="flash-rate" id="rateRow"><button class="again">Æfa aftur síðar</button><button class="good">Ég kann þetta ✓</button></div>`;
+      slot.querySelector('.again').addEventListener('click',()=>{ order.push(idx); next(); });
+      slot.querySelector('.good').addEventListener('click',next);
+    }
+    function next(){ pos++; draw(); window.scrollTo(0,0); }
+  }
+}
+
+function renderQuiz(){
+  const ch = CHAPTERS[cur.i]; const panel = document.getElementById('panel');
+  let q = {qi:0, answered:false, score:0}; drawQ();
+  function drawQ(){
+    const question = ch.quiz[q.qi]; const n = ch.quiz.length; const prog = Math.round((q.qi)/n*100);
+    panel.innerHTML = `
+    <div class="qprog" style="--cc:${'var('+ch.cc+')'}"><i style="width:${prog}%"></i></div>
+    <div class="card qcard" style="--cc:${'var('+ch.cc+')'}">
+      <div class="qnum">Spurning ${q.qi+1} af ${n}</div>
+      <div class="qtext">${esc(question.q)}</div>
+      <div class="opts" id="opts">${question.opts.map((o,k)=>`<button class="opt" data-k="${k}"><span class="mk">${String.fromCharCode(65+k)}</span><span>${esc(o)}</span></button>`).join("")}</div>
+      <div id="whySlot"></div><div id="nextSlot"></div>
+    </div>`;
+    const opts = panel.querySelectorAll('.opt');
+    opts.forEach(b=>b.addEventListener('click',()=>{
+      if(q.answered) return; q.answered=true; const k=+b.dataset.k;
+      opts.forEach(x=>x.disabled=true); opts[question.a].classList.add('correct');
+      if(k===question.a){ q.score++; } else { b.classList.add('wrong'); }
+      document.getElementById('whySlot').innerHTML = `<div class="why"><b>${k===question.a?"Rétt! ":"Ekki alveg. "}</b>${esc(question.why)}</div>`;
+      const last = q.qi===n-1;
+      document.getElementById('nextSlot').innerHTML = `<div class="nav-row"><button class="btn primary wide" style="--cc:${'var('+ch.cc+')'}" id="qn">${last?"Sjá niðurstöður ›":"Næsta spurning ›"}</button></div>`;
+      document.getElementById('qn').addEventListener('click',()=>{ if(last) showResult(); else { q.qi++; q.answered=false; drawQ(); window.scrollTo(0,0);} });
+    }));
+  }
+  function showResult(){
+    const n = ch.quiz.length, s = q.score;
+    const rec = DATA.ch[ch.id] || (DATA.ch[ch.id]={learned:[]});
+    rec.quizBest = Math.max(rec.quizBest||0, s); saveData();
+    const pctScore = Math.round(s/n*100); let msg, badge;
+    if(pctScore===100){ msg="Fullkomið! Þú kannt þennan kafla."; badge="🌟 Meistari"; }
+    else if(pctScore>=70){ msg="Flott! Þú ert með þetta að mestu."; badge="👍 Vel gert"; }
+    else if(pctScore>=40){ msg="Góð byrjun. Farðu aftur yfir hugtökin og reyndu svo aftur."; badge="💪 Áfram"; }
+    else { msg="Engar áhyggjur — þetta kemur. Hlustaðu og lestu hugtökin aftur."; badge="🌱 Æfing"; }
+    panel.innerHTML = `
+    <div class="card result" style="--cc:${'var('+ch.cc+')'}">
+      <div class="score">${s}<span style="font-size:1.4rem;color:var(--muted)">/${n}</span></div>
+      <div class="of">rétt svör</div>
+      <div class="badge" style="--cc:${'var('+ch.cc+')'}">${badge}</div>
+      <h2>${msg}</h2>
+      <div class="nav-row"><button class="btn ghost" id="retry">Reyna aftur</button><button class="btn primary" style="--cc:${'var('+ch.cc+')'}" id="review">Rifja upp hugtök</button></div>
+      <div class="nav-row" style="margin-top:10px"><button class="btn ghost wide" id="homeR">Aftur á forsíðu</button></div>
+    </div>`;
+    document.getElementById('retry').addEventListener('click',renderQuiz);
+    document.getElementById('review').addEventListener('click',()=>renderChapter(cur.i,'lera'));
+    document.getElementById('homeR').addEventListener('click',renderHome);
+  }
+}
+
+applyPrefs();
+renderHome();
+</script>
+
+</html>
