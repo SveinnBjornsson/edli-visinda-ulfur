@@ -173,6 +173,30 @@ p{max-width:62ch;}
 .audio-note div span{color:var(--muted); font-size:.92rem;}
 footer.foot{text-align:center; color:var(--muted); font-size:.82rem; padding:30px 18px 10px; line-height:1.6;}
 .hidden{display:none !important;}
+/* formúlureitur */
+.formula{margin:0 0 16px; background:color-mix(in srgb,var(--cc) 8%,transparent);
+  border:1px solid color-mix(in srgb,var(--cc) 30%,transparent); border-left:5px solid var(--cc);
+  border-radius:14px; padding:14px 16px;}
+.formula .flbl{font-size:.72rem; letter-spacing:.09em; text-transform:uppercase; font-weight:700;
+  color:var(--cc); margin-bottom:6px;}
+.formula .feq{font-family:'Lexend',system-ui,sans-serif; font-size:1.18rem; font-weight:600;
+  line-height:1.5; letter-spacing:.01em;}
+:root[data-font="dys"] .formula .feq{font-family:'Atkinson Hyperlegible',sans-serif;}
+.formula .feq sub{font-size:.72em;}
+/* skýringarmynd */
+.figure{margin:0 0 16px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+  padding:14px; text-align:center;}
+.figure svg{max-width:100%; height:auto; display:block; margin:0 auto;}
+.figure figcaption{margin-top:10px; font-size:.86rem; color:var(--muted); line-height:1.45;}
+/* teikni-litaklasar (nýta --cc af hugtakaspjaldinu) */
+.figure .acc{fill:var(--cc);} .figure .acc-s{stroke:var(--cc);}
+.figure .softc{fill:color-mix(in srgb,var(--cc) 16%,transparent);}
+.figure .ink{fill:var(--ink);} .figure .ink-s{stroke:var(--ink);}
+.figure .mut{fill:var(--muted);} .figure .mut-s{stroke:var(--muted);}
+.figure .soft{fill:var(--line-soft);} .figure .line-s{stroke:var(--line);}
+.figure .wht{fill:#fff;}
+.figure text{font-family:'Lexend',system-ui,sans-serif; fill:var(--ink);}
+.figure .tmut{fill:var(--muted);} .figure .tacc{fill:var(--cc);}
 @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important;}}
 </style>
 
@@ -218,11 +242,12 @@ footer.foot{text-align:center; color:var(--muted); font-size:.82rem; padding:30p
 const SITE = {
   key: "edliVisinda_v1",
   eyebrow: "Eðlis- og efnafræði · Borgarholtsskóli",
-  lead: "Veldu kafla hér að neðan. Kaflarnir fylgja bókinni „Eðli vísinda“. Í hverjum kafla getur þú hlustað, lært eitt hugtak í einu, æft á spjöldum og tekið stutt próf."
+  lead: "Veldu kafla hér að neðan. Kaflarnir fylgja bókinni „Eðli vísinda“. Í hverjum kafla getur þú hlustað, lært eitt hugtak í einu (með formúlum og myndum), æft á spjöldum og tekið stutt próf."
 };
 
 /* NÁMSEFNI — fylgir bókinni „Eðli vísinda – Inngangur að eðlis- og efnafræði“.
-   Skrifað upp á nýtt í einföldu máli með dæmum. Blaðsíðutöl vísa í bókina. */
+   Skrifað upp á nýtt í einföldu máli með dæmum, formúlum og skýringarmyndum.
+   Blaðsíðutöl vísa í bókina. */
 const CHAPTERS = [
 {
   id:"edli", num:"🔬", cc:"--c0", part:"", page:11,
@@ -237,8 +262,10 @@ const CHAPTERS = [
   concepts:[
     {t:"Hvað eru vísindi?", d:"Vísindi eru kerfisbundin leið til að skilja heiminn: við gerum athuganir, setjum fram tilgátu, prófum hana með tilraunum og drögum ályktun. Það sem stenst prófun heldur; annað er lagfært.", ex:"Ef þú heldur að planta þurfi ljós til að vaxa, þá setur þú eina í glugga og aðra í myrkur og berð saman. Það er vísindaleg aðferð."},
     {t:"Mælieiningar og SI-kerfið", d:"Til að mælingar séu sambærilegar nota vísindamenn sama einingakerfi um allan heim: SI-kerfið. Grunneiningar eru t.d. metri (lengd), kílógramm (massi) og sekúnda (tími).", ex:"Ef einn mælir í tommum og annar í sentímetrum verður ruglingur. Þess vegna nota allir metra í vísindum."},
-    {t:"Staðalform talna", d:"Mjög stórar eða smáar tölur eru skrifaðar sem tala margfölduð með tíu í veldi. Það gerir þær læsilegri og auðveldar reikning.", ex:"Ljóshraðinn er um 300.000.000 m/s. Í staðalformi er það 3 × 10⁸ m/s — miklu styttra."},
-    {t:"Eðlismassi", d:"Eðlismassi segir hversu þétt efni er: massi á rúmmálseiningu. Formúlan er eðlismassi = massi ÷ rúmmál (t.d. g/cm³). Efni með háan eðlismassa er þungt miðað við stærð.", ex:"Blýkúla og korkur geta verið jafn stórir, en blýið er miklu þyngra — það hefur hærri eðlismassa. Þess vegna sekkur blý en korkur flýtur."},
+    {t:"Staðalform talna", d:"Mjög stórar eða smáar tölur eru skrifaðar sem tala margfölduð með tíu í veldi. Það gerir þær læsilegri og auðveldar reikning.", formula:"3 × 10⁸ = 300.000.000", ex:"Ljóshraðinn er um 300.000.000 m/s. Í staðalformi er það 3 × 10⁸ m/s — miklu styttra."},
+    {t:"Eðlismassi", d:"Eðlismassi segir hversu þétt efni er: massi á rúmmálseiningu. Efni með háan eðlismassa er þungt miðað við stærð.", formula:"eðlismassi = massi ÷ rúmmál&nbsp;&nbsp;(t.d. g/cm³)",
+      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Korkur flýtur, blý sekkur"><text x="150" y="16" text-anchor="middle" font-size="12" class="tacc">léttara flýtur · þyngra sekkur</text><rect x="80" y="26" width="140" height="112" rx="6" class="soft"/><rect x="80" y="56" width="140" height="82" rx="6" class="softc"/><line x1="80" y1="56" x2="220" y2="56" class="acc-s" stroke-width="2"/><rect x="98" y="45" width="30" height="18" rx="3" class="acc"/><text x="113" y="41" text-anchor="middle" font-size="11" class="tmut">korkur</text><rect x="168" y="114" width="30" height="18" rx="3" class="ink"/><text x="183" y="110" text-anchor="middle" font-size="11" class="tmut">blý</text></svg>', cap:"Jafn stórir hlutir, ólíkur eðlismassi: korkur flýtur, blý sekkur.",
+      ex:"Blýkúla og korkur geta verið jafn stórir, en blýið er miklu þyngra — það hefur hærri eðlismassa. Þess vegna sekkur blý en korkur flýtur."},
     {t:"Mælinákvæmni og markverðir stafir", d:"Engin mæling er fullkomlega nákvæm. Markverðir stafir sýna hversu nákvæm talan er — við skrifum ekki fleiri stafi en mælingin réttlætir.", ex:"Ef reglustika sýnir millimetra geturðu sagt 12,4 cm — en ekki 12,437 cm, því stikan er ekki svo nákvæm."},
     {t:"Vísindaleg líkön", d:"Líkan er einföld mynd af raunveruleikanum sem hjálpar okkur að skilja hann. Líkön eru ekki „sannleikurinn“ heldur besta skýringin í bili — og þau batna með nýrri þekkingu.", ex:"Atómlíkanið hefur breyst oft: fyrst lítil kúla, svo með rafeindir á brautum. Hvert líkan var betra en það á undan."},
     {t:"Atómkenningin verður til", d:"Hugmyndin um að allt sé búið til úr örsmáum ódeilanlegum ögnum — atómum — kom frá Forn-Grikkjum og var síðar staðfest með tilraunum. Þetta er ein mikilvægasta hugmynd vísindanna.", ex:"Demókrítos stakk upp á atómum fyrir 2400 árum. Það var svo Dalton sem gerði úr því vísindalega kenningu löngu síðar."}
@@ -262,14 +289,18 @@ const CHAPTERS = [
     "Í lokin er þrýstingur, flotgeta og af hverju hlutir fljóta eða sökkva."
   ],
   concepts:[
-    {t:"Hraði", d:"Hraði segir hversu langt hlutur fer á tíma. Formúlan er hraði = vegalengd ÷ tími, mælt í metrum á sekúndu (m/s).", ex:"Ef þú hleypur 100 metra á 10 sekúndum er hraðinn 100 ÷ 10 = 10 m/s."},
-    {t:"Hröðun", d:"Hröðun er breyting á hraða á tíma — hversu hratt hluturinn eykur (eða minnkar) hraðann. Mælt í m/s². Ef bíll fer hraðar og hraðar er hann að hraða.", ex:"Bíll sem fer úr 0 í 20 m/s á 4 sekúndum hraðar um 5 m/s á hverri sekúndu (5 m/s²)."},
-    {t:"Þyngdarhröðun", d:"Allir hlutir falla til jarðar með sömu hröðun ef ekkert stöðvar þá: um 9,8 m/s². Þess vegna falla steinn og fjöður jafn hratt í lofttæmi.", ex:"Þegar þú sleppir bolta eykst fallhraði hans um u.þ.b. 10 m/s á hverri sekúndu vegna þyngdarhröðunar."},
-    {t:"Kraftur, massi og þyngd", d:"Kraftur er tog eða ýting, mældur í njútonum (N). Massi (kg) er hversu mikið efni er í hlut. Þyngd er krafturinn sem þyngdaraflið togar með. Lögmálið: kraftur = massi × hröðun (F = m·a).", ex:"Sami hlutur hefur sama massa á jörðu og tungli, en minni þyngd á tunglinu því þyngdaraflið er veikara þar."},
-    {t:"Uppvegnir og óuppvegnir kraftar", d:"Ef kraftar á hlut jafnast út (uppvegnir) breytist hreyfingin ekki. Ef þeir jafnast ekki (óuppvegnir) fer hluturinn af stað, hraðar eða hægir á sér.", ex:"Bók á borði stendur kyrr því þyngd hennar og stuðningur borðsins jafnast út. Ýtirðu henni fastar en núningurinn, þá rennur hún."},
-    {t:"Vinna, orka og afl", d:"Vinna er unnin þegar kraftur færir hlut: vinna = kraftur × vegalengd. Orka er geta til að vinna vinnu. Afl er hversu hratt vinnan er unnin (vinna ÷ tími), mælt í vöttum (W).", ex:"Að lyfta þungum kassa upp stiga er vinna. Að gera það hratt krefst meira afls en að gera það hægt."},
-    {t:"Þrýstingur", d:"Þrýstingur er kraftur á flatareiningu: þrýstingur = kraftur ÷ flatarmál. Sami kraftur á lítinn flöt gefur mikinn þrýsting.", ex:"Þú sekkur síður í snjó á skíðum en í skóm — skíðin dreifa þyngdinni á stærri flöt og lækka þrýstinginn."},
-    {t:"Flotgeta og uppdrif", d:"Hlutur í vökva fær uppdrif upp á við sem er jafn þungt og vökvinn sem hann ýtir frá sér (lögmál Arkímedesar). Ef uppdrifið er meira en þyngdin flýtur hluturinn.", ex:"Risastórt stálskip flýtur af því lögun þess ryður frá miklum sjó — uppdrifið verður nógu stórt til að halda því á floti."}
+    {t:"Hraði", d:"Hraði segir hversu langt hlutur fer á tíma. Mælt í metrum á sekúndu (m/s).", formula:"hraði = vegalengd ÷ tími&nbsp;&nbsp;(m/s)", ex:"Ef þú hleypur 100 metra á 10 sekúndum er hraðinn 100 ÷ 10 = 10 m/s."},
+    {t:"Hröðun", d:"Hröðun er breyting á hraða á tíma — hversu hratt hluturinn eykur (eða minnkar) hraðann. Ef bíll fer hraðar og hraðar er hann að hraða.", formula:"hröðun = breyting á hraða ÷ tími&nbsp;&nbsp;(m/s²)", ex:"Bíll sem fer úr 0 í 20 m/s á 4 sekúndum hraðar um 5 m/s á hverri sekúndu (5 m/s²)."},
+    {t:"Þyngdarhröðun", d:"Allir hlutir falla til jarðar með sömu hröðun ef ekkert stöðvar þá: um 9,8 m/s². Þess vegna falla steinn og fjöður jafn hratt í lofttæmi.", formula:"þyngdarhröðun ≈ 9,8 m/s²", ex:"Þegar þú sleppir bolta eykst fallhraði hans um u.þ.b. 10 m/s á hverri sekúndu vegna þyngdarhröðunar."},
+    {t:"Kraftur, massi og þyngd", d:"Kraftur er tog eða ýting, mældur í njútonum (N). Massi (kg) er hversu mikið efni er í hlut. Þyngd er krafturinn sem þyngdaraflið togar með.", formula:"kraftur = massi × hröðun&nbsp;&nbsp;·&nbsp;&nbsp;F = m · a", ex:"Sami hlutur hefur sama massa á jörðu og tungli, en minni þyngd á tunglinu því þyngdaraflið er veikara þar."},
+    {t:"Uppvegnir og óuppvegnir kraftar", d:"Ef kraftar á hlut jafnast út (uppvegnir) breytist hreyfingin ekki. Ef þeir jafnast ekki (óuppvegnir) fer hluturinn af stað, hraðar eða hægir á sér.",
+      svg:'<svg viewBox="0 0 300 170" role="img" aria-label="Uppvegnir og óuppvegnir kraftar"><text x="150" y="14" text-anchor="middle" font-size="11" class="tacc">jafnir kraftar → kyrrt</text><rect x="125" y="26" width="50" height="34" rx="5" class="softc"/><line x1="123" y1="43" x2="80" y2="43" class="ink-s" stroke-width="3"/><polygon points="74,43 84,38 84,48" class="ink"/><line x1="177" y1="43" x2="220" y2="43" class="ink-s" stroke-width="3"/><polygon points="226,43 216,38 216,48" class="ink"/><text x="150" y="104" text-anchor="middle" font-size="11" class="tacc">ójafnir kraftar → hreyfist →</text><rect x="115" y="116" width="50" height="34" rx="5" class="softc"/><line x1="113" y1="133" x2="90" y2="133" class="mut-s" stroke-width="3"/><polygon points="86,133 94,129 94,137" class="mut"/><line x1="167" y1="133" x2="240" y2="133" class="acc-s" stroke-width="3"/><polygon points="246,133 236,128 236,138" class="acc"/></svg>', cap:"Jafnir kraftar halda hlut kyrrum; ójafnir koma honum af stað.",
+      ex:"Bók á borði stendur kyrr því þyngd hennar og stuðningur borðsins jafnast út. Ýtirðu henni fastar en núningurinn, þá rennur hún."},
+    {t:"Vinna, orka og afl", d:"Vinna er unnin þegar kraftur færir hlut. Orka er geta til að vinna vinnu. Afl er hversu hratt vinnan er unnin, mælt í vöttum (W).", formula:"vinna = kraftur × vegalengd<br>afl = vinna ÷ tími&nbsp;&nbsp;(W)", ex:"Að lyfta þungum kassa upp stiga er vinna. Að gera það hratt krefst meira afls en að gera það hægt."},
+    {t:"Þrýstingur", d:"Þrýstingur er kraftur á flatareiningu. Sami kraftur á lítinn flöt gefur mikinn þrýsting. Mælt í paskölum (Pa).", formula:"þrýstingur = kraftur ÷ flatarmál&nbsp;&nbsp;(Pa)", ex:"Þú sekkur síður í snjó á skíðum en í skóm — skíðin dreifa þyngdinni á stærri flöt og lækka þrýstinginn."},
+    {t:"Flotgeta og uppdrif", d:"Hlutur í vökva fær uppdrif upp á við sem er jafn þungt og vökvinn sem hann ýtir frá sér (lögmál Arkímedesar). Ef uppdrifið er meira en þyngdin flýtur hluturinn.",
+      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Uppdrif og þyngd"><rect x="40" y="46" width="220" height="94" rx="6" class="softc"/><line x1="40" y1="46" x2="260" y2="46" class="acc-s" stroke-width="2"/><rect x="125" y="72" width="50" height="38" rx="5" class="ink"/><line x1="150" y1="70" x2="150" y2="36" class="acc-s" stroke-width="3"/><polygon points="150,26 143,40 157,40" class="acc"/><text x="150" y="20" text-anchor="middle" font-size="11" class="tacc">uppdrif</text><line x1="150" y1="110" x2="150" y2="130" class="mut-s" stroke-width="3"/><polygon points="150,138 143,126 157,126" class="mut"/><text x="150" y="150" text-anchor="middle" font-size="11" class="tmut">þyngd</text></svg>', cap:"Uppdrifið ýtir upp, þyngdin togar niður. Stærra uppdrif → hluturinn flýtur.",
+      ex:"Risastórt stálskip flýtur af því lögun þess ryður frá miklum sjó — uppdrifið verður nógu stórt til að halda því á floti."}
   ],
   quiz:[
     {q:"Hver er formúlan fyrir hraða?", opts:["Hraði = tími ÷ vegalengd","Hraði = vegalengd ÷ tími","Hraði = massi × tími","Hraði = kraftur ÷ massi"], a:1, why:"Hraði = vegalengd ÷ tími, mælt í m/s."},
@@ -292,10 +323,14 @@ const CHAPTERS = [
   concepts:[
     {t:"Orkugjafar jarðar", d:"Langstærsti orkugjafi jarðar er sólin — hún knýr veður, vinda, hafstrauma og líf. Auk þess kemur orka innan úr jörðinni (jarðvarmi) og frá aðdráttarafli tungls og sólar (sjávarföll).", ex:"Vindur verður til þegar sólin hitar loft misjafnt. Öll þessi orka á rætur í sólinni."},
     {t:"Orkujöfnuður jarðar", d:"Jörðin tekur við orku frá sólinni og gefur frá sér varma út í geiminn. Ef jafnvægi helst er hitinn stöðugur. Raskist það — t.d. vegna gróðurhúsalofttegunda — hlýnar jörðin.", ex:"Gróðurhúsalofttegundir halda meiri varma inni, líkt og teppi. Þá hitnar jörðin — það eru gróðurhúsaáhrif."},
-    {t:"Rafsegulbylgjur og rafsegulróf", d:"Ljós, útvarpsbylgjur, örbylgjur, innrautt, útfjólublátt, röntgen og gammageislar eru allt rafsegulbylgjur — sama fyrirbærið á ólíkri tíðni. Saman mynda þær rafsegulrófið.", ex:"Örbylgjuofn, útvarp og sólarljós nota öll rafsegulbylgjur — bara á mismunandi tíðni."},
+    {t:"Rafsegulbylgjur og rafsegulróf", d:"Ljós, útvarpsbylgjur, örbylgjur, innrautt, útfjólublátt, röntgen og gammageislar eru allt rafsegulbylgjur — sama fyrirbærið á ólíkri tíðni. Saman mynda þær rafsegulrófið.",
+      svg:'<svg viewBox="0 0 300 110" role="img" aria-label="Rafsegulrófið"><defs><linearGradient id="spec" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c0392b"/><stop offset="0.45" stop-color="#f1c40f"/><stop offset="0.65" stop-color="#2ecc71"/><stop offset="1" stop-color="#7d3cc9"/></linearGradient></defs><text x="150" y="16" text-anchor="middle" font-size="11" class="tacc">lág tíðni → há tíðni (meiri orka)</text><rect x="20" y="42" width="260" height="26" rx="6" fill="url(#spec)"/><rect x="150" y="42" width="46" height="26" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><text x="173" y="36" text-anchor="middle" font-size="9" class="tmut">sýnilegt ljós</text><text x="22" y="86" font-size="10" class="tmut">Útvarp</text><text x="278" y="86" text-anchor="end" font-size="10" class="tmut">Gamma</text></svg>', cap:"Rafsegulrófið: útvarp, ljós, röntgen og gamma — allt sama fyrirbærið á ólíkri tíðni.",
+      ex:"Örbylgjuofn, útvarp og sólarljós nota öll rafsegulbylgjur — bara á mismunandi tíðni."},
     {t:"Sýnilegt ljós og útfjólublátt", d:"Sýnilegt ljós er örlítill hluti rófsins sem augað nemur — regnbogans litir. Útfjólublátt (UV) er orkumeira og ósýnilegt; það veldur sólbruna og getur skaðað húð.", ex:"Sólarvörn ver húðina fyrir UV-geislum sólarinnar, sem við sjáum ekki en finnum þegar við brennum."},
     {t:"Hamskiptaorka", d:"Orka sem fer í að breyta ham efnis — t.d. bræða ís eða sjóða vatn — án þess að hitinn hækki á meðan. Orkan fer í hamskiptin sjálf, ekki í að hækka hitastigið.", ex:"Þegar ís bráðnar helst hitinn 0°C þótt þú hitir hann áfram — orkan fer í að breyta ísnum í vatn."},
-    {t:"Hringrás vatns", d:"Vatn er sífellt á hreyfingu: það gufar upp af höfum, þéttist í ský, fellur sem úrkoma og rennur aftur til sjávar. Sólin knýr þessa hringrás.", ex:"Rigningin sem fellur á Íslandi gufaði áður upp af hafinu — sama vatnið fer hringinn aftur og aftur."},
+    {t:"Hringrás vatns", d:"Vatn er sífellt á hreyfingu: það gufar upp af höfum, þéttist í ský, fellur sem úrkoma og rennur aftur til sjávar. Sólin knýr þessa hringrás.",
+      svg:'<svg viewBox="0 0 300 160" role="img" aria-label="Hringrás vatns"><circle cx="255" cy="28" r="15" fill="#f5b301"/><rect x="20" y="122" width="260" height="30" rx="4" class="softc"/><text x="150" y="145" text-anchor="middle" font-size="11" class="tmut">haf</text><ellipse cx="95" cy="58" rx="44" ry="18" class="soft"/><text x="95" y="62" text-anchor="middle" font-size="11" class="tmut">ský</text><line x1="60" y1="120" x2="55" y2="82" class="acc-s" stroke-width="2"/><polygon points="55,74 49,86 61,86" class="acc"/><text x="30" y="104" font-size="10" class="tacc">uppgufun</text><line x1="120" y1="80" x2="120" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><line x1="140" y1="80" x2="140" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><line x1="160" y1="80" x2="160" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><text x="165" y="104" font-size="10" class="tmut">úrkoma</text></svg>', cap:"Sólin knýr hringrásina: uppgufun → ský → úrkoma → aftur til sjávar.",
+      ex:"Rigningin sem fellur á Íslandi gufaði áður upp af hafinu — sama vatnið fer hringinn aftur og aftur."},
     {t:"Orkuframleiðsla", d:"Við breytum orku í rafmagn með ýmsum leiðum: vatnsafli (fallvatn snýr hverflum), jarðvarma (gufa úr jörðu) og víðar kjarnorku. Ísland notar nær eingöngu vatnsafl og jarðvarma.", ex:"Í vatnsaflsvirkjun fellur vatn niður og snýr hverfli sem framleiðir rafmagn — hrein, endurnýjanleg orka."}
   ],
   quiz:[
@@ -317,10 +352,16 @@ const CHAPTERS = [
     "Í lokin er hvernig hægt er að aðgreina efni sem hafa verið blönduð saman."
   ],
   concepts:[
-    {t:"Atómið", d:"Atóm er minnsta eining frumefnis. Það hefur kjarna í miðju (úr róteindum og nifteindum) og rafeindir sem sveima í kring. Allt efni er búið til úr atómum.", ex:"Eitt gramm af járni inniheldur ótrúlega mörg atóm — fleiri en stjörnur á himni."},
-    {t:"Hamir efna", d:"Efni geta verið í þremur algengum hömum: föstu (fast form), fljótandi (vökvi) og gasi. Hamurinn ræðst af hita og þrýstingi.", ex:"Vatn er sama efnið í öllum hömum: ís (fast), vatn (fljótandi) og gufa (gas)."},
+    {t:"Atómið", d:"Atóm er minnsta eining frumefnis. Það hefur kjarna í miðju (úr róteindum og nifteindum) og rafeindir sem sveima í kring. Allt efni er búið til úr atómum.",
+      svg:'<svg viewBox="0 0 260 160" role="img" aria-label="Atóm: kjarni og rafeindir"><ellipse cx="130" cy="80" rx="96" ry="54" fill="none" class="line-s" stroke-width="1.5"/><circle cx="130" cy="80" r="22" class="acc"/><text x="130" y="84" text-anchor="middle" font-size="10" class="wht">kjarni</text><circle cx="226" cy="80" r="7" class="ink"/><circle cx="34" cy="80" r="7" class="ink"/><circle cx="130" cy="26" r="7" class="ink"/><text x="130" y="152" text-anchor="middle" font-size="11" class="tmut">rafeindir sveima um kjarnann</text></svg>', cap:"Kjarni (róteindir + nifteindir) í miðju, rafeindir sveima í kring.",
+      ex:"Eitt gramm af járni inniheldur ótrúlega mörg atóm — fleiri en stjörnur á himni."},
+    {t:"Hamir efna", d:"Efni geta verið í þremur algengum hömum: föstu (fast form), fljótandi (vökvi) og gasi. Hamurinn ræðst af hita og þrýstingi.",
+      svg:'<svg viewBox="0 0 300 130" role="img" aria-label="Fast, fljótandi og gas"><rect x="10" y="18" width="86" height="74" rx="6" class="soft"/><circle cx="30" cy="38" r="5" class="acc"/><circle cx="53" cy="38" r="5" class="acc"/><circle cx="76" cy="38" r="5" class="acc"/><circle cx="30" cy="58" r="5" class="acc"/><circle cx="53" cy="58" r="5" class="acc"/><circle cx="76" cy="58" r="5" class="acc"/><circle cx="30" cy="78" r="5" class="acc"/><circle cx="53" cy="78" r="5" class="acc"/><circle cx="76" cy="78" r="5" class="acc"/><text x="53" y="108" text-anchor="middle" font-size="11" class="tmut">fast</text><rect x="107" y="18" width="86" height="74" rx="6" class="soft"/><circle cx="128" cy="66" r="5" class="acc"/><circle cx="150" cy="60" r="5" class="acc"/><circle cx="172" cy="70" r="5" class="acc"/><circle cx="138" cy="80" r="5" class="acc"/><circle cx="162" cy="82" r="5" class="acc"/><circle cx="150" cy="72" r="5" class="acc"/><text x="150" y="108" text-anchor="middle" font-size="11" class="tmut">fljótandi</text><rect x="204" y="18" width="86" height="74" rx="6" class="soft"/><circle cx="222" cy="34" r="5" class="acc"/><circle cx="266" cy="44" r="5" class="acc"/><circle cx="240" cy="66" r="5" class="acc"/><circle cx="276" cy="78" r="5" class="acc"/><circle cx="220" cy="80" r="5" class="acc"/><text x="247" y="108" text-anchor="middle" font-size="11" class="tmut">gas</text></svg>', cap:"Í föstu efni raðast agnir þétt, í vökva laust, í gasi dreifðar.",
+      ex:"Vatn er sama efnið í öllum hömum: ís (fast), vatn (fljótandi) og gufa (gas)."},
     {t:"Frumefni", d:"Frumefni er efni sem er búið til úr aðeins einni tegund atóma og ekki er hægt að brjóta niður í einfaldari efni. Súrefni, járn og gull eru frumefni.", ex:"Gullhringur er úr einni tegund atóma — gulli. Þú getur ekki brotið gull niður í eitthvað einfaldara efnafræðilega."},
-    {t:"Efnasamband", d:"Efnasamband myndast þegar tvö eða fleiri frumefni tengjast efnafræðilega í fastri hlutföllum. Nýja efnið hefur allt aðra eiginleika en frumefnin.", ex:"Vatn (H₂O) er efnasamband úr vetni og súrefni — tveimur lofttegundum sem saman mynda vökva."},
+    {t:"Efnasamband", d:"Efnasamband myndast þegar tvö eða fleiri frumefni tengjast efnafræðilega í föstum hlutföllum. Nýja efnið hefur allt aðra eiginleika en frumefnin.",
+      svg:'<svg viewBox="0 0 300 120" role="img" aria-label="Frumefni, efnasamband, efnablanda"><rect x="8" y="24" width="88" height="60" rx="6" class="soft"/><circle cx="34" cy="46" r="6" class="acc"/><circle cx="58" cy="46" r="6" class="acc"/><circle cx="46" cy="66" r="6" class="acc"/><circle cx="70" cy="66" r="6" class="acc"/><text x="52" y="100" text-anchor="middle" font-size="10" class="tmut">frumefni</text><rect x="106" y="24" width="88" height="60" rx="6" class="soft"/><circle cx="132" cy="52" r="6" class="acc"/><circle cx="146" cy="52" r="6" class="ink"/><circle cx="164" cy="66" r="6" class="acc"/><circle cx="178" cy="66" r="6" class="ink"/><text x="150" y="100" text-anchor="middle" font-size="10" class="tmut">efnasamband</text><rect x="204" y="24" width="88" height="60" rx="6" class="soft"/><circle cx="226" cy="44" r="6" class="acc"/><circle cx="256" cy="52" r="6" class="ink"/><circle cx="240" cy="70" r="6" class="acc"/><circle cx="272" cy="68" r="6" class="ink"/><text x="248" y="100" text-anchor="middle" font-size="10" class="tmut">efnablanda</text></svg>', cap:"Frumefni: ein tegund. Efnasamband: tengd saman fast. Efnablanda: blönduð, ótengd.",
+      ex:"Vatn (H₂O) er efnasamband úr vetni og súrefni — tveimur lofttegundum sem saman mynda vökva."},
     {t:"Efnablanda", d:"Í efnablöndu eru efni blönduð saman án þess að tengjast efnafræðilega. Þau halda eiginleikum sínum og oft má aðskilja þau aftur.", ex:"Saltvatn er efnablanda: saltið og vatnið blandast en tengjast ekki — þú getur gufað vatnið upp og fengið saltið aftur."},
     {t:"Lausn og leysni", d:"Lausn myndast þegar eitt efni leysist upp í öðru (t.d. salt í vatni). Leysni segir hversu mikið af efni getur leyst upp — heitt vatn leysir oft meira en kalt.", ex:"Sykur leysist hraðar og meira upp í heitu tei en köldu — leysnin eykst með hita."},
     {t:"Aðgreining efna", d:"Efni í blöndu má aðskilja með aðferðum eins og síun (fast frá vökva), uppgufun (leyst efni skilið eftir) og eimingu (skilja að vökva eftir suðumarki).", ex:"Eiming er notuð til að skilja að efni í hráolíu — hvert efni sýður við sitt hitastig og er safnað sér."}
@@ -345,8 +386,10 @@ const CHAPTERS = [
   ],
   concepts:[
     {t:"Lotukerfið", d:"Tafla þar sem öllum frumefnum er raðað eftir vaxandi sætistölu. Efni með svipaða eiginleika lenda í sömu dálkum, svo taflan sýnir mynstur.", ex:"Þegar þú veist hvar frumefni er í lotukerfinu geturðu spáð fyrir um hvernig það hegðar sér."},
-    {t:"Sætistala", d:"Sætistala er fjöldi róteinda í kjarna atómsins. Hún skilgreinir frumefnið — öll atóm sama frumefnis hafa sömu sætistölu.", ex:"Kolefni hefur alltaf 6 róteindir (sætistala 6). Atóm með 8 róteindir er alltaf súrefni, aldrei kolefni."},
-    {t:"Massatala", d:"Massatala er samanlagður fjöldi róteinda og nifteinda í kjarnanum. Hún segir okkur nokkurn veginn hversu þungt atómið er.", ex:"Kolefnisatóm með 6 róteindir og 6 nifteindir hefur massatöluna 12."},
+    {t:"Sætistala", d:"Sætistala er fjöldi róteinda í kjarna atómsins. Hún skilgreinir frumefnið — öll atóm sama frumefnis hafa sömu sætistölu.", formula:"sætistala = fjöldi róteinda", ex:"Kolefni hefur alltaf 6 róteindir (sætistala 6). Atóm með 8 róteindir er alltaf súrefni, aldrei kolefni."},
+    {t:"Massatala", d:"Massatala er samanlagður fjöldi róteinda og nifteinda í kjarnanum. Hún segir okkur nokkurn veginn hversu þungt atómið er.", formula:"massatala = róteindir + nifteindir",
+      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Kjarni með róteindum og nifteindum"><circle cx="120" cy="72" r="46" fill="none" class="line-s" stroke-width="1.5"/><circle cx="104" cy="58" r="9" class="acc"/><circle cx="124" cy="52" r="9" class="mut"/><circle cx="140" cy="64" r="9" class="acc"/><circle cx="100" cy="78" r="9" class="mut"/><circle cx="120" cy="76" r="9" class="acc"/><circle cx="138" cy="86" r="9" class="mut"/><circle cx="112" cy="94" r="9" class="acc"/><circle cx="132" cy="98" r="9" class="mut"/><circle cx="86" cy="70" r="9" class="acc"/><circle cx="150" cy="80" r="9" class="mut"/><circle cx="118" cy="40" r="9" class="acc"/><circle cx="150" cy="54" r="9" class="mut"/><circle cx="210" cy="46" r="7" class="acc"/><text x="222" y="50" font-size="11" class="tmut">= róteind</text><circle cx="210" cy="72" r="7" class="mut"/><text x="222" y="76" font-size="11" class="tmut">= nifteind</text><text x="222" y="104" font-size="11" class="tacc">6 + 6 = massatala 12</text></svg>', cap:"Kolefni-12: 6 róteindir + 6 nifteindir. Sætistalan (róteindir) er 6.",
+      ex:"Kolefnisatóm með 6 róteindir og 6 nifteindir hefur massatöluna 12."},
     {t:"Samsætur", d:"Samsætur eru atóm sama frumefnis með ólíkan fjölda nifteinda. Þau hafa sömu sætistölu en ólíka massatölu.", ex:"Kolefni-12 og kolefni-14 eru samsætur: bæði með 6 róteindir, en ólíkan fjölda nifteinda. Kolefni-14 er notað til aldursgreiningar."},
     {t:"Lotur, hvel og flokkar", d:"Raðirnar í töflunni heita lotur og dálkarnir flokkar. Rafeindir raðast í hvel utan um kjarnann; efni í sama flokki hafa svipaðan fjölda ytri rafeinda og því svipaða eiginleika.", ex:"Frumefni í sama flokki (dálki) hegða sér líkt — t.d. eru öll eðalgös í sama flokki."},
     {t:"Málmar og málmleysingjar", d:"Flest frumefni eru málmar: þeir leiða rafmagn og hita, eru gljáandi og oft sveigjanlegir. Málmleysingjar gera það ekki og eru oft gas eða brothætt föst efni.", ex:"Kopar (málmur) leiðir rafmagn og er notaður í víra. Brennisteinn (málmleysingi) er gult, brothætt duft sem leiðir ekki."},
@@ -372,11 +415,15 @@ const CHAPTERS = [
   ],
   concepts:[
     {t:"Efnatengi", d:"Efnatengi eru kraftarnir sem halda atómum saman í efnasamböndum. Atóm tengjast til að verða stöðugri — oftast til að fá fullt ytra rafeindahvel.", ex:"Vetni og súrefni tengjast og mynda vatn af því saman verða þau stöðugri en ein og sér."},
-    {t:"Jónir og jónatengi", d:"Jón er atóm sem hefur tapað eða fengið rafeindir og hefur því rafhleðslu (+ eða −). Jónatengi myndast þegar jákvæð og neikvæð jón dragast saman.", ex:"Í matarsalti (NaCl) gefur natríum eina rafeind til klórs. Natríum verður jákvætt, klór neikvætt, og þau dragast saman."},
-    {t:"Sameindir og samgild tengi", d:"Í samgildu tengi deila tvö atóm rafeindum í stað þess að gefa/taka. Þannig myndast sameindir — algengt hjá málmleysingjum.", ex:"Í súrefnisgasi (O₂) deila tvö súrefnisatóm rafeindum. Vatn (H₂O) er líka með samgild tengi."},
+    {t:"Jónir og jónatengi", d:"Jón er atóm sem hefur tapað eða fengið rafeindir og hefur því rafhleðslu (+ eða −). Jónatengi myndast þegar jákvæð og neikvæð jón dragast saman.",
+      svg:'<svg viewBox="0 0 300 120" role="img" aria-label="Jónatengi milli Na+ og Cl-"><circle cx="80" cy="60" r="30" class="softc"/><text x="80" y="58" text-anchor="middle" font-size="15" class="ink">Na</text><text x="80" y="76" text-anchor="middle" font-size="14" class="tacc">+</text><circle cx="220" cy="60" r="36" class="acc"/><text x="220" y="58" text-anchor="middle" font-size="15" class="wht">Cl</text><text x="220" y="78" text-anchor="middle" font-size="14" class="wht">−</text><line x1="112" y1="60" x2="182" y2="60" class="mut-s" stroke-width="2" stroke-dasharray="4 4"/><text x="150" y="30" text-anchor="middle" font-size="11" class="tacc">dragast saman</text></svg>', cap:"Í matarsalti gefur Na eina rafeind til Cl. Jónirnar dragast saman (+ og −).",
+      ex:"Í matarsalti (NaCl) gefur natríum eina rafeind til klórs. Natríum verður jákvætt, klór neikvætt, og þau dragast saman."},
+    {t:"Sameindir og samgild tengi", d:"Í samgildu tengi deila tvö atóm rafeindum í stað þess að gefa/taka. Þannig myndast sameindir — algengt hjá málmleysingjum.",
+      svg:'<svg viewBox="0 0 300 120" role="img" aria-label="Samgilt tengi: deila rafeindum"><circle cx="118" cy="60" r="40" fill="none" class="acc-s" stroke-width="2"/><circle cx="182" cy="60" r="40" fill="none" class="acc-s" stroke-width="2"/><circle cx="140" cy="52" r="6" class="ink"/><circle cx="160" cy="68" r="6" class="ink"/><text x="150" y="106" text-anchor="middle" font-size="11" class="tmut">atómin deila rafeindum</text></svg>', cap:"Í samgildu tengi deila atómin rafeindum (skarast) og mynda sameind.",
+      ex:"Í súrefnisgasi (O₂) deila tvö súrefnisatóm rafeindum. Vatn (H₂O) er líka með samgild tengi."},
     {t:"Veik efnatengi milli sameinda", d:"Auk sterku tengjanna innan sameinda eru veikari kraftar milli sameinda. Þeir ráða t.d. suðumarki og hvort efni er fast, fljótandi eða gas.", ex:"Veik tengi milli vatnssameinda halda vatninu fljótandi — án þeirra myndi það sjóða við miklu lægra hitastig."},
     {t:"Málmar og málmtengi", d:"Í málmi „fljóta“ ytri rafeindir frjálsar milli atómanna. Þessar hreyfanlegu rafeindir gera það að verkum að málmar leiða rafmagn og hita vel.", ex:"Kopar leiðir rafmagn af því rafeindir geta hreyfst frjálst gegnum hann — þess vegna er hann í rafmagnsvírum."},
-    {t:"Heiti og formúlur einfaldra efna", d:"Efnaformúla sýnir hvaða atóm og hversu mörg eru í efni. Tölurnar (undirvísar) segja fjöldann. Efni eru nefnd eftir reglum úr frumefnunum sem mynda þau.", ex:"CO₂ þýðir eitt kolefnisatóm og tvö súrefnisatóm — koltvíoxíð. H₂O er tvö vetni og eitt súrefni — vatn."}
+    {t:"Heiti og formúlur einfaldra efna", d:"Efnaformúla sýnir hvaða atóm og hversu mörg eru í efni. Tölurnar (undirvísar) segja fjöldann. Efni eru nefnd eftir reglum úr frumefnunum sem mynda þau.", formula:"CO<sub>2</sub> = 1 kolefni + 2 súrefni&nbsp;&nbsp;·&nbsp;&nbsp;H<sub>2</sub>O = 2 vetni + 1 súrefni", ex:"CO₂ þýðir eitt kolefnisatóm og tvö súrefnisatóm — koltvíoxíð. H₂O er tvö vetni og eitt súrefni — vatn."}
   ],
   quiz:[
     {q:"Til hvers tengjast atóm saman?", opts:["Til að verða stærri","Til að verða stöðugri (oft fullt ytra hvel)","Til að verða þyngri","Af tilviljun"], a:1, why:"Atóm tengjast til að ná stöðugra ástandi, oftast með fullu ytra rafeindahveli."},
@@ -398,10 +445,14 @@ const CHAPTERS = [
   ],
   concepts:[
     {t:"Hvað er efnahvarf?", d:"Í efnahvarfi rofna efnatengi og ný myndast, þannig að upphaflegu efnin (hvarfefni) breytast í ný efni (myndefni). Nýju efnin hafa aðra eiginleika.", ex:"Þegar viður brennur hvarfast hann við súrefni og breytist í ösku, reyk og gas — allt önnur efni en viðurinn var."},
-    {t:"Efnajöfnur", d:"Efnajafna er stutt leið til að skrifa efnahvarf: hvarfefni vinstra megin, ör, og myndefni hægra megin. Hún sýnir hvað breytist í hvað.", ex:"Vetni + súrefni → vatn er skrifað 2H₂ + O₂ → 2H₂O."},
-    {t:"Að stilla efnajöfnu", d:"Í efnahvarfi hvorki myndast né eyðist efni — massinn varðveitist. Þess vegna verða jafn mörg atóm af hverri tegund beggja vegna örvarinnar. Að stilla jöfnu er að láta það ganga upp.", ex:"Vinstra megin verða að vera jafn mörg súrefnisatóm og hægra megin — annars er jafnan ekki rétt stillt."},
+    {t:"Efnajöfnur", d:"Efnajafna er stutt leið til að skrifa efnahvarf: hvarfefni vinstra megin, ör, og myndefni hægra megin. Hún sýnir hvað breytist í hvað.", formula:"hvarfefni → myndefni", ex:"Vetni + súrefni → vatn er skrifað 2H₂ + O₂ → 2H₂O."},
+    {t:"Að stilla efnajöfnu", d:"Í efnahvarfi hvorki myndast né eyðist efni — massinn varðveitist. Þess vegna verða jafn mörg atóm af hverri tegund beggja vegna örvarinnar. Að stilla jöfnu er að láta það ganga upp.",
+      svg:'<svg viewBox="0 0 300 120" role="img" aria-label="Stillt efnajafna"><text x="150" y="34" text-anchor="middle" font-size="17" class="ink">2H₂ + O₂ → 2H₂O</text><line x1="30" y1="52" x2="270" y2="52" class="line-s" stroke-width="1"/><text x="90" y="76" text-anchor="middle" font-size="11" class="tmut">vinstra: 4 H · 2 O</text><text x="210" y="76" text-anchor="middle" font-size="11" class="tmut">hægra: 4 H · 2 O</text><text x="150" y="102" text-anchor="middle" font-size="12" class="tacc">jafn mörg atóm báðum megin ✓</text></svg>', cap:"Rétt stillt jafna: jafn mörg atóm af hverri tegund vinstra og hægra megin.",
+      ex:"Vinstra megin verða að vera jafn mörg súrefnisatóm og hægra megin — annars er jafnan ekki rétt stillt."},
     {t:"Oxun og afoxun", d:"Í oxunar-afoxunarhvörfum flytjast rafeindir milli efna. Það sem tapar rafeindum oxast; það sem tekur við þeim afoxast. Þetta gerist t.d. þegar málmur ryðgar eða rafhlaða vinnur.", ex:"Þegar járn ryðgar tapar það rafeindum til súrefnis — járnið oxast og myndar ryð."},
-    {t:"Sýru-basa hvörf", d:"Sýra og basi eru andstæður. Þegar þau hvarfast saman mynda þau salt og vatn og hlutleysa hvort annað. pH-kvarðinn mælir hversu súrt eða basískt efni er (0 súrt, 14 basískt, 7 hlutlaust).", ex:"Maga­sýra er súr. Sýrubindandi tafla er basísk og hlutleysir umframsýru — sýru-basa hvarf í maganum."},
+    {t:"Sýru-basa hvörf", d:"Sýra og basi eru andstæður. Þegar þau hvarfast saman mynda þau salt og vatn og hlutleysa hvort annað. pH-kvarðinn mælir hversu súrt eða basískt efni er.",
+      svg:'<svg viewBox="0 0 300 110" role="img" aria-label="pH-kvarðinn"><defs><linearGradient id="ph" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e0552e"/><stop offset="0.5" stop-color="#2e9e5b"/><stop offset="1" stop-color="#2e59c7"/></linearGradient></defs><text x="150" y="18" text-anchor="middle" font-size="12" class="tacc">pH-kvarðinn</text><rect x="20" y="40" width="260" height="24" rx="6" fill="url(#ph)"/><line x1="150" y1="36" x2="150" y2="68" stroke="#fff" stroke-width="2"/><text x="24" y="86" font-size="10" class="tmut">0 súrt</text><text x="150" y="86" text-anchor="middle" font-size="10" class="ink">7 hlutlaust</text><text x="276" y="86" text-anchor="end" font-size="10" class="tmut">14 basískt</text></svg>', cap:"pH 0 = súrt, 7 = hlutlaust, 14 = basískt. Sýra + basi hlutleysa hvort annað.",
+      ex:"Magasýra er súr. Sýrubindandi tafla er basísk og hlutleysir umframsýru — sýru-basa hvarf í maganum."},
     {t:"Fellingarhvörf", d:"Þegar tvær tærar lausnir er blandað getur myndast fast efni sem botnfellur — það kallast felling eða botnfall. Það myndast af því nýja efnið leysist ekki upp.", ex:"Blandirðu réttum lausnum saman getur skyndilega myndast skýjað botnfall — fast efni sem fellur til botns."}
   ],
   quiz:[
@@ -578,11 +629,15 @@ function renderLearn(){
     } else {
       const ci = s-1; const c = ch.concepts[ci];
       if(!rec.learned.includes(ci)){ rec.learned.push(ci); saveData(); }
-      const speakText = c.t+". "+c.d+" Dæmi: "+c.ex;
+      const speakText = c.t+". "+c.d+(c.speak?(" "+c.speak):"")+" Dæmi: "+c.ex;
+      const formulaHtml = c.formula ? `<div class="formula"><div class="flbl">Formúla</div><div class="feq">${c.formula}</div></div>` : "";
+      const figHtml = c.svg ? `<figure class="figure">${c.svg}${c.cap?`<figcaption>${esc(c.cap)}</figcaption>`:""}</figure>` : "";
       panel.innerHTML = `
       <div class="card concept" style="--cc:${'var('+ch.cc+')'}">
         <div class="term">${esc(c.t)}</div>
         <p class="def">${esc(c.d)}</p>
+        ${formulaHtml}
+        ${figHtml}
         <div class="example"><div class="lbl">💬 Dæmi úr daglegu lífi</div><div>${esc(c.ex)}</div></div>
         <div id="listenSlot" style="margin-top:16px"></div>
       </div>
