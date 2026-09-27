@@ -292,6 +292,12 @@ footer.foot{text-align:center; color:var(--muted); font-size:.82rem; padding:30p
 @media (max-width:400px){ .numbers,.units{grid-template-columns:1fr;} }
 .flash-inner{min-height:300px;}
 .flash-face{padding:26px 24px 48px;}
+.vlist{display:flex; flex-direction:column; gap:8px;}
+.vitem{display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line); border-left:6px solid var(--cc); border-radius:14px; padding:12px 14px; text-decoration:none; color:var(--ink);}
+.vitem .vic{width:34px; height:34px; flex:none; border-radius:50%; background:var(--cc); color:#fff; display:grid; place-items:center; font-size:.9rem;}
+.vitem b{display:block; font-size:.98rem; line-height:1.3;}
+.vitem small{color:var(--muted); font-size:.82rem;}
+.part-head .pt{font-size:1rem;}
 @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important;}}
 </style>
 
@@ -329,7 +335,7 @@ footer.foot{text-align:center; color:var(--muted); font-size:.82rem; padding:30p
   <div id="view"></div>
   <footer class="foot">
     Búið til fyrir Úlf Þór · Fylgir bókinni „Eðli vísinda – Inngangur að eðlis- og efnafræði“ (Guðrún Ragnarsdóttir &amp; Kristinn A. Guðjónsson).<br>
-    Námsefnið er skrifað upp á nýtt í einföldu máli. Hlustaðu á bókina í HBS-appinu samhliða ef hún er til.<br><span style="opacity:.7">Útgáfa 2 · 27.9.2026 — prófaæfing, formúlublað, orðalisti, námsáætlun.</span>
+    Námsefnið er skrifað upp á nýtt í einföldu máli. Hlustaðu á bókina í HBS-appinu samhliða ef hún er til.<br><span style="opacity:.7">Útgáfa 3 · 27.9.2026 — 1. kafli eftir glærum kennarans (1.1–1.5), prófaæfing, formúlublað, orðalisti, námsáætlun.</span>
   </footer>
 </main>
 
@@ -337,10 +343,12 @@ footer.foot{text-align:center; color:var(--muted); font-size:.82rem; padding:30p
 /* Stillingar fyrir þessa síðu */
 const SITE = {
   key: "edliVisinda_v1",
-  version: "2 · 27.9.2026",
+  version: "3 · 27.9.2026",
   examDate: "2026-09-30",   /* dagsetning prófsins (ÁÁÁÁ-MM-DD) — breyttu ef þarf */
+  examChapters: ["v11","v12","v13","v14","v15"],   /* kaflarnir sem prófið er úr */
+  examLabel: "úr 1. kafla (Eðli vísinda)",
   eyebrow: "Eðlis- og efnafræði · Borgarholtsskóli",
-  lead: "Kaflarnir fylgja bókinni „Eðli vísinda“. Í hverjum kafla getur þú hlustað, lært eitt hugtak í einu, æft á spjöldum og tekið próf. Fyrir prófið: notaðu námsáætlunina, prófaæfinguna og formúlublaðið."
+  lead: "Prófið 30. september er úr 1. kafla. Honum er hér skipt í fimm hluta eftir glærum kennarans (1.1–1.5). Í hverjum hluta getur þú hlustað, lært eitt hugtak í einu, æft á spjöldum og tekið próf."
 };
 
 /* NÁMSEFNI — fylgir bókinni „Eðli vísinda – Inngangur að eðlis- og efnafræði“.
@@ -348,120 +356,218 @@ const SITE = {
    Blaðsíðutöl vísa í bókina. */
 const CHAPTERS = [
 {
-  id:"edli", num:"🔬", cc:"--c0", part:"", page:11,
-  title:"Eðli vísinda",
-  kicker:"1. kafli",
-  listen:"1. kafli — bls. 11–41.",
+  id:"v11", num:"🔬", cc:"--c0", part:"🎯 Fyrir prófið — 1. kafli: Eðli vísinda", page:11,
+  title:"Hvað eru vísindi?",
+  kicker:"1.1 · Vísindi",
+  listen:"1. kafli — bls. 11–41. Glærur kennarans: „1.1 Vísindi“.",
+  videos:[],
   intro:[
-    "Þessi kafli útskýrir hvað vísindi eru og hvernig vísindamenn vinna.",
-    "Þú lærir líka um mælingar, einingar og hvernig á að skrifa tölur á réttan hátt.",
-    "Í lokin sérðu hvernig hugmyndin um atómið varð til — skref fyrir skref í gegnum söguna."
+    "Vísindi eru skipulögð leið til að safna upplýsingum og skilja heiminn betur.",
+    "Þú lærir vísindalega ferlið í sex skrefum og hvernig Jenner notaði það gegn bólusótt.",
+    "Í lokin lærirðu hvað kenning, lögmál, líkan og breyta þýða."
   ],
   concepts:[
-    {t:"Hvað eru vísindi?", d:"Vísindi eru kerfisbundin leið til að skilja heiminn: við gerum athuganir, setjum fram tilgátu, prófum hana með tilraunum og drögum ályktun. Það sem stenst prófun heldur; annað er lagfært.", ex:"Ef þú heldur að planta þurfi ljós til að vaxa, þá setur þú eina í glugga og aðra í myrkur og berð saman. Það er vísindaleg aðferð."},
-    {t:"Mælieiningar og SI-kerfið", d:"Til að mælingar séu sambærilegar nota vísindamenn sama einingakerfi um allan heim: SI-kerfið. Grunneiningar eru t.d. metri (lengd), kílógramm (massi) og sekúnda (tími).", ex:"Ef einn mælir í tommum og annar í sentímetrum verður ruglingur. Þess vegna nota allir metra í vísindum."},
-    {t:"Staðalform talna", tip:"Veldið segir hversu mörg sæti kommurnar færast. 10⁸ = átta núll á eftir 1.", d:"Mjög stórar eða smáar tölur eru skrifaðar sem tala margfölduð með tíu í veldi. Það gerir þær læsilegri og auðveldar reikning.", formula:"3 × 10⁸ = 300.000.000", ex:"Ljóshraðinn er um 300.000.000 m/s. Í staðalformi er það 3 × 10⁸ m/s — miklu styttra."},
-    {t:"Eðlismassi", tip:"Vatn er 1 g/cm³. Efni með lægri tölu flýtur, hærri sekkur.", d:"Eðlismassi segir hversu þétt efni er: massi á rúmmálseiningu. Efni með háan eðlismassa er þungt miðað við stærð.", formula:"eðlismassi = massi ÷ rúmmál&nbsp;&nbsp;(t.d. g/cm³)",
-      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Korkur flýtur, blý sekkur"><text x="150" y="16" text-anchor="middle" font-size="12" class="tacc">léttara flýtur · þyngra sekkur</text><rect x="80" y="26" width="140" height="112" rx="6" class="soft"/><rect x="80" y="56" width="140" height="82" rx="6" class="softc"/><line x1="80" y1="56" x2="220" y2="56" class="acc-s" stroke-width="2"/><rect x="98" y="45" width="30" height="18" rx="3" class="acc"/><text x="113" y="41" text-anchor="middle" font-size="11" class="tmut">korkur</text><rect x="168" y="114" width="30" height="18" rx="3" class="ink"/><text x="183" y="110" text-anchor="middle" font-size="11" class="tmut">blý</text></svg>', cap:"Jafn stórir hlutir, ólíkur eðlismassi: korkur flýtur, blý sekkur.",
-      ex:"Blýkúla og korkur geta verið jafn stórir, en blýið er miklu þyngra — það hefur hærri eðlismassa. Þess vegna sekkur blý en korkur flýtur."},
-    {t:"Mælinákvæmni og markverðir stafir", tip:"Aldrei fleiri aukastafi en mælitækið sýnir.", d:"Engin mæling er fullkomlega nákvæm. Markverðir stafir sýna hversu nákvæm talan er — við skrifum ekki fleiri stafi en mælingin réttlætir.", ex:"Ef reglustika sýnir millimetra geturðu sagt 12,4 cm — en ekki 12,437 cm, því stikan er ekki svo nákvæm."},
-    {t:"Vísindaleg líkön", d:"Líkan er einföld mynd af raunveruleikanum sem hjálpar okkur að skilja hann. Líkön eru ekki „sannleikurinn“ heldur besta skýringin í bili — og þau batna með nýrri þekkingu.", ex:"Atómlíkanið hefur breyst oft: fyrst lítil kúla, svo með rafeindir á brautum. Hvert líkan var betra en það á undan."},
-    {t:"Atómkenningin verður til", d:"Hugmyndin um að allt sé búið til úr örsmáum ódeilanlegum ögnum — atómum — kom frá Forn-Grikkjum og var síðar staðfest með tilraunum. Þetta er ein mikilvægasta hugmynd vísindanna.", ex:"Demókrítos stakk upp á atómum fyrir 2400 árum. Það var svo Dalton sem gerði úr því vísindalega kenningu löngu síðar."}
+    {t:"Vísindi", d:"Vísindi eru söfnun upplýsinga á kerfisbundinn hátt — til að læra eitthvað nýtt eða skilja viðfangsefnið betur. Lykilorðið er kerfisbundið: ekki giska, heldur athuga, prófa og skrá.", ex:"Að prófa þrjár tegundir af skíðaáburði á sömu brekku, sama dag, og tímamæla hverja ferð — það er kerfisbundið. Að segja „þessi er örugglega bestur“ er það ekki.", tip:"Vísindi = kerfisbundin söfnun upplýsinga."},
+    {t:"Hagnýt vísindi og grunnrannsóknir", d:"Hagnýt vísindi eru stunduð til að gagnast beint við ákveðið verkefni. Grunnrannsóknir („hrein vísindi“) auka þekkingu mannkyns án þess að sjáanlegur tilgangur sé í augnablikinu — mest stundaðar í háskólum og opinberum stofnunum.", ex:"Að þróa betri rafhlöðu í síma er hagnýtt. Að rannsaka hvernig svarthol hegða sér er grunnrannsókn — enginn veit strax til hvers það nýtist.", tip:"Hagnýtt = nýtist strax. Grunnrannsókn = þekking fyrst, notkun kannski síðar."},
+    {t:"Þrjár megingreinar vísinda", d:"Vísindagrein beitir vísindalegum aðferðum á afmörkuðu sviði. Megingreinarnar eru þrjár: hugvísindi (samfélag, menning, sagnfræði, bókmenntafræði, heimspeki), náttúruvísindi (fyrirbæri náttúrunnar: efnafræði, eðlisfræði, jarðfræði, stjarnvísindi) og félagsvísindi (samskipti manna: félagsfræði, mannfræði, hagfræði).",
+      svg:'<svg viewBox="0 0 300 120" role="img" aria-label="Þrjár megingreinar vísinda"><rect x="6" y="14" width="92" height="90" rx="10" class="softc"/><text x="52" y="38" text-anchor="middle" font-size="12" font-weight="700" class="tacc">Hugvísindi</text><text x="52" y="58" text-anchor="middle" font-size="10" class="tmut">sagnfræði</text><text x="52" y="73" text-anchor="middle" font-size="10" class="tmut">heimspeki</text><text x="52" y="88" text-anchor="middle" font-size="10" class="tmut">bókmenntir</text><rect x="104" y="14" width="92" height="90" rx="10" class="softc"/><text x="150" y="38" text-anchor="middle" font-size="12" font-weight="700" class="tacc">Náttúruvísindi</text><text x="150" y="58" text-anchor="middle" font-size="10" class="tmut">efnafræði</text><text x="150" y="73" text-anchor="middle" font-size="10" class="tmut">eðlisfræði</text><text x="150" y="88" text-anchor="middle" font-size="10" class="tmut">jarðfræði</text><rect x="202" y="14" width="92" height="90" rx="10" class="softc"/><text x="248" y="38" text-anchor="middle" font-size="12" font-weight="700" class="tacc">Félagsvísindi</text><text x="248" y="58" text-anchor="middle" font-size="10" class="tmut">félagsfræði</text><text x="248" y="73" text-anchor="middle" font-size="10" class="tmut">mannfræði</text><text x="248" y="88" text-anchor="middle" font-size="10" class="tmut">hagfræði</text></svg>', cap:"Hug = menning og hugsun. Náttúra = efnisheimurinn. Félag = fólk saman.",
+      ex:"Sagnfræðingur (hugvísindi), efnafræðingur (náttúruvísindi) og hagfræðingur (félagsvísindi) nota allir vísindalegar aðferðir — bara á ólíkum sviðum.", tip:"Hugvísindi = menning. Náttúruvísindi = náttúran. Félagsvísindi = samskipti fólks."},
+    {t:"Vísindalegt ferli — sex skref", d:"Vísindalegt ferli („scientific method“) eru reglur um hvernig á að afla þekkingar. Skrefin eru sex: 1) Athugun, 2) Greining, 3) Tilgáta sett fram, 4) Tilraun gerð, 5) Líkan, 6) Útgáfa.",
+      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Sex skref vísindalegs ferlis"><g font-size="11"><rect x="6" y="10" width="88" height="34" rx="8" class="acc"/><text x="50" y="31" text-anchor="middle" class="wht">1 Athugun</text><rect x="106" y="10" width="88" height="34" rx="8" class="acc"/><text x="150" y="31" text-anchor="middle" class="wht">2 Greining</text><rect x="206" y="10" width="88" height="34" rx="8" class="acc"/><text x="250" y="31" text-anchor="middle" class="wht">3 Tilgáta</text><rect x="6" y="66" width="88" height="34" rx="8" class="acc"/><text x="50" y="87" text-anchor="middle" class="wht">4 Tilraun</text><rect x="106" y="66" width="88" height="34" rx="8" class="acc"/><text x="150" y="87" text-anchor="middle" class="wht">5 Líkan</text><rect x="206" y="66" width="88" height="34" rx="8" class="acc"/><text x="250" y="87" text-anchor="middle" class="wht">6 Útgáfa</text></g><line x1="94" y1="27" x2="106" y2="27" class="mut-s" stroke-width="2"/><line x1="194" y1="27" x2="206" y2="27" class="mut-s" stroke-width="2"/><line x1="250" y1="44" x2="250" y2="56" class="mut-s" stroke-width="2"/><line x1="250" y1="56" x2="50" y2="56" class="mut-s" stroke-width="2"/><line x1="50" y1="56" x2="50" y2="66" class="mut-s" stroke-width="2"/><line x1="94" y1="83" x2="106" y2="83" class="mut-s" stroke-width="2"/><line x1="194" y1="83" x2="206" y2="83" class="mut-s" stroke-width="2"/><text x="150" y="130" text-anchor="middle" font-size="11" class="tmut">Ef tilraunin styður ekki tilgátuna → ný tilgáta og aftur af stað</text></svg>', cap:"Athugun → Greining → Tilgáta → Tilraun → Líkan → Útgáfa.",
+      ex:"Þú tekur eftir að síminn tæmist hratt (athugun), skoðar hvaða forrit nota rafhlöðu (greining), giskar á TikTok (tilgáta), slekkur á því í einn dag (tilraun), dregur ályktun (líkan) og segir vinum frá (útgáfa).", tip:"A-G-T-T-L-Ú: Athugun, Greining, Tilgáta, Tilraun, Líkan, Útgáfa."},
+    {t:"Góð tilgáta: prófanleg og með forspárgildi", d:"Tilgáta er hugmynd sem útskýrir það sem þegar er vitað. Hún verður að vera sannanleg með tilraunum — annars þarf að breyta henni. Hún þarf að hafa forspárgildi: segja fyrir um hvað gerist. Ef tilgáta hættir að útskýra nýjar niðurstöður þarf nýja tilgátu. Breytingar eru góðar og nauðsynlegar — það aðskilur vísindi frá öllum öðrum leiðum til að útskýra heiminn.", ex:"„Plöntur vaxa betur í birtu“ er prófanleg — settu eina í glugga og aðra í skáp. „Plöntum líður betur ef maður hugsar fallega til þeirra“ er ekki hægt að mæla — það er ekki vísindaleg tilgáta.", tip:"Tilgáta þarf að vera prófanleg og segja fyrir um eitthvað. Ef hún klikkar: breyta henni."},
+    {t:"Dæmi: Jenner og bólusótt", d:"Bólusótt drap þriðjung þeirra sem smituðust og um 500 milljónir manna á 20. öldinni. Árið 1798 tók Edward Jenner eftir að fólk sem umgekkst kýr fékk mun vægari bólusótt (athugun). Hann safnaði upplýsingum um fleiri (greining) og setti fram tilgátu: kúabóla verndar gegn bólusótt. Hann smitaði dreng fyrst af kúabólu og svo bólusótt — drengurinn veiktist ekki (tilraun). Líkanið: kúabóla verndar, þótt enginn vissi þá af hverju. Hann birti niðurstöðurnar (útgáfa). Bólusetning varð til — síðasta tilfellið var í Sómalíu 1977.", ex:"Þetta er sama ferli og bóluefnin gegn COVID-19: athugun, tilgáta, tilraunir á fólki, niðurstöður birtar.", tip:"Jenner 1798: kúabóla → vernd gegn bólusótt. Öll sex skrefin í einu dæmi."},
+    {t:"Samanburðartilraun (viðmið)", d:"Vísindatilraunir eru alltaf tvíþættar. Aðaltilraunin prófar tilgátuna. Samanburðartilraunin (viðmiðið) er eins að öllu leyti nema því eina sem á að athuga. Án viðmiðs veistu ekki hvort breytingin var vegna þess sem þú prófaðir eða einhvers annars.",
+      svg:'<svg viewBox="0 0 300 120" role="img" aria-label="Aðaltilraun og samanburðartilraun"><rect x="20" y="20" width="115" height="80" rx="10" class="softc"/><text x="77" y="42" text-anchor="middle" font-size="11" font-weight="700" class="tacc">Aðaltilraun</text><text x="77" y="62" text-anchor="middle" font-size="10" class="tmut">gras + áburður</text><text x="77" y="78" text-anchor="middle" font-size="10" class="tmut">sama ljós, vatn, jörð</text><rect x="165" y="20" width="115" height="80" rx="10" class="soft"/><text x="222" y="42" text-anchor="middle" font-size="11" font-weight="700" class="ink">Viðmið</text><text x="222" y="62" text-anchor="middle" font-size="10" class="tmut">gras án áburðar</text><text x="222" y="78" text-anchor="middle" font-size="10" class="tmut">sama ljós, vatn, jörð</text><text x="150" y="114" text-anchor="middle" font-size="10" class="tacc">aðeins EITT atriði ólíkt</text></svg>', cap:"Allt eins nema það eina sem er verið að prófa.",
+      ex:"Viltu vita hvort áburður hjálpi grasi? Tveir blettir, sama sól, sama vatn — annar fær áburð (aðaltilraun), hinn ekki (viðmið).", tip:"Viðmið = alveg eins tilraun nema EITT atriði."},
+    {t:"Vísindakenning og náttúrulögmál", d:"Vísindakenning er hugmynd vísindamanna um samhengi athugana, sett fram til að skýra heilan flokk fyrirbæra. Hún þarf að hafa forsagnargildi (segja fyrir um meira en athuganirnar sem hún byggir á), vera prófanleg og helst einföld og útskýra sem flest. Náttúrulögmál er kenning sem þykir svo vel sönnuð og víðtæk að hún er grundvallaratriði fyrir margt annað — t.d. þyngdarlögmálið.", ex:"Þyngdarlögmál Newtons segir ekki bara af hverju epli fellur, heldur líka hvernig tunglið fer um jörðina og hvernig á að senda gervihnött á braut.", tip:"Kenning: skýrir, spáir, prófanleg, einföld. Lögmál: kenning sem er svo vel sönnuð að allt byggir á henni."},
+    {t:"Þrjár gerðir líkana", d:"Líkan er leið til að lýsa samhengi. Munnlegt líkan er einfaldast: útskýring í orðum („ef salt er sett á götu bráðnar klakinn“). Tölfræðilegt líkan greinir frumbreytu og fylgibreytu og finnur fylgni; það er staðbundið („því kaldara, því meira salt þarf“). Eðlisrænt/stærðfræðilegt líkan er fullkomnast: jafna sem lýsir öllum eðlisþáttum og gildir alls staðar (altækt).", ex:"Veðurspá er stærðfræðilegt líkan: jöfnur sem reikna hita og vind. „Það rignir oft þegar ský eru dökk“ er munnlegt líkan.", tip:"Munnlegt (orð) → tölfræðilegt (fylgni) → stærðfræðilegt (jafna, gildir alls staðar)."},
+    {t:"Breytur: frumbreyta og fylgibreyta", d:"Breyta er það sem er mælt og breytist eftir skilyrðum, t.d. hitastig. Frumbreyta (x) er sú sem hinar eru háðar en er sjálf ekki háð þeim. Fylgibreyta (y) er háð frumbreytunni. Stærðfræðilega: y = f(x) — breytingar á y fara eftir breytingum á x.", ex:"Rennsli í á (fylgibreyta) er háð úrkomu (frumbreyta). Áin hefur engin áhrif á rigninguna. Í tilraun breytir þú frumbreytunni og mælir fylgibreytuna.", tip:"y = f(x): y FYLGIR x. x = frumbreyta, y = fylgibreyta."}
   ],
   quiz:[
-    {c:0, q:"Hvað einkennir vísindalega aðferð?", opts:["Að giska og vona","Að gera athuganir, setja fram tilgátu og prófa hana með tilraunum","Að trúa því sem manni finnst rétt","Að spyrja engra spurninga"], a:1, why:"Vísindi byggja á athugunum, tilgátum og tilraunum — það sem stenst prófun heldur."},
-    {c:1, q:"Af hverju nota vísindamenn SI-einingakerfið?", opts:["Það er íslenskt","Svo mælingar séu sambærilegar um allan heim","Til að flækja hlutina","Það er ódýrara"], a:1, why:"Sameiginlegar einingar (metri, kg, sekúnda) gera mælingar sambærilegar hvar sem er."},
-    {c:2, q:"Hvernig er 300.000.000 skrifað í staðalformi?", opts:["3 × 10⁸","30 × 10⁶","3 × 10⁶","300 × 10⁵"], a:0, why:"Staðalform er tala á milli 1 og 10 sinnum tíu í veldi: 3 × 10⁸."},
-    {c:3, q:"Af hverju flýtur korkur en blý sekkur?", opts:["Korkur er stærri","Blý hefur hærri eðlismassa en vatn, korkur lægri","Blý er kaldara","Það er tilviljun"], a:1, why:"Efni með lægri eðlismassa en vatn flýtur; blý hefur mun hærri eðlismassa og sekkur."},
-    {c:5, q:"Hvað er vísindalegt líkan?", opts:["Fullkominn sannleikur sem breytist aldrei","Einföld mynd af raunveruleikanum sem batnar með nýrri þekkingu","Ljósmynd","Tilraun"], a:1, why:"Líkan er besta skýringin í bili — það er endurbætt þegar ný þekking kemur fram."},
-    {c:0, q:"Hvað er tilgáta?", opts:["Ágiskun sem hægt er að prófa með tilraun","Staðreynd sem er þegar sönnuð","Mæling með reglustiku","Eining í SI-kerfinu"], a:0, why:"Tilgáta er hugmynd um svar sem má prófa með athugunum og tilraunum — það er kjarninn í vísindalegri aðferð."},
-    {c:1, q:"Hver er SI-grunneiningin fyrir massa?", opts:["Gramm (g)","Kílógramm (kg)","Pund","Lítri (l)"], a:1, why:"Kílógramm er grunneining massa í SI-kerfinu. Metri er fyrir lengd og sekúnda fyrir tíma."},
-    {c:3, q:"Hlutur er 200 g og rúmmálið 50 cm³. Hver er eðlismassinn?", opts:["0,25 g/cm³","4 g/cm³","250 g/cm³","10 g/cm³"], a:1, why:"Eðlismassi = massi ÷ rúmmál = 200 ÷ 50 = 4 g/cm³. Þyngra en vatn (1 g/cm³) — hluturinn sekkur."},
-    {c:2, q:"Hvaða tala er 2,5 × 10³?", opts:["250","2500","25.000","2,5"], a:1, why:"10³ = 1000, og 2,5 × 1000 = 2500."},
-    {c:4, q:"Hvað segja markverðir stafir okkur?", opts:["Hversu stór talan er","Hversu nákvæm mælingin er","Hvaða eining er notuð","Hvað hluturinn vegur"], a:1, why:"Markverðir stafir sýna nákvæmni mælingarinnar — við skrifum ekki fleiri stafi en mælitækið réttlætir."},
-    {c:6, q:"Hver stakk fyrst upp á hugmyndinni um atóm, fyrir um 2400 árum?", opts:["Newton","Demókrítos","Dalton","Einstein"], a:1, why:"Demókrítos í Forn-Grikklandi stakk upp á atómum. Dalton gerði úr því vísindalega kenningu miklu síðar."}
+    {c:0, q:"Hvað einkennir vísindi umfram venjulega ágiskun?", opts:["Kerfisbundin söfnun upplýsinga","Að treysta tilfinningu","Að trúa því sem flestir segja","Að forðast tilraunir"], a:0, why:"Vísindi eru kerfisbundin söfnun upplýsinga til að læra nýtt eða skilja betur."},
+    {c:1, q:"Hvað eru grunnrannsóknir („hrein vísindi“)?", opts:["Rannsóknir sem gagnast beint ákveðnu verkefni","Rannsóknir sem auka þekkingu án sjáanlegs tilgangs í augnablikinu","Rannsóknir sem fyrirtæki borga fyrir","Rannsóknir á grunnskólabörnum"], a:1, why:"Grunnrannsóknir auka þekkingu mannkyns án þess að tilgangurinn sé ljós strax — mest í háskólum."},
+    {c:1, q:"Að þróa nýtt bóluefni fyrir sjúkrahús er dæmi um…", opts:["Grunnrannsóknir","Hagnýt vísindi","Hugvísindi","Gervivísindi"], a:1, why:"Hagnýt vísindi eru stunduð til að gagnast beint við ákveðið verkefni."},
+    {c:2, q:"Hagfræði og félagsfræði tilheyra…", opts:["Náttúruvísindum","Hugvísindum","Félagsvísindum","Engum vísindum"], a:2, why:"Félagsvísindi fjalla um samskipti manna: félagsfræði, mannfræði, hagfræði."},
+    {c:2, q:"Hvaða grein er náttúruvísindi?", opts:["Sagnfræði","Heimspeki","Efnafræði","Bókmenntafræði"], a:2, why:"Náttúruvísindi fjalla um fyrirbæri náttúrunnar: efnafræði, eðlisfræði, jarðfræði, stjarnvísindi."},
+    {c:3, q:"Hver er rétt röð vísindalegs ferlis?", opts:["Tilraun → Athugun → Tilgáta → Útgáfa","Athugun → Greining → Tilgáta → Tilraun → Líkan → Útgáfa","Tilgáta → Útgáfa → Tilraun → Athugun","Greining → Útgáfa → Líkan → Tilraun"], a:1, why:"Skrefin sex: Athugun, Greining, Tilgáta, Tilraun, Líkan, Útgáfa."},
+    {c:3, q:"Hvað er fyrsta skrefið í vísindalegu ferli?", opts:["Tilraun","Útgáfa","Athugun","Líkan"], a:2, why:"Allt byrjar á athugun — að taka eftir einhverju."},
+    {c:4, q:"Hvað þarf tilgáta að vera?", opts:["Sönnuð fyrirfram","Prófanleg með tilraunum og með forspárgildi","Vinsæl","Flókin"], a:1, why:"Tilgáta verður að vera sannanleg með tilraunum og segja fyrir um hvað gerist."},
+    {c:4, q:"Hvað gerist ef tilgáta hættir að útskýra nýjar niðurstöður?", opts:["Niðurstöðunum er hent","Finna þarf nýja tilgátu","Tilgátan verður lögmál","Ekkert"], a:1, why:"Ef tilgáta útskýrir ekki nýjar mælingar þarf nýja tilgátu — breytingar eru hluti af vísindum."},
+    {c:5, q:"Hver var tilgáta Jenners?", opts:["Kýr valda bólusótt","Þeir sem smitast af kúabólu eru verndaðir gegn alvarlegri bólusótt","Bólusótt læknast með salti","Börn fá ekki bólusótt"], a:1, why:"Jenner tók eftir að fólk sem umgekkst kýr fékk væga bólusótt og setti fram þá tilgátu að kúabóla verndaði."},
+    {c:5, q:"Hvenær var síðasta skráða tilfelli bólusóttar?", opts:["1798 í Englandi","1977 í Sómalíu","2020 í Kína","1918 á Íslandi"], a:1, why:"Bólusetning og útrýmingaráætlun WHO útrýmdu bólusótt — síðasta tilfellið var í Sómalíu 1977."},
+    {c:6, q:"Hvað er samanburðartilraun (viðmið)?", opts:["Tilraun sem er endurtekin tvisvar","Tilraun eins og aðaltilraunin í alla staði nema því sem á að athuga","Tilraun með fleiri breytum","Tilraun án niðurstöðu"], a:1, why:"Viðmiðið er eins nema eitt atriði — þannig sést hvort það atriði olli breytingunni."},
+    {c:7, q:"Hvað er náttúrulögmál?", opts:["Kenning sem er svo vel sönnuð og víðtæk að hún er grundvöllur margs annars","Tilgáta sem enginn hefur prófað","Lög sem Alþingi setur um náttúruna","Munnlegt líkan"], a:0, why:"Náttúrulögmál, t.d. þyngdarlögmálið, er kenning sem þykir svo vel sönnuð að margt byggir á henni."},
+    {c:7, q:"Hvað þarf góð vísindakenning að hafa?", opts:["Forsagnargildi og vera prófanleg","Mörg flókin orð","Stuðning stjórnmálamanna","Að vera ný"], a:0, why:"Kenning þarf forsagnargildi, að vera prófanleg og helst einföld og skýra sem flest."},
+    {c:8, q:"Hvaða gerð líkans er fullkomnust?", opts:["Munnlegt líkan","Tölfræðilegt líkan","Eðlisrænt/stærðfræðilegt líkan","Þau eru öll jafn góð"], a:2, why:"Stærðfræðilegt líkan lýsir öllum eðlisþáttum með jöfnu og gildir alls staðar (altækt)."},
+    {c:9, q:"Rennsli í á fer eftir úrkomu. Hvað er úrkoman?", opts:["Fylgibreyta","Frumbreyta","Líkan","Viðmið"], a:1, why:"Úrkoman er frumbreytan (x) — rennslið (y) er háð henni, en ekki öfugt."},
+    {c:9, q:"Í y = f(x), hvor er fylgibreytan?", opts:["x","y","f","Hvorug"], a:1, why:"y fylgir x: y er fylgibreytan, x frumbreytan."}
   ]
 },
 {
-  id:"hreyfing", num:"🚀", cc:"--c1", part:"", page:42,
-  title:"Hraði, hröðun, kraftur og massi",
-  kicker:"2. kafli",
-  listen:"2. kafli — bls. 42–71.",
+  id:"v12", num:"📏", cc:"--c1", part:"🎯 Fyrir prófið — 1. kafli: Eðli vísinda", page:11,
+  title:"Tölur, einingar og mælingar",
+  kicker:"1.2 · Mælingar og tölur",
+  listen:"1. kafli — bls. 11–41. Glærur kennarans: „1.2 Mælingar og tölur“.",
+  videos:[],
   intro:[
-    "Þessi kafli fjallar um hreyfingu: hvað hraði og hröðun eru og hvað fær hluti til að hreyfast.",
-    "Þú lærir um krafta, massa og þyngd, og hvernig þeir tengjast með einföldum formúlum.",
-    "Í lokin er þrýstingur, flotgeta og af hverju hlutir fljóta eða sökkva."
+    "Í vísindum er tala aldrei ein — hún hefur alltaf einingu.",
+    "Þú lærir SI-einingarnar, forskeytin (kíló, milli…), staðalform og hvernig á að breyta milli eininga.",
+    "Í lokin lærirðu um óvissu í mælingum og markverða stafi — það sem oft er spurt um í prófi."
   ],
   concepts:[
-    {t:"Hraði", tip:"Hraði = vegalengd ÷ tími. Hugsaðu „km á klukkustund“ — vegalengd á tíma.", d:"Hraði segir hversu langt hlutur fer á tíma. Mælt í metrum á sekúndu (m/s).", formula:"hraði = vegalengd ÷ tími&nbsp;&nbsp;(m/s)", ex:"Ef þú hleypur 100 metra á 10 sekúndum er hraðinn 100 ÷ 10 = 10 m/s."},
-    {t:"Hröðun", d:"Hröðun er breyting á hraða á tíma — hversu hratt hluturinn eykur (eða minnkar) hraðann. Ef bíll fer hraðar og hraðar er hann að hraða.", formula:"hröðun = breyting á hraða ÷ tími&nbsp;&nbsp;(m/s²)", ex:"Bíll sem fer úr 0 í 20 m/s á 4 sekúndum hraðar um 5 m/s á hverri sekúndu (5 m/s²)."},
-    {t:"Þyngdarhröðun", d:"Allir hlutir falla til jarðar með sömu hröðun ef ekkert stöðvar þá: um 9,8 m/s². Þess vegna falla steinn og fjöður jafn hratt í lofttæmi.", formula:"þyngdarhröðun ≈ 9,8 m/s²", ex:"Þegar þú sleppir bolta eykst fallhraði hans um u.þ.b. 10 m/s á hverri sekúndu vegna þyngdarhröðunar."},
-    {t:"Kraftur, massi og þyngd", tip:"Massi (kg) breytist aldrei. Þyngd (N) fer eftir þyngdaraflinu — minni á tunglinu.", d:"Kraftur er tog eða ýting, mældur í njútonum (N). Massi (kg) er hversu mikið efni er í hlut. Þyngd er krafturinn sem þyngdaraflið togar með — þyngd = massi × þyngdarhröðun.", formula:"kraftur = massi × hröðun&nbsp;&nbsp;·&nbsp;&nbsp;F = m · a<br>þyngd = massi × g&nbsp;&nbsp;(g ≈ 9,8 m/s²)", ex:"Sami hlutur hefur sama massa á jörðu og tungli, en minni þyngd á tunglinu því þyngdaraflið er veikara þar."},
-    {t:"Uppvegnir og óuppvegnir kraftar", d:"Ef kraftar á hlut jafnast út (uppvegnir) breytist hreyfingin ekki. Ef þeir jafnast ekki (óuppvegnir) fer hluturinn af stað, hraðar eða hægir á sér.",
-      svg:'<svg viewBox="0 0 300 170" role="img" aria-label="Uppvegnir og óuppvegnir kraftar"><text x="150" y="14" text-anchor="middle" font-size="11" class="tacc">jafnir kraftar → kyrrt</text><rect x="125" y="26" width="50" height="34" rx="5" class="softc"/><line x1="123" y1="43" x2="80" y2="43" class="ink-s" stroke-width="3"/><polygon points="74,43 84,38 84,48" class="ink"/><line x1="177" y1="43" x2="220" y2="43" class="ink-s" stroke-width="3"/><polygon points="226,43 216,38 216,48" class="ink"/><text x="150" y="104" text-anchor="middle" font-size="11" class="tacc">ójafnir kraftar → hreyfist →</text><rect x="115" y="116" width="50" height="34" rx="5" class="softc"/><line x1="113" y1="133" x2="90" y2="133" class="mut-s" stroke-width="3"/><polygon points="86,133 94,129 94,137" class="mut"/><line x1="167" y1="133" x2="240" y2="133" class="acc-s" stroke-width="3"/><polygon points="246,133 236,128 236,138" class="acc"/></svg>', cap:"Jafnir kraftar halda hlut kyrrum; ójafnir koma honum af stað.",
-      ex:"Bók á borði stendur kyrr því þyngd hennar og stuðningur borðsins jafnast út. Ýtirðu henni fastar en núningurinn, þá rennur hún."},
-    {t:"Vinna, orka og afl", d:"Vinna er unnin þegar kraftur færir hlut. Orka er geta til að vinna vinnu. Afl er hversu hratt vinnan er unnin, mælt í vöttum (W).", formula:"vinna = kraftur × vegalengd<br>afl = vinna ÷ tími&nbsp;&nbsp;(W)", ex:"Að lyfta þungum kassa upp stiga er vinna. Að gera það hratt krefst meira afls en að gera það hægt."},
-    {t:"Þrýstingur", tip:"Lítill flötur → mikill þrýstingur (nál, hælar). Stór flötur → lítill þrýstingur (skíði).", d:"Þrýstingur er kraftur á flatareiningu. Sami kraftur á lítinn flöt gefur mikinn þrýsting. Mælt í paskölum (Pa).", formula:"þrýstingur = kraftur ÷ flatarmál&nbsp;&nbsp;(Pa)", ex:"Þú sekkur síður í snjó á skíðum en í skóm — skíðin dreifa þyngdinni á stærri flöt og lækka þrýstinginn."},
-    {t:"Flotgeta og uppdrif", d:"Hlutur í vökva fær uppdrif upp á við sem er jafn þungt og vökvinn sem hann ýtir frá sér (lögmál Arkímedesar). Ef uppdrifið er meira en þyngdin flýtur hluturinn.",
-      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Uppdrif og þyngd"><rect x="40" y="46" width="220" height="94" rx="6" class="softc"/><line x1="40" y1="46" x2="260" y2="46" class="acc-s" stroke-width="2"/><rect x="125" y="72" width="50" height="38" rx="5" class="ink"/><line x1="150" y1="70" x2="150" y2="36" class="acc-s" stroke-width="3"/><polygon points="150,26 143,40 157,40" class="acc"/><text x="150" y="20" text-anchor="middle" font-size="11" class="tacc">uppdrif</text><line x1="150" y1="110" x2="150" y2="130" class="mut-s" stroke-width="3"/><polygon points="150,138 143,126 157,126" class="mut"/><text x="150" y="150" text-anchor="middle" font-size="11" class="tmut">þyngd</text></svg>', cap:"Uppdrifið ýtir upp, þyngdin togar niður. Stærra uppdrif → hluturinn flýtur.",
-      ex:"Risastórt stálskip flýtur af því lögun þess ryður frá miklum sjó — uppdrifið verður nógu stórt til að halda því á floti."}
+    {t:"Stigstærð og vektor", d:"Stigstærð er tala + eining, t.d. 19 ár eða 100 km/klst. Vektor er stigstærð með stefnu, t.d. 100 km/klst í norður. Eining getur verið samsett úr fleiri einingum, eins og km/klst.", ex:"„Ég hljóp 5 km“ er stigstærð. „Vindurinn er 15 m/s úr suðri“ er vektor því stefnan fylgir.", tip:"Stigstærð = tala + eining. Vektor = líka stefna."},
+    {t:"SI-grunneiningar", d:"Vísindamenn um allan heim nota sama einingakerfi, SI-kerfið. Grunneiningarnar sem þú þarft að kunna: massi í kílógrömmum (kg), lengd í metrum (m), tími í sekúndum (s). Auk þess rafstraumur í amperum (A) og hitastig í kelvin (K).", formula:"massi: kg &nbsp;·&nbsp; lengd: m &nbsp;·&nbsp; tími: s<br>rafstraumur: A &nbsp;·&nbsp; hitastig: K", ex:"Kílógramm var upphaflega skilgreint sem massi eins lítra af vatni. Í vísindum eru grömm alltaf breytt í kg og klukkustundir í sekúndur.", tip:"kg – m – s. Ekki g, ekki km, ekki klst."},
+    {t:"Afleiddar einingar", d:"Sumar einingar eru búnar til úr grunneiningunum. Kraftur er mældur í njútonum (N = kg·m/s²), vinna og orka í júlum (J = N·m) og afl í vöttum (W = J/s). Rafhleðsla er í kúlomb (C).", formula:"kraftur: F = m · a → N<br>vinna/orka: J = N · m &nbsp;·&nbsp; afl: P = E ÷ t → W", ex:"Ljósapera merkt 60 W notar 60 júl af orku á hverri sekúndu.", tip:"N = kraftur, J = orka, W = afl (orka á sekúndu)."},
+    {t:"Forskeyti: kíló, milli og félagar", d:"Forskeyti láta okkur skrifa stórar og litlar tölur á stuttan hátt. Hvert þrep er × 1000: gíga (G, 10⁹) → mega (M, 10⁶) → kíló (k, 10³) → eining → milli (m, 10⁻³) → míkró (µ, 10⁻⁶) → nanó (n, 10⁻⁹). Centi (c) er 1/100 og desi (d) 1/10.", formula:"k = 1000 &nbsp;·&nbsp; M = 1.000.000 &nbsp;·&nbsp; G = 1.000.000.000<br>c = 0,01 &nbsp;·&nbsp; m = 0,001 &nbsp;·&nbsp; µ = 0,000001",
+      svg:'<svg viewBox="0 0 300 100" role="img" aria-label="Forskeyti frá gíga til nanó"><g font-size="11"><rect x="4" y="30" width="40" height="30" rx="6" class="acc"/><text x="24" y="49" text-anchor="middle" class="wht">G</text><rect x="47" y="30" width="40" height="30" rx="6" class="acc"/><text x="67" y="49" text-anchor="middle" class="wht">M</text><rect x="90" y="30" width="40" height="30" rx="6" class="acc"/><text x="110" y="49" text-anchor="middle" class="wht">k</text><rect x="133" y="30" width="40" height="30" rx="6" class="soft"/><text x="153" y="49" text-anchor="middle" class="ink">1</text><rect x="176" y="30" width="40" height="30" rx="6" class="acc"/><text x="196" y="49" text-anchor="middle" class="wht">m</text><rect x="219" y="30" width="40" height="30" rx="6" class="acc"/><text x="239" y="49" text-anchor="middle" class="wht">µ</text><rect x="262" y="30" width="34" height="30" rx="6" class="acc"/><text x="279" y="49" text-anchor="middle" class="wht">n</text></g><text x="150" y="18" text-anchor="middle" font-size="10" class="tmut">hvert þrep = × 1000</text><text x="24" y="80" text-anchor="middle" font-size="9" class="tmut">10⁹</text><text x="67" y="80" text-anchor="middle" font-size="9" class="tmut">10⁶</text><text x="110" y="80" text-anchor="middle" font-size="9" class="tmut">10³</text><text x="196" y="80" text-anchor="middle" font-size="9" class="tmut">10⁻³</text><text x="239" y="80" text-anchor="middle" font-size="9" class="tmut">10⁻⁶</text><text x="279" y="80" text-anchor="middle" font-size="9" class="tmut">10⁻⁹</text></svg>', cap:"Stórt til vinstri (G, M, k), lítið til hægri (m, µ, n). Hvert þrep er þúsundfalt.",
+      ex:"1 km = 1000 m. 1 mm = 0,001 m. 2 GB á símanum eru 2.000.000.000 bæti. 5 ml = 5 cm³.", tip:"kíló = þúsund. milli = þúsundasti. centi = hundraðasti. míkró = milljónasti."},
+    {t:"Staðalform", d:"Á staðalformi er tala skrifuð sem tala með aðeins EINN staf vinstra megin við kommuna, margfölduð með tíu í veldi. Jákvætt veldi = stór tala, neikvætt veldi = lítil tala.", formula:"123.000 m = 1,23 × 10⁵ m<br>0,00005638 s = 5,638 × 10⁻⁵ s", ex:"1000 m = 1 × 10³ m. Ljóshraði 300.000.000 m/s = 3 × 10⁸ m/s. 0,002 g = 2 × 10⁻³ g.", tip:"Einn stafur fyrir framan kommuna. Veldið telur sætin sem kommurnar færðust. Mínus = lítil tala."},
+    {t:"Einingabreyting með broti", d:"Öruggasta leiðin til að breyta milli eininga er að margfalda með broti sem er jafnt og 1, t.d. 60 mín ÷ 1 klst eða 1000 m ÷ 1 km. Það má alltaf margfalda með 1. Sama eining uppi og niðri styttist út.", formula:"120 km/klst = 120.000 m ÷ 3600 s = 33,3 m/s", ex:"5 klst × (60 mín ÷ 1 klst) = 300 mín — „klst“ styttist út og „mín“ verður eftir. 0,772 s = 0,0129 mín.", tip:"Margfalda með broti sem er = 1. Sama eining uppi og niðri hverfur."},
+    {t:"Rúmmál", d:"Rúmmál er rýmið sem hlutur tekur. SI-einingin er rúmmetri (m³). Lítri er ekki SI-eining en er mikið notaður: 1 m³ = 1000 L, 1 dm³ = 1 L, 1 cm³ = 1 mL.", formula:"1 m³ = 1000 L &nbsp;·&nbsp; 1 dm³ = 1 L &nbsp;·&nbsp; 1 cm³ = 1 mL", ex:"Hálfs lítra Nocco-dós er 500 mL = 500 cm³ = 0,5 dm³.", tip:"cm³ = mL. dm³ = lítri. m³ = þúsund lítrar."},
+    {t:"Eðlismassi", d:"Eðlismassi segir hversu þungur hlutur er miðað við rúmmálið sem hann tekur: massi deilt með rúmmáli. SI-einingin er kg/m³ (líka g/cm³). Stál 7800 kg/m³, vatn 1000, ís 920, bensín 800. Efni með lægri eðlismassa en vatn flýtur á vatni.", formula:"eðlismassi = massi ÷ rúmmál &nbsp;·&nbsp; ρ = m ÷ V &nbsp;&nbsp;(kg/m³)",
+      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Ís flýtur, stál sekkur"><text x="150" y="16" text-anchor="middle" font-size="12" class="tacc">léttara en vatn flýtur · þyngra sekkur</text><rect x="80" y="26" width="140" height="112" rx="6" class="soft"/><rect x="80" y="56" width="140" height="82" rx="6" class="softc"/><line x1="80" y1="56" x2="220" y2="56" class="acc-s" stroke-width="2"/><rect x="98" y="45" width="30" height="18" rx="3" class="acc"/><text x="113" y="41" text-anchor="middle" font-size="11" class="tmut">ís 920</text><rect x="168" y="114" width="30" height="18" rx="3" class="ink"/><text x="183" y="110" text-anchor="middle" font-size="11" class="tmut">stál 7800</text><text x="150" y="80" text-anchor="middle" font-size="10" class="tmut">vatn 1000 kg/m³</text></svg>', cap:"Ís (920) flýtur á vatni (1000). Stál (7800) sekkur.",
+      ex:"Ísmolar fljóta í glasi af því eðlismassi íss (920) er lægri en vatns (1000). Bensín (800) flýtur ofan á vatni.", tip:"ρ = m ÷ V. Vatn = 1000 kg/m³ = 1 g/cm³. Lægra flýtur."},
+    {t:"Mælingar og óvissa", d:"Engin mæling er fullkomlega nákvæm. Aflestraróvissan er helmingurinn af minnsta bili á kvarðanum: reglustika með cm-bilum hefur óvissuna ±0,5 cm, með mm-bilum ±0,5 mm — tíu sinnum nákvæmari. Mælitæki með skjá: framleiðandi gefur oftast ±1 á síðasta staf. Niðurstaða er skrifuð sem gildi ± óvissa.", formula:"óvissa = ½ × minnsta bil<br>6,5 ± 0,5 cm &nbsp;·&nbsp; 6,55 ± 0,05 cm &nbsp;·&nbsp; vog: 2,56 ± 0,01 g",
+      svg:'<svg viewBox="0 0 300 120" role="img" aria-label="Óvissa á reglustiku"><rect x="20" y="30" width="260" height="30" rx="4" class="soft"/><g class="ink-s" stroke-width="1.5"><line x1="40" y1="30" x2="40" y2="50"/><line x1="90" y1="30" x2="90" y2="50"/><line x1="140" y1="30" x2="140" y2="50"/><line x1="190" y1="30" x2="190" y2="50"/><line x1="240" y1="30" x2="240" y2="50"/></g><g font-size="9" class="tmut"><text x="40" y="74" text-anchor="middle">5</text><text x="90" y="74" text-anchor="middle">6</text><text x="140" y="74" text-anchor="middle">7</text><text x="190" y="74" text-anchor="middle">8</text><text x="240" y="74" text-anchor="middle">9 cm</text></g><line x1="20" y1="14" x2="115" y2="14" class="acc-s" stroke-width="4"/><text x="150" y="104" text-anchor="middle" font-size="11" class="tacc">minnsta bil 1 cm → mæling 6,5 ± 0,5 cm</text></svg>', cap:"Minnsta bil 1 cm gefur óvissuna ±0,5 cm. Bil upp á 1 mm gefur ±0,5 mm.",
+      ex:"Þú mælir bók með venjulegri reglustiku: 21,3 ± 0,05 cm. Með málbandi sem sýnir bara cm: 21 ± 0,5 cm.", tip:"Óvissa = hálft minnsta bil. Fínni kvarði = minni óvissa."},
+    {t:"Óvissur leggjast saman", d:"Þegar mæligildi með óvissu eru lögð saman eða dregin frá, þá leggst óvissan saman. Óvissur geta bara orðið stærri — þær styttast aldrei út.", formula:"5,4 ± 0,1 g + 3,6 ± 0,1 g = 9,0 ± 0,2 g", ex:"Þú vigtar tvo hluti á vog með óvissu 0,1 g: 5,4 g og 3,6 g. Samtals 9,0 g, óvissan 0,1 + 0,1 = 0,2 g. Svar: 9,0 ± 0,2 g.", tip:"Leggja saman gildin — og leggja saman óvissurnar líka."},
+    {t:"Marktækur munur", d:"Munur á tveimur mælingum er aðeins marktækur ef hann er stærri en óvissan. Ef óvissan er ±0,5 mm er ekki marktækur munur á 55,5 mm og 55,2 mm — reglustikan getur ekki greint þann mun með vissu.", ex:"Tveir vinir hlaupa 100 m á 13,4 og 13,3 s, mælt með skeiðklukku með ±0,2 s óvissu. Munurinn (0,1 s) er minni en óvissan — ekki marktækur.", tip:"Marktækur munur = munurinn er STÆRRI en óvissan."},
+    {t:"Markverðir stafir", d:"Markverðir stafir eru þeir stafir í tölu sem skipta máli fyrir mælinguna — þeir koma til vegna óvissunnar. Núll sem stendur eitt og sér vinstra megin við kommu (og núllin á undan fyrsta staf) eru ekki markverð. Trix: skrifaðu töluna á staðalformi og teldu stafina sem verða eftir.", formula:"609,40 cm → 5 stafir (6,0940 × 10²)<br>15,65 cm → 4 stafir &nbsp;·&nbsp; 0,35 cm → 2 stafir &nbsp;·&nbsp; 0,07 cm → 1 stafur", ex:"67,89 ± 0,05: níurnar aftast eru markverðar. 0,0350 hefur 3 markverða stafi (3,50 × 10⁻²) — núllin fremst telja ekki.", tip:"Núll fremst telja ekki. Skrifaðu á staðalformi og teldu."}
   ],
   quiz:[
-    {c:0, q:"Hver er formúlan fyrir hraða?", opts:["Hraði = tími ÷ vegalengd","Hraði = vegalengd ÷ tími","Hraði = massi × tími","Hraði = kraftur ÷ massi"], a:1, why:"Hraði = vegalengd ÷ tími, mælt í m/s."},
-    {c:1, q:"Hvað er hröðun?", opts:["Sama og hraði","Breyting á hraða á tíma","Þyngd hlutar","Kraftur á hlut"], a:1, why:"Hröðun mælir hversu hratt hraðinn breytist, í m/s²."},
-    {c:3, q:"Hvað segir lögmálið F = m·a?", opts:["Kraftur = massi × hröðun","Kraftur = massi ÷ hröðun","Massi = kraftur × hröðun","Hröðun = kraftur × massi"], a:0, why:"Krafturinn sem þarf er massinn margfaldaður með hröðuninni (F = m·a)."},
-    {c:6, q:"Af hverju sekkur þú síður í snjó á skíðum en í skóm?", opts:["Skíðin eru létt","Skíðin dreifa þyngdinni á stærri flöt og lækka þrýstinginn","Snjórinn er harðari","Skór eru þyngri"], a:1, why:"Sami kraftur á stærri flöt gefur minni þrýsting — þess vegna sekkurðu síður."},
-    {c:7, q:"Af hverju flýtur stálskip þótt stál sé þungt?", opts:["Stál er létt í vatni","Lögun þess ryður frá miklum sjó og uppdrifið heldur því á floti","Það er fullt af lofti alls staðar","Sjórinn ýtir því upp af tilviljun"], a:1, why:"Uppdrif er jafn þungt og vökvinn sem hluturinn ryður frá. Lögun skipsins ryður nógu miklu til að fljóta (Arkímedes)."},
-    {c:0, q:"Bíll ekur 300 m á 20 sekúndum. Hver er hraðinn?", opts:["6000 m/s","15 m/s","0,07 m/s","320 m/s"], a:1, why:"Hraði = vegalengd ÷ tími = 300 ÷ 20 = 15 m/s."},
-    {c:3, q:"Manneskja er 50 kg. Hver er þyngd hennar á jörðinni (g ≈ 10 m/s²)?", opts:["50 N","5 N","500 N","5000 N"], a:2, why:"Þyngd = massi × g = 50 × 10 = 500 N. Massinn er áfram 50 kg."},
-    {c:3, q:"Hver er munurinn á massa og þyngd?", opts:["Enginn munur","Massi er magn efnis (kg), þyngd er kraftur þyngdaraflsins (N)","Massi er mældur í N, þyngd í kg","Þyngd er alltaf meiri en massi"], a:1, why:"Massi (kg) breytist ekki hvar sem þú ert. Þyngd (N) er krafturinn sem þyngdaraflið togar með og er minni á tunglinu."},
-    {c:5, q:"Hvað er afl?", opts:["Sama og kraftur","Hversu hratt vinna er unnin","Vegalengd á tíma","Massi × hraði"], a:1, why:"Afl = vinna ÷ tími, mælt í vöttum (W). Sama vinna á styttri tíma = meira afl."},
-    {c:3, q:"Í hvaða einingu er kraftur mældur?", opts:["Kílógramm (kg)","Njúton (N)","Vatt (W)","Paskal (Pa)"], a:1, why:"Kraftur og þyngd eru mæld í njútonum (N). Vatt er afl og paskal er þrýstingur."},
-    {c:6, q:"Kraftur upp á 600 N verkar á 0,5 m² flöt. Hver er þrýstingurinn?", opts:["300 Pa","1200 Pa","600 Pa","0,5 Pa"], a:1, why:"Þrýstingur = kraftur ÷ flatarmál = 600 ÷ 0,5 = 1200 Pa."},
-    {c:4, q:"Hvað gerist við hlut ef kraftarnir á hann eru uppvegnir (jafnast út)?", opts:["Hann hraðar","Hreyfing hans breytist ekki","Hann stöðvast alltaf","Hann þyngist"], a:1, why:"Uppvegnir kraftar breyta ekki hreyfingu: kyrr hlutur er áfram kyrr og hlutur á hreyfingu heldur sama hraða."},
-    {c:2, q:"Steinn og fjöður falla í lofttæmi. Hvort lendir fyrr?", opts:["Steinninn","Fjöðrin","Þau lenda samtímis","Hvorugt fellur"], a:2, why:"Án loftmótstöðu falla allir hlutir með sömu þyngdarhröðun (≈ 9,8 m/s²) og lenda samtímis."}
+    {c:0, q:"„100 km/klst í norður“ er dæmi um…", opts:["Stigstærð","Vektor","Forskeyti","Óvissu"], a:1, why:"Vektor er stigstærð með stefnu. Án stefnunnar (100 km/klst) væri þetta stigstærð."},
+    {c:1, q:"Hverjar eru SI-grunneiningar fyrir massa, lengd og tíma?", opts:["g, cm, mín","kg, m, s","kg, km, klst","N, J, W"], a:1, why:"Kílógramm, metri og sekúnda eru grunneiningar SI-kerfisins."},
+    {c:2, q:"Í hvaða einingu er afl mælt?", opts:["Njúton (N)","Júl (J)","Vatt (W)","Kelvin (K)"], a:2, why:"Afl er orka á tíma, P = E ÷ t, mælt í vöttum (W = J/s)."},
+    {c:3, q:"Hvað er 1 kílómetri margir metrar?", opts:["100","1000","10.000","0,001"], a:1, why:"Kíló þýðir þúsund: 1 km = 1000 m."},
+    {c:3, q:"Hvað þýðir forskeytið milli (m)?", opts:["Þúsund","Hundraðasti","Þúsundasti","Milljón"], a:2, why:"Milli = 10⁻³ = 0,001. 1 mm er þúsundasti úr metra."},
+    {c:3, q:"Hvað er 1 mega (M)?", opts:["1.000","1.000.000","1.000.000.000","0,000001"], a:1, why:"Mega = 10⁶ = ein milljón. Gíga er milljarður."},
+    {c:4, q:"Hvernig er 123.000 m skrifað á staðalformi?", opts:["123 × 10³ m","12,3 × 10⁴ m","1,23 × 10⁵ m","1,23 × 10³ m"], a:2, why:"Aðeins einn stafur fyrir framan kommuna: 1,23 × 10⁵."},
+    {c:4, q:"Hvað þýðir neikvætt veldi, t.d. 5,6 × 10⁻⁵?", opts:["Talan er neikvæð","Talan er mjög lítil","Talan er mjög stór","Talan er heil tala"], a:1, why:"Neikvætt veldi þýðir lítil tala: 5,6 × 10⁻⁵ = 0,000056."},
+    {c:5, q:"120 km/klst eru hversu margir m/s?", opts:["2 m/s","33,3 m/s","120 m/s","432 m/s"], a:1, why:"120 km = 120.000 m og 1 klst = 3600 s. 120.000 ÷ 3600 = 33,3 m/s."},
+    {c:5, q:"Af hverju má margfalda með broti eins og 60 mín ÷ 1 klst?", opts:["Af því það er jafnt og 1","Af því kennarinn segir það","Af því brot eru minni","Það má ekki"], a:0, why:"60 mín og 1 klst eru sami tíminn, svo brotið er jafnt og 1 — og það má alltaf margfalda með 1."},
+    {c:6, q:"1 cm³ er jafnt og…", opts:["1 lítri","1 mL","1 dm³","1 m³"], a:1, why:"1 cm³ = 1 mL. 1 dm³ = 1 L og 1 m³ = 1000 L."},
+    {c:7, q:"Eðlismassi vatns er um…", opts:["100 kg/m³","1000 kg/m³","7800 kg/m³","920 kg/m³"], a:1, why:"Vatn er 1000 kg/m³ (= 1 g/cm³). Ís er 920 og stál 7800."},
+    {c:7, q:"Af hverju flýtur ís á vatni?", opts:["Ís er heitari","Eðlismassi íss (920) er lægri en vatns (1000)","Ís er stærri","Vatn ýtir ísnum upp af tilviljun"], a:1, why:"Efni með lægri eðlismassa en vatn flýtur. Ís er 920 kg/m³, vatn 1000."},
+    {c:7, q:"Hlutur er 2 kg og 0,001 m³. Eðlismassi?", opts:["0,0005 kg/m³","2000 kg/m³","200 kg/m³","2 kg/m³"], a:1, why:"ρ = m ÷ V = 2 ÷ 0,001 = 2000 kg/m³."},
+    {c:8, q:"Minnsta bil á reglustiku er 1 mm. Hver er óvissan?", opts:["±1 mm","±0,5 mm","±0,1 mm","±2 mm"], a:1, why:"Aflestraróvissa er helmingur af minnsta bili: ±0,5 mm."},
+    {c:8, q:"Hvor mælingin er nákvæmari: 6,5 ± 0,5 cm eða 6,55 ± 0,05 cm?", opts:["6,5 ± 0,5 cm","6,55 ± 0,05 cm","Jafn nákvæmar","Hvorug er nákvæm"], a:1, why:"Minni óvissa = nákvæmari mæling. ±0,05 er tíu sinnum nákvæmara en ±0,5."},
+    {c:9, q:"Þú leggur saman 5,4 ± 0,1 g og 3,6 ± 0,1 g. Svarið er…", opts:["9,0 ± 0,1 g","9,0 ± 0,2 g","9,0 ± 0 g","9,0 ± 0,05 g"], a:1, why:"Gildin leggjast saman (9,0 g) og óvissurnar líka (0,1 + 0,1 = 0,2 g)."},
+    {c:9, q:"Geta óvissur stytt hvor aðra út?", opts:["Já, alltaf","Nei — óvissur geta bara stækkað","Bara í margföldun","Bara ef þær eru jafnar"], a:1, why:"Óvissur leggjast saman og verða bara stærri, aldrei minni."},
+    {c:10, q:"Óvissa er ±0,5 mm. Er marktækur munur á 55,5 mm og 55,2 mm?", opts:["Já, 0,3 mm er munur","Nei, munurinn er minni en óvissan","Já, því tölurnar eru ólíkar","Það fer eftir reglustikunni"], a:1, why:"Munurinn (0,3 mm) er minni en óvissan (0,5 mm) — ekki marktækur."},
+    {c:11, q:"Hversu marga markverða stafi hefur 0,35 cm?", opts:["1","2","3","4"], a:1, why:"Núllið fremst telur ekki. 0,35 = 3,5 × 10⁻¹ → 2 markverðir stafir."},
+    {c:11, q:"Hversu marga markverða stafi hefur 609,40 cm?", opts:["3","4","5","6"], a:2, why:"Allir fimm stafirnir telja: 6,0940 × 10². Núll á milli og aftast eru markverð."},
+    {c:11, q:"Hvernig sérðu fljótt hvaða stafir eru markverðir?", opts:["Telja öll núll","Skrifa töluna á staðalformi","Sleppa kommunni","Mæla aftur"], a:1, why:"Trix kennarans: á staðalformi standa aðeins markverðu stafirnir eftir."}
   ]
 },
 {
-  id:"orka", num:"⚡", cc:"--c2", part:"", page:77,
-  title:"Orkubúskapur jarðar og orkuframleiðsla",
-  kicker:"3. kafli",
-  listen:"3. kafli — bls. 77–114.",
+  id:"v13", num:"⚛️", cc:"--c2", part:"🎯 Fyrir prófið — 1. kafli: Eðli vísinda", page:11,
+  title:"Þróun atómkenningarinnar",
+  kicker:"1.3 · Vísindaleg líkön",
+  listen:"1. kafli — bls. 11–41. Glærur kennarans: „1.3 Vísindaleg líkön“.",
+  videos:[],
   intro:[
-    "Þessi kafli fjallar um orkuna sem gerir jörðina byggilega og hvaðan hún kemur.",
-    "Þú lærir um rafsegulbylgjur — ljós, útvarpsbylgjur, röntgen — sem eru allar sama fyrirbærið.",
-    "Í lokin er hvernig við framleiðum orku: vatnsafl, jarðvarmi og fleira."
+    "Vísindakenningar þróast: hvert líkan er betra en það á undan.",
+    "Atómkenningin er besta dæmið — frá Dalton 1808 til rafeindaskýsins í dag.",
+    "Þú þarft að kunna röðina: Dalton, Thomson, Rutherford, Bohr, rafeindaský — og hvað hver bætti við."
   ],
   concepts:[
-    {t:"Orkugjafar jarðar", d:"Langstærsti orkugjafi jarðar er sólin — hún knýr veður, vinda, hafstrauma og líf. Auk þess kemur orka innan úr jörðinni (jarðvarmi) og frá aðdráttarafli tungls og sólar (sjávarföll).", ex:"Vindur verður til þegar sólin hitar loft misjafnt. Öll þessi orka á rætur í sólinni."},
-    {t:"Orkujöfnuður jarðar", d:"Jörðin tekur við orku frá sólinni og gefur frá sér varma út í geiminn. Ef jafnvægi helst er hitinn stöðugur. Raskist það — t.d. vegna gróðurhúsalofttegunda — hlýnar jörðin.", ex:"Gróðurhúsalofttegundir halda meiri varma inni, líkt og teppi. Þá hitnar jörðin — það eru gróðurhúsaáhrif."},
-    {t:"Rafsegulbylgjur og rafsegulróf", d:"Ljós, útvarpsbylgjur, örbylgjur, innrautt, útfjólublátt, röntgen og gammageislar eru allt rafsegulbylgjur — sama fyrirbærið á ólíkri tíðni. Saman mynda þær rafsegulrófið.",
-      svg:'<svg viewBox="0 0 300 110" role="img" aria-label="Rafsegulrófið"><defs><linearGradient id="spec" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c0392b"/><stop offset="0.45" stop-color="#f1c40f"/><stop offset="0.65" stop-color="#2ecc71"/><stop offset="1" stop-color="#7d3cc9"/></linearGradient></defs><text x="150" y="16" text-anchor="middle" font-size="11" class="tacc">lág tíðni → há tíðni (meiri orka)</text><rect x="20" y="42" width="260" height="26" rx="6" fill="url(#spec)"/><rect x="150" y="42" width="46" height="26" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><text x="173" y="36" text-anchor="middle" font-size="9" class="tmut">sýnilegt ljós</text><text x="22" y="86" font-size="10" class="tmut">Útvarp</text><text x="278" y="86" text-anchor="end" font-size="10" class="tmut">Gamma</text></svg>', cap:"Rafsegulrófið: útvarp, ljós, röntgen og gamma — allt sama fyrirbærið á ólíkri tíðni.",
-      ex:"Örbylgjuofn, útvarp og sólarljós nota öll rafsegulbylgjur — bara á mismunandi tíðni."},
-    {t:"Sýnilegt ljós og útfjólublátt", d:"Sýnilegt ljós er örlítill hluti rófsins sem augað nemur — regnbogans litir. Útfjólublátt (UV) er orkumeira og ósýnilegt; það veldur sólbruna og getur skaðað húð.", ex:"Sólarvörn ver húðina fyrir UV-geislum sólarinnar, sem við sjáum ekki en finnum þegar við brennum."},
-    {t:"Hamskiptaorka", tip:"Á meðan hamur breytist stendur hitamælirinn kyrr.", d:"Orka sem fer í að breyta ham efnis — t.d. bræða ís eða sjóða vatn — án þess að hitinn hækki á meðan. Orkan fer í hamskiptin sjálf, ekki í að hækka hitastigið.", ex:"Þegar ís bráðnar helst hitinn 0°C þótt þú hitir hann áfram — orkan fer í að breyta ísnum í vatn."},
-    {t:"Hringrás vatns", d:"Vatn er sífellt á hreyfingu: það gufar upp af höfum, þéttist í ský, fellur sem úrkoma og rennur aftur til sjávar. Sólin knýr þessa hringrás.",
-      svg:'<svg viewBox="0 0 300 160" role="img" aria-label="Hringrás vatns"><circle cx="255" cy="28" r="15" fill="#f5b301"/><rect x="20" y="122" width="260" height="30" rx="4" class="softc"/><text x="150" y="145" text-anchor="middle" font-size="11" class="tmut">haf</text><ellipse cx="95" cy="58" rx="44" ry="18" class="soft"/><text x="95" y="62" text-anchor="middle" font-size="11" class="tmut">ský</text><line x1="60" y1="120" x2="55" y2="82" class="acc-s" stroke-width="2"/><polygon points="55,74 49,86 61,86" class="acc"/><text x="30" y="104" font-size="10" class="tacc">uppgufun</text><line x1="120" y1="80" x2="120" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><line x1="140" y1="80" x2="140" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><line x1="160" y1="80" x2="160" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><text x="165" y="104" font-size="10" class="tmut">úrkoma</text></svg>', cap:"Sólin knýr hringrásina: uppgufun → ský → úrkoma → aftur til sjávar.",
-      ex:"Rigningin sem fellur á Íslandi gufaði áður upp af hafinu — sama vatnið fer hringinn aftur og aftur."},
-    {t:"Orkuframleiðsla", d:"Við breytum orku í rafmagn með ýmsum leiðum: vatnsafli (fallvatn snýr hverflum), jarðvarma (gufa úr jörðu) og víðar kjarnorku. Ísland notar nær eingöngu vatnsafl og jarðvarma.", ex:"Í vatnsaflsvirkjun fellur vatn niður og snýr hverfli sem framleiðir rafmagn — hrein, endurnýjanleg orka."}
+    {t:"Kenningar þróast", d:"Vísindakenning er ekki endanlegur sannleikur heldur besta skýringin í bili. Þegar ný tilraun sýnir eitthvað sem gamla líkanið útskýrir ekki er líkanið lagfært eða nýtt búið til. Atómkenningin hefur breyst fimm sinnum á 200 árum.",
+      svg:'<svg viewBox="0 0 300 110" role="img" aria-label="Tímalína atómkenningarinnar"><line x1="20" y1="40" x2="280" y2="40" class="line-s" stroke-width="2"/><g class="acc"><circle cx="30" cy="40" r="7"/><circle cx="92" cy="40" r="7"/><circle cx="154" cy="40" r="7"/><circle cx="216" cy="40" r="7"/><circle cx="278" cy="40" r="7"/></g><g font-size="10" class="ink" text-anchor="middle"><text x="30" y="66">Dalton</text><text x="92" y="66">Thomson</text><text x="154" y="66">Rutherford</text><text x="216" y="66">Bohr</text><text x="278" y="66">Ský</text></g><g font-size="9" class="tmut" text-anchor="middle"><text x="30" y="24">1808</text><text x="92" y="24">1898</text><text x="154" y="24">1911</text><text x="216" y="24">1913</text><text x="278" y="24">nútími</text></g><text x="150" y="98" text-anchor="middle" font-size="10" class="tacc">hvert líkan bætir við það sem á undan kom</text></svg>', cap:"Dalton → Thomson → Rutherford → Bohr → rafeindaský.",
+      ex:"Landakort af Íslandi árið 1600 var ekki „rangt“ — það var besta líkanið þá. Nú höfum við gervihnattamyndir. Sama gildir um atómið.", tip:"D-T-R-B-S: Dalton, Thomson, Rutherford, Bohr, Ský."},
+    {t:"Dalton (1808): atómkenningin", d:"John Dalton setti fram atómkenninguna með fimm atriðum: 1) Allt efni er úr örsmáum ögnum, atómum, sem ekki er hægt að skipta. 2) Atóm sama frumefnis eru eins. 3) Atóm ólíkra frumefna eru ólík og ekki er hægt að breyta einu frumefni í annað. 4) Efnasambönd myndast þegar atóm tveggja eða fleiri frumefna tengjast. 5) Í efnahvörfum umraðast atómin.", ex:"Hugsaðu um LEGO: kubbarnir (atómin) breytast ekki, en þú getur raðað þeim upp á nýtt (efnahvarf) og byggt nýja hluti (efnasambönd).", tip:"Dalton: atóm = ódeilanleg kúla. Sama frumefni = eins atóm. Efnahvarf = umröðun."},
+    {t:"Thomson (1898): rafeindin finnst", d:"J.J. Thomson uppgötvaði að geisli frá katóðu var straumur mínus-hlaðinna agna sem losnuðu úr atómum — rafeindir. Líkan hans: atómið er kúla með jákvæðri hleðslu og neikvæðar rafeindir dreifast um hana, eins og rúsínur í bollu.", ex:"Gamlir túbusjónvörp og tölvuskjáir notuðu einmitt katóðugeisla — rafeindastraum — til að teikna myndina.", tip:"Thomson = rafeindin. „Rúsínubollu“-líkanið: + kúla með − rafeindum í."},
+    {t:"Rutherford (1911): kjarninn", d:"Ernest Rutherford skaut plús-hlöðnum ögnum á örþunna málmþynnu. Tilgátan var að allar færu í gegn. Flestar gerðu það — en sumar skoppuðu til baka! Niðurstaða: atómið er að mestu tómarúm, með örlítinn jákvætt hlaðinn kjarna í miðju, og rafeindirnar sveima á brautum í kring.",
+      svg:'<svg viewBox="0 0 300 130" role="img" aria-label="Tilraun Rutherfords"><rect x="150" y="14" width="6" height="100" rx="2" class="softc"/><circle cx="153" cy="64" r="4" class="acc"/><g class="mut-s" stroke-width="2"><line x1="20" y1="40" x2="270" y2="40"/><line x1="20" y1="90" x2="270" y2="90"/><line x1="20" y1="60" x2="148" y2="63"/></g><line x1="148" y1="63" x2="40" y2="20" class="acc-s" stroke-width="2"/><polygon points="34,17 46,18 40,28" class="acc"/><text x="60" y="118" font-size="10" class="tmut">flestar agnir fara beint í gegn</text><text x="200" y="26" font-size="10" class="tacc">ein og ein skoppar til baka</text><text x="170" y="68" font-size="9" class="tacc">kjarni</text></svg>', cap:"Flestar agnirnar fóru í gegnum þynnuna — atómið er mest tómarúm. Sumar skoppuðu af litla kjarnanum.",
+      ex:"Ef atómið væri Laugardalsvöllur væri kjarninn á stærð við ertu á miðjunni — og allt hitt tómt.", tip:"Rutherford = kjarninn. Málmþynna, sumar agnir til baka → lítill + kjarni, mest tómarúm."},
+    {t:"Bohr (1913): rafeindir á brautum", d:"Samkvæmt eðlisfræðinni hefðu rafeindirnar átt að geisla frá sér orku og falla inn í kjarnann. Niels Bohr sýndi fram á að rafeindir ferðast eftir ákveðnum brautum í ákveðinni fjarlægð frá kjarnanum og eyða ekki orku á meðan. Það eru samdráttarkraftar milli + kjarnans og − rafeindanna sem halda þeim á brautunum.", ex:"Eins og reikistjörnur um sólina: hver rafeind á sína braut í fastri fjarlægð frá kjarnanum.", tip:"Bohr = brautir. Rafeindir á föstum brautum, eyða ekki orku."},
+    {t:"Rafeindaský (nútímalíkanið)", d:"Í nútímalíkaninu er ekki hægt að segja nákvæmlega hvar rafeind er á hverjum tíma. Rafeindirnar mynda samfellt rafeindaský umhverfis kjarnann — þéttast þar sem líklegast er að finna þær.", ex:"Eins og loftmynd af flugnasveimi: þú sérð ekki hverja flugu, bara ský þar sem þær eru flestar.", tip:"Ský = rafeindir eru „einhvers staðar“ í skýi kringum kjarnann, ekki á fastri braut."}
   ],
   quiz:[
-    {c:0, q:"Hver er langstærsti orkugjafi jarðar?", opts:["Jarðvarmi","Sólin","Vindur","Sjávarföll"], a:1, why:"Sólin knýr veður, vinda, hafstrauma og líf — langstærsti orkugjafinn."},
-    {c:2, q:"Hvað eiga ljós, útvarpsbylgjur og röntgengeislar sameiginlegt?", opts:["Þau eru öll sýnileg","Þau eru öll rafsegulbylgjur á ólíkri tíðni","Þau eru öll hættuleg","Þau ferðast öll hægar en hljóð"], a:1, why:"Öll eru þau rafsegulbylgjur — sama fyrirbærið á mismunandi tíðni (rafsegulrófið)."},
-    {c:1, q:"Hvað eru gróðurhúsaáhrif?", opts:["Þegar jörðin kólnar","Þegar lofttegundir halda varma inni og jörðin hlýnar","Þegar sólin slokknar","Þegar það rignir meira"], a:1, why:"Gróðurhúsalofttegundir halda varma inni eins og teppi, sem hlýjar jörðina."},
-    {c:4, q:"Af hverju helst hitinn 0°C á meðan ís bráðnar?", opts:["Ísinn er bilaður","Orkan fer í hamskiptin (að breyta ís í vatn), ekki í að hækka hitann","Það er engin orka","Hitinn hækkar strax"], a:1, why:"Hamskiptaorkan fer í að breyta ham efnisins — hitinn hækkar ekki fyrr en allur ísinn er bráðnaður."},
-    {c:6, q:"Hvaða orkugjafa notar Ísland mest?", opts:["Kol og olíu","Vatnsafl og jarðvarma","Kjarnorku","Vindmyllur eingöngu"], a:1, why:"Ísland framleiðir rafmagn nær eingöngu með vatnsafli og jarðvarma — endurnýjanlegum orkugjöfum."},
-    {c:5, q:"Hvað knýr hringrás vatns?", opts:["Tunglið","Sólin","Vindurinn","Jarðvarmi"], a:1, why:"Sólin hitar hafið svo vatn gufar upp, þéttist í ský og fellur sem úrkoma — sólin knýr hringinn."},
-    {c:5, q:"Hvað gerist við uppgufun?", opts:["Gas breytist í vökva","Vökvi breytist í gas","Vökvi breytist í fast efni","Vatnið hverfur"], a:1, why:"Við uppgufun fer vatn úr fljótandi ham í gas (vatnsgufu)."},
-    {c:3, q:"Hvaða geislun veldur sólbruna?", opts:["Útvarpsbylgjur","Útfjólublá geislun (UV)","Innrauð geislun","Sýnilegt ljós"], a:1, why:"Útfjólublá geislun er orkumeiri en sýnilegt ljós og skaðar húðina — þess vegna notum við sólarvörn."},
-    {c:2, q:"Hvort hefur meiri orku: gammageislar eða útvarpsbylgjur?", opts:["Útvarpsbylgjur","Gammageislar — hærri tíðni","Jafn mikla","Hvorugt hefur orku"], a:1, why:"Því hærri tíðni, því meiri orka. Gammageislar eru efst í rafsegulrófinu, útvarpsbylgjur neðst."},
-    {c:6, q:"Hvað er endurnýjanlegur orkugjafi?", opts:["Orkugjafi sem gengur ekki til þurrðar, t.d. vatnsafl","Kol","Olía","Orkugjafi sem klárast"], a:0, why:"Vatnsafl, jarðvarmi, vindur og sól endurnýjast sífellt. Kol og olía klárast."},
-    {c:6, q:"Hvað gerist í vatnsaflsvirkjun?", opts:["Vatn er hitað með kolum","Fallandi vatn snýr hverfli sem framleiðir rafmagn","Vatn er klofið í vetni","Gufa úr jörðu er notuð"], a:1, why:"Í vatnsaflsvirkjun fellur vatn niður og snýr hverfli (túrbínu) sem framleiðir rafmagn."},
-    {c:1, q:"Hvað gerist ef jörðin tekur við meiri orku en hún gefur frá sér?", opts:["Hún kólnar","Hún hlýnar","Ekkert gerist","Hún hættir að snúast"], a:1, why:"Ef orkujöfnuðurinn raskast — t.d. vegna gróðurhúsalofttegunda — helst meiri varmi inni og jörðin hlýnar."}
+    {c:0, q:"Hver er rétt röð í þróun atómkenningarinnar?", opts:["Bohr → Dalton → Thomson → Rutherford","Dalton → Thomson → Rutherford → Bohr → rafeindaský","Rutherford → Dalton → Bohr → Thomson","Thomson → Bohr → Dalton → Rutherford"], a:1, why:"Dalton (1808), Thomson (1898), Rutherford (1911), Bohr (1913), rafeindaský (nútími)."},
+    {c:1, q:"Hvenær setti Dalton fram atómkenninguna?", opts:["1608","1808","1911","1977"], a:1, why:"Dalton (1766–1844) setti atómkenninguna fram árið 1808."},
+    {c:1, q:"Hvað sagði Dalton um atóm sama frumefnis?", opts:["Þau eru öll ólík","Þau eru eins","Þau eru tóm","Þau hafa rafeindir"], a:1, why:"Eitt af fimm atriðum Daltons: atóm sama frumefnis eru eins."},
+    {c:1, q:"Hvað gerist við atómin í efnahvarfi samkvæmt Dalton?", opts:["Þau eyðast","Þau umraðast","Þau breytast í önnur frumefni","Þau skiptast í tvennt"], a:1, why:"Í efnahvörfum umraðast atómin — þau eyðast ekki og breytast ekki í önnur frumefni."},
+    {c:2, q:"Hvað uppgötvaði Thomson?", opts:["Kjarnann","Rafeindina — mínus-hlaðnar agnir","Nifteindina","Brautir rafeinda"], a:1, why:"Thomson fann að katóðugeisli var straumur neikvætt hlaðinna agna: rafeindir."},
+    {c:2, q:"Hvernig var líkan Thomsons af atóminu?", opts:["Lítill kjarni með tómarúmi í kring","Kúla með + hleðslu og − rafeindum dreifðum um hana","Rafeindaský","Ódeilanleg kúla án hleðslu"], a:1, why:"„Rúsínubollu“-líkanið: jákvæð kúla með rafeindum dreifðum um hana."},
+    {c:3, q:"Hvað gerði Rutherford í tilraun sinni?", opts:["Skaut + hlöðnum ögnum á málmþynnu","Hitaði málm þar til hann bráðnaði","Setti salt á klaka","Mældi rafeindir í katóðugeisla"], a:0, why:"Rutherford skaut plús-hlöðnum ögnum á þunna málmþynnu og sá að sumar skoppuðu til baka."},
+    {c:3, q:"Hvað sýndi tilraun Rutherfords?", opts:["Atómið er þétt kúla","Atómið er að mestu tómarúm með lítinn + kjarna í miðju","Rafeindir eru jákvæðar","Atóm er ekki til"], a:1, why:"Flestar agnir fóru í gegn (tómarúm) en sumar skoppuðu af litlum, jákvæðum kjarna."},
+    {c:4, q:"Hvað bætti Bohr við?", opts:["Rafeindir ferðast á ákveðnum brautum í fastri fjarlægð frá kjarna","Atóm eru ódeilanleg","Kjarninn er neikvæður","Rafeindir eru í skýi"], a:0, why:"Bohr sýndi að rafeindir eru á föstum brautum og eyða ekki orku á meðan."},
+    {c:5, q:"Hvað segir nútímalíkanið um rafeindir?", opts:["Þær eru kyrrar í kjarnanum","Þær mynda samfellt rafeindaský umhverfis kjarnann","Þær eru á einni braut","Þær eru jákvæðar"], a:1, why:"Rafeindirnar mynda rafeindaský — ekki er hægt að segja nákvæmlega hvar hver er."},
+    {c:0, q:"Af hverju eru til mörg líkön af atóminu?", opts:["Vísindamenn voru ósammála af þrjósku","Hvert líkan bætti við nýrri þekkingu úr nýjum tilraunum","Það elsta er réttast","Líkönin eru öll eins"], a:1, why:"Vísindakenningar þróast: nýjar tilraunir sýna það sem gamla líkanið skýrði ekki."}
   ]
 },
 {
-  id:"efnin", num:"🧪", cc:"--c3", part:"", page:121,
+  id:"v14", num:"⚠️", cc:"--c3", part:"🎯 Fyrir prófið — 1. kafli: Eðli vísinda", page:11,
+  title:"Vandamál við vísindatilraunir",
+  kicker:"1.4 · Vandamál",
+  listen:"1. kafli — bls. 11–41. Glærur kennarans: „1.4 Vandamál við vísindatilraunir“.",
+  videos:[{t:"Science is wrong SOMETIMES (myndband kennarans, enska)", url:"https://www.youtube.com/watch?v=LJDgVlv55Uw"}],
+  intro:[
+    "Vísindi eru unnin af fólki — og fólk getur gert mistök eða haft skoðanir.",
+    "Þú lærir helstu vandamálin: hlutdrægni, að fáir endurtaka tilraunir og falsrök.",
+    "Í lokin: marktækur munur, línulegt samband og veldisvöxtur."
+  ],
+  concepts:[
+    {t:"Fólk metur niðurstöðurnar", d:"Það eru alltaf manneskjur sem setja fram niðurstöður, meta þær og draga ályktanir. Þar geta persónulegar skoðanir eða pólitík læðst inn — jafnvel óvart. Þess vegna þarf viðmið, endurtekningar og að aðrir fái að skoða gögnin.", ex:"Ef fyrirtæki sem selur orkudrykk borgar rannsókn á orkudrykkjum er hætta á að niðurstaðan halli í átt að því sem fyrirtækið vill.", tip:"Vísindi eru unnin af fólki — skoðanir og peningar geta haft áhrif."},
+    {t:"Fáir endurtaka tilraunir annarra", d:"Mesta vandamálið í dag: það er meiri frægð og meiri peningar í að finna eitthvað nýtt en að endurtaka tilraun annarra. En endurtekning er það sem staðfestir hvort niðurstaða er rétt. Ef enginn endurtekur geta villur lifað lengi.", ex:"Ein rannsókn segir að súkkulaði grenni. Það slær í gegn í fréttum. Enginn endurtekur tilraunina — og hún reynist röng.", tip:"Ein tilraun sannar ekkert. Endurtekning staðfestir."},
+    {t:"Ólíkar greinar — ólík vissa", d:"Í eðlisfræði, efnafræði og stjörnufræði er oft hægt að mæla mjög nákvæmlega og endurtaka nákvæmlega. Í lyfjafræði, læknisfræði, líffræði og félagsvísindum er unnið með lifandi verur og fólk, og niðurstöður byggja á tölfræði — þar er meiri óvissa og fleiri þættir sem trufla.", ex:"Að mæla suðumark vatns gefur alltaf sama svar. Að mæla hvort nýtt lyf virki á 200 manns gefur mismunandi svar hjá hverjum og einum.", tip:"Fólk og lífverur = meiri óvissa en efni og tölur."},
+    {t:"Þróunarkenningin — best studda kenningin", d:"Þróunarkenningin er sú kenning sem best er studd af vísindarannsóknum: líffræði, erfðafræði, jarðfræði og efnafræði styðja hana allar. Hún hefur forspárgildi — við getum jafnvel notað hana til að breyta lífverum — rétt eins og þyngdarlögmál Newtons lætur okkur reikna brautir hnatta og senda gervihnetti á braut.", ex:"Bakteríur verða ónæmar fyrir sýklalyfjum nákvæmlega eins og þróunarkenningin spáir. Það sjáum við gerast á sjúkrahúsum í dag.", tip:"Þróunarkenning = best studda kenningin, með forspárgildi eins og þyngdarlögmálið."},
+    {t:"Falsrök: „vísindin hafa haft rangt fyrir sér“", d:"Algeng falsrök hljóma svona: „Vísindamenn höfðu stundum rangt fyrir sér í fortíðinni — þess vegna er kenning X röng.“ Þetta er ekki rökrétt. Að vísindi leiðrétti sig með nýjum gögnum er einmitt styrkur þeirra, ekki veikleiki. Samfélagsmiðlar dreifa svona rökum hratt.", ex:"„Læknar héldu einu sinni að reykingar væru hollar, þess vegna er bóluefnið hættulegt“ — fyrri hlutinn sannar ekkert um þann seinni.", tip:"Að vísindi leiðrétti sig = styrkur. „Þau höfðu rangt fyrir sér áður“ sannar ekki neitt um núna."},
+    {t:"Marktækur munur", d:"Munur á tveimur niðurstöðum er aðeins marktækur ef hann er stærri en óvissan í mælingunum. Lítill munur innan óvissunnar segir ekkert — hann gæti verið tilviljun eða skekkja í tækinu.", ex:"Hópur sem fékk vítamín sofnaði 2 mínútum fyrr en hinn — en óvissan í svefnmælingunni er 10 mínútur. Munurinn er ekki marktækur.", tip:"Munur < óvissa → ekki marktækur. Munur > óvissa → marktækur."},
+    {t:"Línulegt samband og veldisvöxtur", d:"Línulegt samband: fylgibreytan vex jafnt og þétt með frumbreytunni — línurit er bein lína. Veldisvöxtur: vöxturinn verður hraðari og hraðari, t.d. tvöfaldast á jöfnum tíma — línuritið sveigir upp á við.",
+      svg:'<svg viewBox="0 0 300 130" role="img" aria-label="Línulegt samband og veldisvöxtur"><g class="line-s" stroke-width="1.5"><line x1="30" y1="110" x2="140" y2="110"/><line x1="30" y1="110" x2="30" y2="20"/><line x1="170" y1="110" x2="280" y2="110"/><line x1="170" y1="110" x2="170" y2="20"/></g><line x1="30" y1="110" x2="135" y2="35" class="acc-s" stroke-width="3"/><path d="M170 108 C 215 106, 245 90, 275 25" fill="none" class="acc-s" stroke-width="3"/><text x="85" y="126" text-anchor="middle" font-size="11" class="ink">línulegt</text><text x="225" y="126" text-anchor="middle" font-size="11" class="ink">veldisvöxtur</text><text x="85" y="16" text-anchor="middle" font-size="9" class="tmut">jafn hraður</text><text x="225" y="16" text-anchor="middle" font-size="9" class="tmut">hraðar og hraðar</text></svg>', cap:"Bein lína = línulegt. Sveigir upp = veldisvöxtur (t.d. tvöföldun).",
+      ex:"Að leggja 1000 kr. í bauk á mánuði er línulegt. Bakteríur sem tvöfaldast á 20 mínútum — 1, 2, 4, 8, 16… — er veldisvöxtur.", tip:"Línulegt = + sama tala í hvert sinn. Veldis = × sama tala í hvert sinn."}
+  ],
+  quiz:[
+    {c:0, q:"Af hverju geta skoðanir haft áhrif á vísindaniðurstöður?", opts:["Af því tölur ljúga","Af því fólk setur fram, metur og túlkar niðurstöðurnar","Af því tilraunir eru alltaf rangar","Það geta þær ekki"], a:1, why:"Það eru alltaf manneskjur sem meta og álykta — þar geta skoðanir eða pólitík læðst inn."},
+    {c:1, q:"Hvað er mesta vandamálið við vísindatilraunir í nútímanum samkvæmt kennaranum?", opts:["Tækin eru of dýr","Fáir vilja endurtaka tilraunir annarra","Það eru of margar tilraunir","Enginn birtir niðurstöður"], a:1, why:"Meiri frægð og peningar í að finna nýtt en að endurtaka — en endurtekning staðfestir niðurstöður."},
+    {c:2, q:"Í hvaða greinum er yfirleitt meiri óvissa í niðurstöðum?", opts:["Eðlisfræði og efnafræði","Læknisfræði, lyfjafræði og félagsvísindum","Stjörnufræði","Engum — allar eru jafn nákvæmar"], a:1, why:"Þar er unnið með lifandi verur og fólk og byggt á tölfræði — fleiri þættir trufla."},
+    {c:3, q:"Hvaða kenning er best studd af vísindarannsóknum?", opts:["Þróunarkenningin","Flöt jörð","Stjörnuspeki","Kenningin um fjóra frumþætti"], a:0, why:"Líffræði, erfðafræði, jarðfræði og efnafræði styðja allar þróunarkenninguna."},
+    {c:4, q:"„Vísindamenn höfðu rangt fyrir sér áður, þess vegna er þessi kenning röng.“ Hvað er þetta?", opts:["Góð vísindaleg rök","Falsrök","Náttúrulögmál","Samanburðartilraun"], a:1, why:"Að vísindi hafi leiðrétt sig áður sannar ekkert um núverandi kenningu — það er styrkur vísinda."},
+    {c:4, q:"Að vísindi leiðrétti sig með nýjum gögnum er…", opts:["Veikleiki","Styrkur vísindanna","Merki um að þau séu röng","Tilviljun"], a:1, why:"Það er einmitt það sem aðskilur vísindi frá öðrum aðferðum: þau breytast með nýrri þekkingu."},
+    {c:5, q:"Hvenær er munur á tveimur mælingum marktækur?", opts:["Alltaf ef tölurnar eru ólíkar","Þegar munurinn er stærri en óvissan","Þegar munurinn er minni en óvissan","Aldrei"], a:1, why:"Marktækur munur þarf að vera stærri en óvissan í mælingunum."},
+    {c:6, q:"Bakteríur tvöfaldast á 20 mínútum: 1, 2, 4, 8, 16… Þetta er…", opts:["Línulegt samband","Veldisvöxtur","Marktækur munur","Óvissa"], a:1, why:"Þegar magnið margfaldast á jöfnum tíma er það veldisvöxtur — vex hraðar og hraðar."},
+    {c:6, q:"Hvernig lítur línurit af línulegu sambandi út?", opts:["Bein lína","Sveigir upp","Hringur","Bylgja"], a:0, why:"Í línulegu sambandi vex y jafnt með x — bein lína."}
+  ]
+},
+{
+  id:"v15", num:"🔮", cc:"--c4", part:"🎯 Fyrir prófið — 1. kafli: Eðli vísinda", page:11,
+  title:"Skoðanir og gervivísindi",
+  kicker:"1.5 · Gervivísindi",
+  listen:"1. kafli — bls. 11–41. Glærur kennarans: „1.5 Gervivísindi“. Sjá líka töfluna á bls. 28 í Risaeðlubókinni.",
+  videos:[],
+  intro:[
+    "Af hverju trúum við því sem við trúum — og af hverju er svona erfitt að skipta um skoðun?",
+    "Þú lærir muninn á vísindum og gervivísindum, atriði fyrir atriði.",
+    "Í lokin: hvernig gervivísindi eru notuð til að hafa peninga af fólki."
+  ],
+  concepts:[
+    {t:"Hvað mótar skoðanir okkar?", d:"Fjögur atriði móta skoðanir: uppeldi, fræðsla (líka auglýsingar!), reynsla og að tilheyra hópi. Við tökum oft upp skoðanir fólksins í kringum okkur án þess að hugsa það til enda.", ex:"Ef allir í vinahópnum segja að ákveðið orkudrykkjamerki sé „best“ ertu líklegur til að hafa sömu skoðun — án þess að hafa prófað hin.", tip:"Uppeldi – fræðsla – reynsla – hópur."},
+    {t:"Af hverju skiptum við ekki um skoðun?", d:"Rannsóknir sýna að fólk myndar sér skoðun á sem auðveldastan hátt: auðvelt + þægilegt + eigin reynsla = „sennilegt“. Eftir að skoðun er mynduð er erfitt að breyta henni — sérstaklega ef margir aðrir hafa sömu skoðun, jafnvel þótt hún sé röng.", ex:"Þegar einhver sýnir þér að uppáhaldsliðið þitt sé ekki það besta tölfræðilega, þá viltu samt ekki trúa því. Heilinn ver skoðunina.", tip:"Auðvelt + þægilegt + reynsla = „sennilegt“. Margir sammála = enn erfiðara að breyta."},
+    {t:"Hvað þarf til að skipta um skoðun?", d:"Þrennt: staðreyndir, fræðslu og móttöku — það er, að viðkomandi sé tilbúinn að hlusta og taka við. Staðreyndir einar duga sjaldan ef enginn vilji er til að hlusta.", ex:"Þú getur sýnt einhverjum tíu rannsóknir — ef hann er ekki tilbúinn að hlusta (móttaka) breytist ekkert.", tip:"Staðreyndir + fræðsla + móttaka."},
+    {t:"Gervivísindi", d:"Gervivísindi eru oft byggð á kennivaldi, t.d. helgum ritum, eða á „kenningum“ sem eru ekki sannaðar. Þau standast ekki vísindalega aðferðafræði, byggja á reynslusögum einstaklinga sem skýra fátt, verða veikari eftir því sem þekking eykst, og eru persónubundin — ganga ekki upp hjá öðrum.", ex:"Stjörnuspeki, kristallalækningar og „detox“-fótabað eru gervivísindi: enginn getur endurtekið tilraun sem sýnir að þau virki.", tip:"Gervivísindi: kennivald, ósannað, reynslusögur, veikjast með þekkingu, persónubundin."},
+    {t:"Vísindi á móti gervivísindum", d:"Vísindi eru byggð á athugunum og skýra margt. Kenningar eru sannaðar með vísindalegri aðferðafræði — tilraunum og samanburðartilraunum. Þau styrkjast oftast með nýrri þekkingu. Þau eru ópersónubundin og prófanleg af hverjum sem er.",
+      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Gervivísindi á móti vísindum"><rect x="6" y="6" width="140" height="138" rx="10" class="soft"/><rect x="154" y="6" width="140" height="138" rx="10" class="softc"/><text x="76" y="28" text-anchor="middle" font-size="12" font-weight="700" class="ink">Gervivísindi</text><text x="224" y="28" text-anchor="middle" font-size="12" font-weight="700" class="tacc">Vísindi</text><g font-size="10" class="tmut"><text x="14" y="52">kennivald / trú</text><text x="14" y="72">ósannaðar „kenningar“</text><text x="14" y="92">reynslusögur</text><text x="14" y="112">veikjast með þekkingu</text><text x="14" y="132">persónubundin</text></g><g font-size="10" class="ink"><text x="162" y="52">athuganir</text><text x="162" y="72">tilraunir + viðmið</text><text x="162" y="92">skýra margt</text><text x="162" y="112">styrkjast með þekkingu</text><text x="162" y="132">hver sem er getur prófað</text></g></svg>', cap:"Vísindi: prófanleg af hverjum sem er og styrkjast með nýrri þekkingu.",
+      ex:"Bóluefni: milljónir tilrauna, viðmiðunarhópar, hver sem er getur skoðað gögnin. Það eru vísindi.", tip:"Vísindi: athuganir, tilraunir með viðmiði, styrkjast, hver sem er getur prófað."},
+    {t:"Fjárplógsstarfsemi og misnotkun", d:"Gervivísindamenn segja kenningar sínar byggðar á gögnum — sem oft eru reynsla fárra. Þeir „sveigja“ kenningar sínar að alvöru vísindakenningum til að láta þær líta út fyrir að vera sannaðar. Gervivísindum fylgir oft fjárplógsstarfsemi: auðtrúa fólk er blekkt til að borga fyrir eitthvað fánýtt, eins og rafsegularmbönd eða kristalla. Sjá töfluna á bls. 28 í Risaeðlubókinni.", ex:"Auglýsing segir „vísindalega sannað“ og sýnir mann í hvítum sloppi — en engin rannsókn er nefnd. Það er vísindalegt orðalag notað til að selja.", tip:"„Vísindalega sannað“ án rannsóknar = viðvörunarmerki. Rafsegularmbönd, kristallar = fjárplógur."}
+  ],
+  quiz:[
+    {c:0, q:"Hvað af þessu mótar skoðanir okkar samkvæmt glærunum?", opts:["Uppeldi, fræðsla, reynsla og að tilheyra hópi","Aðeins staðreyndir","Aðeins skólinn","Veðrið"], a:0, why:"Fjögur atriði: uppeldi, fræðsla (líka auglýsingar), reynsla og hópurinn."},
+    {c:1, q:"Hvernig myndar fólk sér oftast skoðun?", opts:["Með löngum rannsóknum","Á sem auðveldastan hátt: auðvelt + þægilegt + reynsla","Með því að lesa vísindagreinar","Með útreikningum"], a:1, why:"Rannsóknir sýna að fólk velur það sem er auðvelt, þægilegt og passar við eigin reynslu."},
+    {c:1, q:"Hvenær er erfiðast að fá fólk til að breyta rangri skoðun?", opts:["Þegar það er eitt með hana","Þegar margir aðrir hafa sömu skoðun","Þegar hún er ný","Það er alltaf jafn auðvelt"], a:1, why:"Ef fleiri deila skoðuninni er enn erfiðara að breyta henni — þótt hún sé röng."},
+    {c:2, q:"Hvað þarf til að fá fólk til að skipta um skoðun?", opts:["Staðreyndir, fræðslu og móttöku","Hærri rödd","Fleiri auglýsingar","Hótanir"], a:0, why:"Staðreyndir og fræðsla duga ekki nema viðkomandi sé tilbúinn að taka við (móttaka)."},
+    {c:3, q:"Hvað einkennir gervivísindi?", opts:["Kenningar prófaðar með samanburðartilraunum","Byggð á kennivaldi og reynslusögum, standast ekki vísindalega aðferð","Styrkjast með nýrri þekkingu","Hver sem er getur prófað þau"], a:1, why:"Gervivísindi byggja á kennivaldi, ósönnuðum kenningum og reynslusögum og standast ekki vísindalega aðferðafræði."},
+    {c:3, q:"Hvað gerist við gervivísindi þegar þekking á viðfangsefninu eykst?", opts:["Þau styrkjast","Þau verða veikari","Þau breytast í vísindi","Ekkert"], a:1, why:"Gervivísindi standast síður skoðun eftir því sem meira er vitað. Vísindi styrkjast hins vegar."},
+    {c:4, q:"Hvað einkennir vísindi umfram gervivísindi?", opts:["Þau eru persónubundin","Þau eru prófanleg af hverjum sem er og styrkjast með nýrri þekkingu","Þau byggja á reynslu eins manns","Þau eru byggð á helgum ritum"], a:1, why:"Vísindi eru ópersónubundin, prófanleg af hverjum sem er og styrkjast oftast með nýrri þekkingu."},
+    {c:4, q:"Hvernig eru vísindakenningar sannaðar?", opts:["Með atkvæðagreiðslu","Með tilraunum og samanburðartilraunum","Með reynslusögum","Með auglýsingum"], a:1, why:"Vísindaleg aðferðafræði: tilraunir með viðmiði sem hver sem er getur endurtekið."},
+    {c:5, q:"Rafsegularmbönd og kristallar sem eiga að lækna eru dæmi um…", opts:["Grunnrannsóknir","Fjárplógsstarfsemi tengda gervivísindum","Náttúrulögmál","Hagnýt vísindi"], a:1, why:"Auðtrúa fólk er blekkt til að borga fyrir eitthvað fánýtt — það er fjárplógsstarfsemi gervivísinda."},
+    {c:5, q:"Hvernig reyna gervivísindamenn að láta kenningar sínar líta út fyrir að vera sannaðar?", opts:["Með því að birta gögnin sín opinberlega","Með því að sveigja þær að alvöru vísindakenningum","Með samanburðartilraunum","Með því að viðurkenna óvissu"], a:1, why:"Þeir „sveigja“ kenningar sínar að viðurkenndum vísindum svo þær virðist sannaðar."}
+  ]
+},
+
+{
+  id:"efnin", num:"🧪", cc:"--c3", part:"Síðar á önninni — Efnafræði (okt.–nóv.)", videos:[], page:121,
   title:"Efnin allt í kringum okkur",
   kicker:"4. kafli",
   listen:"4. kafli — bls. 121–139.",
@@ -500,8 +606,9 @@ const CHAPTERS = [
     {c:0, q:"Hvaða hleðslu hafa rafeindir?", opts:["Jákvæða","Neikvæða","Enga","Það fer eftir frumefninu"], a:1, why:"Rafeindir eru neikvætt hlaðnar og sveima um kjarnann. Róteindir í kjarnanum eru jákvæðar."}
   ]
 },
+
 {
-  id:"lotukerfi", num:"📋", cc:"--c4", part:"", page:143,
+  id:"lotukerfi", num:"📋", cc:"--c4", part:"Síðar á önninni — Efnafræði (okt.–nóv.)", videos:[], page:143,
   title:"Lotukerfið",
   kicker:"5. kafli",
   listen:"5. kafli — bls. 143–166.",
@@ -536,8 +643,9 @@ const CHAPTERS = [
     {c:3, q:"Kolefni-14 hefur 6 róteindir. Hversu margar nifteindir hefur það?", opts:["6","8","14","20"], a:1, why:"Massatala − róteindir = nifteindir: 14 − 6 = 8. Kolefni-12 hefur hins vegar 6 nifteindir."}
   ]
 },
+
 {
-  id:"efnatengi", num:"🔗", cc:"--c5", part:"", page:172,
+  id:"efnatengi", num:"🔗", cc:"--c5", part:"Síðar á önninni — Efnafræði (okt.–nóv.)", videos:[{t:"Efnatengi", url:"https://www.youtube.com/watch?v=gPXXwmc1DNU"},{t:"Punkta- og byggingarformúlur", url:"https://www.youtube.com/watch?v=NMPpE8kB46E"},{t:"Nafnakerfi", url:"https://www.youtube.com/watch?v=T5tDb3MNjG8"}], page:172,
   title:"Efni, efnatengi og heiti einfaldra efna",
   kicker:"6. kafli",
   listen:"6. kafli — bls. 172–188.",
@@ -573,8 +681,9 @@ const CHAPTERS = [
     {c:4, q:"Hvað einkennir málmtengi?", opts:["Ytri rafeindir fljóta frjálsar milli atómanna","Atómin deila tveimur rafeindum","Jónir dragast saman","Engar rafeindir"], a:0, why:"Í málmtengi eru ytri rafeindirnar hreyfanlegar — þess vegna leiða málmar rafmagn og hita."}
   ]
 },
+
 {
-  id:"efnahvorf", num:"💥", cc:"--c6", part:"", page:194,
+  id:"efnahvorf", num:"💥", cc:"--c6", part:"Síðar á önninni — Efnafræði (okt.–nóv.)", videos:[], page:194,
   title:"Efnahvörf",
   kicker:"7. kafli",
   listen:"7. kafli — bls. 194–211.",
@@ -609,66 +718,152 @@ const CHAPTERS = [
     {c:5, q:"Hvað er botnfall?", opts:["Gas sem myndast","Fast efni sem myndast og fellur til botns þegar lausnir blandast","Vatn sem gufar upp","Sýra"], a:1, why:"Í fellingarhvarfi myndast fast efni sem leysist ekki upp og fellur til botns — botnfall."},
     {c:3, q:"Ryðmyndun á járni er dæmi um…", opts:["Afoxun","Oxun — járnið tapar rafeindum","Fellingarhvarf","Bráðnun"], a:1, why:"Þegar járn ryðgar tapar það rafeindum til súrefnis — það oxast."}
   ]
-}
+},
+
+{
+  id:"orka", num:"⚡", cc:"--c2", part:"Síðar á önninni — Orka jarðar (nóv.–des.)", videos:[{t:"Orka jarðar", url:"https://www.youtube.com/watch?v=0luLdLvT-XQ"},{t:"Raforkuframleiðsla", url:"https://www.youtube.com/watch?v=0vIPZN1mnMk"}], page:77,
+  title:"Orkubúskapur jarðar og orkuframleiðsla",
+  kicker:"3. kafli",
+  listen:"3. kafli — bls. 77–114.",
+  intro:[
+    "Þessi kafli fjallar um orkuna sem gerir jörðina byggilega og hvaðan hún kemur.",
+    "Þú lærir um rafsegulbylgjur — ljós, útvarpsbylgjur, röntgen — sem eru allar sama fyrirbærið.",
+    "Í lokin er hvernig við framleiðum orku: vatnsafl, jarðvarmi og fleira."
+  ],
+  concepts:[
+    {t:"Orkugjafar jarðar", d:"Langstærsti orkugjafi jarðar er sólin — hún knýr veður, vinda, hafstrauma og líf. Auk þess kemur orka innan úr jörðinni (jarðvarmi) og frá aðdráttarafli tungls og sólar (sjávarföll).", ex:"Vindur verður til þegar sólin hitar loft misjafnt. Öll þessi orka á rætur í sólinni."},
+    {t:"Orkujöfnuður jarðar", d:"Jörðin tekur við orku frá sólinni og gefur frá sér varma út í geiminn. Ef jafnvægi helst er hitinn stöðugur. Raskist það — t.d. vegna gróðurhúsalofttegunda — hlýnar jörðin.", ex:"Gróðurhúsalofttegundir halda meiri varma inni, líkt og teppi. Þá hitnar jörðin — það eru gróðurhúsaáhrif."},
+    {t:"Rafsegulbylgjur og rafsegulróf", d:"Ljós, útvarpsbylgjur, örbylgjur, innrautt, útfjólublátt, röntgen og gammageislar eru allt rafsegulbylgjur — sama fyrirbærið á ólíkri tíðni. Saman mynda þær rafsegulrófið.",
+      svg:'<svg viewBox="0 0 300 110" role="img" aria-label="Rafsegulrófið"><defs><linearGradient id="spec" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c0392b"/><stop offset="0.45" stop-color="#f1c40f"/><stop offset="0.65" stop-color="#2ecc71"/><stop offset="1" stop-color="#7d3cc9"/></linearGradient></defs><text x="150" y="16" text-anchor="middle" font-size="11" class="tacc">lág tíðni → há tíðni (meiri orka)</text><rect x="20" y="42" width="260" height="26" rx="6" fill="url(#spec)"/><rect x="150" y="42" width="46" height="26" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><text x="173" y="36" text-anchor="middle" font-size="9" class="tmut">sýnilegt ljós</text><text x="22" y="86" font-size="10" class="tmut">Útvarp</text><text x="278" y="86" text-anchor="end" font-size="10" class="tmut">Gamma</text></svg>', cap:"Rafsegulrófið: útvarp, ljós, röntgen og gamma — allt sama fyrirbærið á ólíkri tíðni.",
+      ex:"Örbylgjuofn, útvarp og sólarljós nota öll rafsegulbylgjur — bara á mismunandi tíðni."},
+    {t:"Sýnilegt ljós og útfjólublátt", d:"Sýnilegt ljós er örlítill hluti rófsins sem augað nemur — regnbogans litir. Útfjólublátt (UV) er orkumeira og ósýnilegt; það veldur sólbruna og getur skaðað húð.", ex:"Sólarvörn ver húðina fyrir UV-geislum sólarinnar, sem við sjáum ekki en finnum þegar við brennum."},
+    {t:"Hamskiptaorka", tip:"Á meðan hamur breytist stendur hitamælirinn kyrr.", d:"Orka sem fer í að breyta ham efnis — t.d. bræða ís eða sjóða vatn — án þess að hitinn hækki á meðan. Orkan fer í hamskiptin sjálf, ekki í að hækka hitastigið.", ex:"Þegar ís bráðnar helst hitinn 0°C þótt þú hitir hann áfram — orkan fer í að breyta ísnum í vatn."},
+    {t:"Hringrás vatns", d:"Vatn er sífellt á hreyfingu: það gufar upp af höfum, þéttist í ský, fellur sem úrkoma og rennur aftur til sjávar. Sólin knýr þessa hringrás.",
+      svg:'<svg viewBox="0 0 300 160" role="img" aria-label="Hringrás vatns"><circle cx="255" cy="28" r="15" fill="#f5b301"/><rect x="20" y="122" width="260" height="30" rx="4" class="softc"/><text x="150" y="145" text-anchor="middle" font-size="11" class="tmut">haf</text><ellipse cx="95" cy="58" rx="44" ry="18" class="soft"/><text x="95" y="62" text-anchor="middle" font-size="11" class="tmut">ský</text><line x1="60" y1="120" x2="55" y2="82" class="acc-s" stroke-width="2"/><polygon points="55,74 49,86 61,86" class="acc"/><text x="30" y="104" font-size="10" class="tacc">uppgufun</text><line x1="120" y1="80" x2="120" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><line x1="140" y1="80" x2="140" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><line x1="160" y1="80" x2="160" y2="118" class="mut-s" stroke-width="2" stroke-dasharray="3 4"/><text x="165" y="104" font-size="10" class="tmut">úrkoma</text></svg>', cap:"Sólin knýr hringrásina: uppgufun → ský → úrkoma → aftur til sjávar.",
+      ex:"Rigningin sem fellur á Íslandi gufaði áður upp af hafinu — sama vatnið fer hringinn aftur og aftur."},
+    {t:"Orkuframleiðsla", d:"Við breytum orku í rafmagn með ýmsum leiðum: vatnsafli (fallvatn snýr hverflum), jarðvarma (gufa úr jörðu) og víðar kjarnorku. Ísland notar nær eingöngu vatnsafl og jarðvarma.", ex:"Í vatnsaflsvirkjun fellur vatn niður og snýr hverfli sem framleiðir rafmagn — hrein, endurnýjanleg orka."}
+  ],
+  quiz:[
+    {c:0, q:"Hver er langstærsti orkugjafi jarðar?", opts:["Jarðvarmi","Sólin","Vindur","Sjávarföll"], a:1, why:"Sólin knýr veður, vinda, hafstrauma og líf — langstærsti orkugjafinn."},
+    {c:2, q:"Hvað eiga ljós, útvarpsbylgjur og röntgengeislar sameiginlegt?", opts:["Þau eru öll sýnileg","Þau eru öll rafsegulbylgjur á ólíkri tíðni","Þau eru öll hættuleg","Þau ferðast öll hægar en hljóð"], a:1, why:"Öll eru þau rafsegulbylgjur — sama fyrirbærið á mismunandi tíðni (rafsegulrófið)."},
+    {c:1, q:"Hvað eru gróðurhúsaáhrif?", opts:["Þegar jörðin kólnar","Þegar lofttegundir halda varma inni og jörðin hlýnar","Þegar sólin slokknar","Þegar það rignir meira"], a:1, why:"Gróðurhúsalofttegundir halda varma inni eins og teppi, sem hlýjar jörðina."},
+    {c:4, q:"Af hverju helst hitinn 0°C á meðan ís bráðnar?", opts:["Ísinn er bilaður","Orkan fer í hamskiptin (að breyta ís í vatn), ekki í að hækka hitann","Það er engin orka","Hitinn hækkar strax"], a:1, why:"Hamskiptaorkan fer í að breyta ham efnisins — hitinn hækkar ekki fyrr en allur ísinn er bráðnaður."},
+    {c:6, q:"Hvaða orkugjafa notar Ísland mest?", opts:["Kol og olíu","Vatnsafl og jarðvarma","Kjarnorku","Vindmyllur eingöngu"], a:1, why:"Ísland framleiðir rafmagn nær eingöngu með vatnsafli og jarðvarma — endurnýjanlegum orkugjöfum."},
+    {c:5, q:"Hvað knýr hringrás vatns?", opts:["Tunglið","Sólin","Vindurinn","Jarðvarmi"], a:1, why:"Sólin hitar hafið svo vatn gufar upp, þéttist í ský og fellur sem úrkoma — sólin knýr hringinn."},
+    {c:5, q:"Hvað gerist við uppgufun?", opts:["Gas breytist í vökva","Vökvi breytist í gas","Vökvi breytist í fast efni","Vatnið hverfur"], a:1, why:"Við uppgufun fer vatn úr fljótandi ham í gas (vatnsgufu)."},
+    {c:3, q:"Hvaða geislun veldur sólbruna?", opts:["Útvarpsbylgjur","Útfjólublá geislun (UV)","Innrauð geislun","Sýnilegt ljós"], a:1, why:"Útfjólublá geislun er orkumeiri en sýnilegt ljós og skaðar húðina — þess vegna notum við sólarvörn."},
+    {c:2, q:"Hvort hefur meiri orku: gammageislar eða útvarpsbylgjur?", opts:["Útvarpsbylgjur","Gammageislar — hærri tíðni","Jafn mikla","Hvorugt hefur orku"], a:1, why:"Því hærri tíðni, því meiri orka. Gammageislar eru efst í rafsegulrófinu, útvarpsbylgjur neðst."},
+    {c:6, q:"Hvað er endurnýjanlegur orkugjafi?", opts:["Orkugjafi sem gengur ekki til þurrðar, t.d. vatnsafl","Kol","Olía","Orkugjafi sem klárast"], a:0, why:"Vatnsafl, jarðvarmi, vindur og sól endurnýjast sífellt. Kol og olía klárast."},
+    {c:6, q:"Hvað gerist í vatnsaflsvirkjun?", opts:["Vatn er hitað með kolum","Fallandi vatn snýr hverfli sem framleiðir rafmagn","Vatn er klofið í vetni","Gufa úr jörðu er notuð"], a:1, why:"Í vatnsaflsvirkjun fellur vatn niður og snýr hverfli (túrbínu) sem framleiðir rafmagn."},
+    {c:1, q:"Hvað gerist ef jörðin tekur við meiri orku en hún gefur frá sér?", opts:["Hún kólnar","Hún hlýnar","Ekkert gerist","Hún hættir að snúast"], a:1, why:"Ef orkujöfnuðurinn raskast — t.d. vegna gróðurhúsalofttegunda — helst meiri varmi inni og jörðin hlýnar."}
+  ]
+},
+
+{
+  id:"hreyfing", num:"🚀", cc:"--c1", part:"Aukaefni — ekki í námsáætlun NAT1A05 þessa önn", videos:[], page:42,
+  title:"Hraði, hröðun, kraftur og massi",
+  kicker:"2. kafli",
+  listen:"2. kafli — bls. 42–71.",
+  intro:[
+    "Þessi kafli fjallar um hreyfingu: hvað hraði og hröðun eru og hvað fær hluti til að hreyfast.",
+    "Þú lærir um krafta, massa og þyngd, og hvernig þeir tengjast með einföldum formúlum.",
+    "Í lokin er þrýstingur, flotgeta og af hverju hlutir fljóta eða sökkva."
+  ],
+  concepts:[
+    {t:"Hraði", tip:"Hraði = vegalengd ÷ tími. Hugsaðu „km á klukkustund“ — vegalengd á tíma.", d:"Hraði segir hversu langt hlutur fer á tíma. Mælt í metrum á sekúndu (m/s).", formula:"hraði = vegalengd ÷ tími&nbsp;&nbsp;(m/s)", ex:"Ef þú hleypur 100 metra á 10 sekúndum er hraðinn 100 ÷ 10 = 10 m/s."},
+    {t:"Hröðun", d:"Hröðun er breyting á hraða á tíma — hversu hratt hluturinn eykur (eða minnkar) hraðann. Ef bíll fer hraðar og hraðar er hann að hraða.", formula:"hröðun = breyting á hraða ÷ tími&nbsp;&nbsp;(m/s²)", ex:"Bíll sem fer úr 0 í 20 m/s á 4 sekúndum hraðar um 5 m/s á hverri sekúndu (5 m/s²)."},
+    {t:"Þyngdarhröðun", d:"Allir hlutir falla til jarðar með sömu hröðun ef ekkert stöðvar þá: um 9,8 m/s². Þess vegna falla steinn og fjöður jafn hratt í lofttæmi.", formula:"þyngdarhröðun ≈ 9,8 m/s²", ex:"Þegar þú sleppir bolta eykst fallhraði hans um u.þ.b. 10 m/s á hverri sekúndu vegna þyngdarhröðunar."},
+    {t:"Kraftur, massi og þyngd", tip:"Massi (kg) breytist aldrei. Þyngd (N) fer eftir þyngdaraflinu — minni á tunglinu.", d:"Kraftur er tog eða ýting, mældur í njútonum (N). Massi (kg) er hversu mikið efni er í hlut. Þyngd er krafturinn sem þyngdaraflið togar með — þyngd = massi × þyngdarhröðun.", formula:"kraftur = massi × hröðun&nbsp;&nbsp;·&nbsp;&nbsp;F = m · a<br>þyngd = massi × g&nbsp;&nbsp;(g ≈ 9,8 m/s²)", ex:"Sami hlutur hefur sama massa á jörðu og tungli, en minni þyngd á tunglinu því þyngdaraflið er veikara þar."},
+    {t:"Uppvegnir og óuppvegnir kraftar", d:"Ef kraftar á hlut jafnast út (uppvegnir) breytist hreyfingin ekki. Ef þeir jafnast ekki (óuppvegnir) fer hluturinn af stað, hraðar eða hægir á sér.",
+      svg:'<svg viewBox="0 0 300 170" role="img" aria-label="Uppvegnir og óuppvegnir kraftar"><text x="150" y="14" text-anchor="middle" font-size="11" class="tacc">jafnir kraftar → kyrrt</text><rect x="125" y="26" width="50" height="34" rx="5" class="softc"/><line x1="123" y1="43" x2="80" y2="43" class="ink-s" stroke-width="3"/><polygon points="74,43 84,38 84,48" class="ink"/><line x1="177" y1="43" x2="220" y2="43" class="ink-s" stroke-width="3"/><polygon points="226,43 216,38 216,48" class="ink"/><text x="150" y="104" text-anchor="middle" font-size="11" class="tacc">ójafnir kraftar → hreyfist →</text><rect x="115" y="116" width="50" height="34" rx="5" class="softc"/><line x1="113" y1="133" x2="90" y2="133" class="mut-s" stroke-width="3"/><polygon points="86,133 94,129 94,137" class="mut"/><line x1="167" y1="133" x2="240" y2="133" class="acc-s" stroke-width="3"/><polygon points="246,133 236,128 236,138" class="acc"/></svg>', cap:"Jafnir kraftar halda hlut kyrrum; ójafnir koma honum af stað.",
+      ex:"Bók á borði stendur kyrr því þyngd hennar og stuðningur borðsins jafnast út. Ýtirðu henni fastar en núningurinn, þá rennur hún."},
+    {t:"Vinna, orka og afl", d:"Vinna er unnin þegar kraftur færir hlut. Orka er geta til að vinna vinnu. Afl er hversu hratt vinnan er unnin, mælt í vöttum (W).", formula:"vinna = kraftur × vegalengd<br>afl = vinna ÷ tími&nbsp;&nbsp;(W)", ex:"Að lyfta þungum kassa upp stiga er vinna. Að gera það hratt krefst meira afls en að gera það hægt."},
+    {t:"Þrýstingur", tip:"Lítill flötur → mikill þrýstingur (nál, hælar). Stór flötur → lítill þrýstingur (skíði).", d:"Þrýstingur er kraftur á flatareiningu. Sami kraftur á lítinn flöt gefur mikinn þrýsting. Mælt í paskölum (Pa).", formula:"þrýstingur = kraftur ÷ flatarmál&nbsp;&nbsp;(Pa)", ex:"Þú sekkur síður í snjó á skíðum en í skóm — skíðin dreifa þyngdinni á stærri flöt og lækka þrýstinginn."},
+    {t:"Flotgeta og uppdrif", d:"Hlutur í vökva fær uppdrif upp á við sem er jafn þungt og vökvinn sem hann ýtir frá sér (lögmál Arkímedesar). Ef uppdrifið er meira en þyngdin flýtur hluturinn.",
+      svg:'<svg viewBox="0 0 300 150" role="img" aria-label="Uppdrif og þyngd"><rect x="40" y="46" width="220" height="94" rx="6" class="softc"/><line x1="40" y1="46" x2="260" y2="46" class="acc-s" stroke-width="2"/><rect x="125" y="72" width="50" height="38" rx="5" class="ink"/><line x1="150" y1="70" x2="150" y2="36" class="acc-s" stroke-width="3"/><polygon points="150,26 143,40 157,40" class="acc"/><text x="150" y="20" text-anchor="middle" font-size="11" class="tacc">uppdrif</text><line x1="150" y1="110" x2="150" y2="130" class="mut-s" stroke-width="3"/><polygon points="150,138 143,126 157,126" class="mut"/><text x="150" y="150" text-anchor="middle" font-size="11" class="tmut">þyngd</text></svg>', cap:"Uppdrifið ýtir upp, þyngdin togar niður. Stærra uppdrif → hluturinn flýtur.",
+      ex:"Risastórt stálskip flýtur af því lögun þess ryður frá miklum sjó — uppdrifið verður nógu stórt til að halda því á floti."}
+  ],
+  quiz:[
+    {c:0, q:"Hver er formúlan fyrir hraða?", opts:["Hraði = tími ÷ vegalengd","Hraði = vegalengd ÷ tími","Hraði = massi × tími","Hraði = kraftur ÷ massi"], a:1, why:"Hraði = vegalengd ÷ tími, mælt í m/s."},
+    {c:1, q:"Hvað er hröðun?", opts:["Sama og hraði","Breyting á hraða á tíma","Þyngd hlutar","Kraftur á hlut"], a:1, why:"Hröðun mælir hversu hratt hraðinn breytist, í m/s²."},
+    {c:3, q:"Hvað segir lögmálið F = m·a?", opts:["Kraftur = massi × hröðun","Kraftur = massi ÷ hröðun","Massi = kraftur × hröðun","Hröðun = kraftur × massi"], a:0, why:"Krafturinn sem þarf er massinn margfaldaður með hröðuninni (F = m·a)."},
+    {c:6, q:"Af hverju sekkur þú síður í snjó á skíðum en í skóm?", opts:["Skíðin eru létt","Skíðin dreifa þyngdinni á stærri flöt og lækka þrýstinginn","Snjórinn er harðari","Skór eru þyngri"], a:1, why:"Sami kraftur á stærri flöt gefur minni þrýsting — þess vegna sekkurðu síður."},
+    {c:7, q:"Af hverju flýtur stálskip þótt stál sé þungt?", opts:["Stál er létt í vatni","Lögun þess ryður frá miklum sjó og uppdrifið heldur því á floti","Það er fullt af lofti alls staðar","Sjórinn ýtir því upp af tilviljun"], a:1, why:"Uppdrif er jafn þungt og vökvinn sem hluturinn ryður frá. Lögun skipsins ryður nógu miklu til að fljóta (Arkímedes)."},
+    {c:0, q:"Bíll ekur 300 m á 20 sekúndum. Hver er hraðinn?", opts:["6000 m/s","15 m/s","0,07 m/s","320 m/s"], a:1, why:"Hraði = vegalengd ÷ tími = 300 ÷ 20 = 15 m/s."},
+    {c:3, q:"Manneskja er 50 kg. Hver er þyngd hennar á jörðinni (g ≈ 10 m/s²)?", opts:["50 N","5 N","500 N","5000 N"], a:2, why:"Þyngd = massi × g = 50 × 10 = 500 N. Massinn er áfram 50 kg."},
+    {c:3, q:"Hver er munurinn á massa og þyngd?", opts:["Enginn munur","Massi er magn efnis (kg), þyngd er kraftur þyngdaraflsins (N)","Massi er mældur í N, þyngd í kg","Þyngd er alltaf meiri en massi"], a:1, why:"Massi (kg) breytist ekki hvar sem þú ert. Þyngd (N) er krafturinn sem þyngdaraflið togar með og er minni á tunglinu."},
+    {c:5, q:"Hvað er afl?", opts:["Sama og kraftur","Hversu hratt vinna er unnin","Vegalengd á tíma","Massi × hraði"], a:1, why:"Afl = vinna ÷ tími, mælt í vöttum (W). Sama vinna á styttri tíma = meira afl."},
+    {c:3, q:"Í hvaða einingu er kraftur mældur?", opts:["Kílógramm (kg)","Njúton (N)","Vatt (W)","Paskal (Pa)"], a:1, why:"Kraftur og þyngd eru mæld í njútonum (N). Vatt er afl og paskal er þrýstingur."},
+    {c:6, q:"Kraftur upp á 600 N verkar á 0,5 m² flöt. Hver er þrýstingurinn?", opts:["300 Pa","1200 Pa","600 Pa","0,5 Pa"], a:1, why:"Þrýstingur = kraftur ÷ flatarmál = 600 ÷ 0,5 = 1200 Pa."},
+    {c:4, q:"Hvað gerist við hlut ef kraftarnir á hann eru uppvegnir (jafnast út)?", opts:["Hann hraðar","Hreyfing hans breytist ekki","Hann stöðvast alltaf","Hann þyngist"], a:1, why:"Uppvegnir kraftar breyta ekki hreyfingu: kyrr hlutur er áfram kyrr og hlutur á hreyfingu heldur sama hraða."},
+    {c:2, q:"Steinn og fjöður falla í lofttæmi. Hvort lendir fyrr?", opts:["Steinninn","Fjöðrin","Þau lenda samtímis","Hvorugt fellur"], a:2, why:"Án loftmótstöðu falla allir hlutir með sömu þyngdarhröðun (≈ 9,8 m/s²) og lenda samtímis."}
+  ]
+},
 ];
 
 /* ---- FORMÚLUBLAÐ, TÖLUR, EININGAR OG SÝNIDÆMI ---- */
 const FORMULAS = [
-  {n:"Eðlismassi", eq:"eðlismassi = massi ÷ rúmmál", say:"eðlismassi er massi deilt með rúmmáli", u:"g/cm³ (eða kg/m³)", m:"Hversu þétt efnið er. Hærri tala = þyngra miðað við stærð. Lægri en 1 g/cm³ → flýtur á vatni.", ch:0, ci:3},
-  {n:"Staðalform talna", eq:"tala × 10ⁿ &nbsp;(talan á milli 1 og 10)", say:"tala sinnum tíu í veldi n", u:"t.d. 3 × 10⁸ = 300.000.000", m:"Veldið segir hversu mörg sæti kommurnar færast. Jákvætt veldi = stór tala, neikvætt = lítil.", ch:0, ci:2},
-  {n:"Hraði", eq:"hraði = vegalengd ÷ tími", say:"hraði er vegalengd deilt með tíma", u:"m/s", m:"Hversu langt á hverri sekúndu. 100 m á 10 s = 10 m/s.", ch:1, ci:0},
-  {n:"Hröðun", eq:"hröðun = breyting á hraða ÷ tími", say:"hröðun er breyting á hraða deilt með tíma", u:"m/s²", m:"Hversu hratt hraðinn breytist. Úr 0 í 20 m/s á 4 s = 5 m/s².", ch:1, ci:1},
-  {n:"Kraftur (2. lögmál Newtons)", eq:"kraftur = massi × hröðun &nbsp;·&nbsp; F = m · a", say:"kraftur er massi sinnum hröðun", u:"N (njúton)", m:"Meiri massi eða meiri hröðun → meiri kraft þarf.", ch:1, ci:3},
-  {n:"Þyngd", eq:"þyngd = massi × þyngdarhröðun &nbsp;·&nbsp; F<sub>þ</sub> = m · g", say:"þyngd er massi sinnum þyngdarhröðun", u:"N (njúton) · g ≈ 9,8 m/s² (oft námundað í 10)", m:"Massi er í kg og breytist ekki. Þyngd er kraftur í N og fer eftir þyngdaraflinu.", ch:1, ci:3},
-  {n:"Vinna", eq:"vinna = kraftur × vegalengd", say:"vinna er kraftur sinnum vegalengd", u:"J (júl)", m:"Vinna er unnin þegar kraftur færir hlut.", ch:1, ci:5},
-  {n:"Afl", eq:"afl = vinna ÷ tími", say:"afl er vinna deilt með tíma", u:"W (vatt)", m:"Hversu hratt vinnan er unnin. Sama vinna á styttri tíma = meira afl.", ch:1, ci:5},
-  {n:"Þrýstingur", eq:"þrýstingur = kraftur ÷ flatarmál", say:"þrýstingur er kraftur deilt með flatarmáli", u:"Pa (paskal) = N/m²", m:"Sami kraftur á lítinn flöt = mikill þrýstingur (nál). Á stóran flöt = lítill (skíði).", ch:1, ci:6},
-  {n:"Uppdrif (Arkímedes)", eq:"uppdrif = þyngd vökvans sem hluturinn ýtir frá sér", say:"uppdrif er jafnt þyngd vökvans sem hluturinn ýtir frá sér", u:"N (njúton)", m:"Uppdrif stærra en þyngd → flýtur. Minna → sekkur.", ch:1, ci:7},
-  {n:"Sætistala og massatala", eq:"sætistala = róteindir<br>massatala = róteindir + nifteindir", say:"sætistala er fjöldi róteinda. Massatala er róteindir plús nifteindir", u:"engin eining — bara talning", m:"Sætistalan segir HVAÐA frumefni. Massatalan segir hversu ÞUNGT atómið er.", ch:4, ci:2},
-  {n:"Efnajafna", eq:"hvarfefni → myndefni", say:"hvarfefni gefa myndefni", u:"jafn mörg atóm af hverri tegund báðum megin", m:"Massinn varðveitist: ekkert myndast né eyðist, atómin bara raðast upp á nýtt.", ch:6, ci:2}
+  {exam:true, n:"Eðlismassi", eq:"eðlismassi = massi ÷ rúmmál &nbsp;·&nbsp; ρ = m ÷ V", say:"eðlismassi er massi deilt með rúmmáli", u:"kg/m³ (SI) eða g/cm³", m:"Hversu þungur hlutur er miðað við rúmmálið. Vatn = 1000 kg/m³. Lægra flýtur, hærra sekkur.", ch:"v12", ci:7},
+  {exam:true, n:"Staðalform", eq:"tala × 10ⁿ &nbsp;(EINN stafur fyrir framan kommuna)", say:"tala sinnum tíu í veldi n, með einum staf fyrir framan kommuna", u:"123.000 = 1,23 × 10⁵ · 0,00005638 = 5,638 × 10⁻⁵", m:"Veldið telur sætin sem kommurnar færðust. Jákvætt = stór tala, neikvætt = lítil.", ch:"v12", ci:4},
+  {exam:true, n:"Forskeyti", eq:"G = 10⁹ · M = 10⁶ · k = 10³ · 1 · m = 10⁻³ · µ = 10⁻⁶ · n = 10⁻⁹", say:"gíga, mega, kíló, eining, milli, míkró, nanó. Hvert þrep er þúsundfalt", u:"c (centi) = 10⁻² · d (desi) = 10⁻¹", m:"1 km = 1000 m. 1 mm = 0,001 m. 1 cm = 0,01 m. 1 cm³ = 1 mL, 1 dm³ = 1 L, 1 m³ = 1000 L.", ch:"v12", ci:3},
+  {exam:true, n:"Einingabreyting með broti", eq:"margfalda með broti sem er = 1<br>120 km/klst = 120.000 m ÷ 3600 s = 33,3 m/s", say:"margfalda með broti sem er jafnt og einn. Sama eining uppi og niðri styttist út", u:"1 klst = 3600 s · 1 km = 1000 m", m:"Öruggasta leiðin: skrifa brot með sömu einingu uppi og niðri (t.d. 60 mín ÷ 1 klst).", ch:"v12", ci:5},
+  {exam:true, n:"Óvissa mælingar", eq:"óvissa = ½ × minnsta bil á kvarða<br>skrifað: gildi ± óvissa", say:"óvissa er helmingur af minnsta bili á kvarðanum", u:"reglustika með mm → ±0,5 mm · vog → ±1 á síðasta staf", m:"Engin mæling er fullkomin. Fínni kvarði = minni óvissa = nákvæmari mæling.", ch:"v12", ci:8},
+  {exam:true, n:"Óvissur við samlagningu", eq:"(a ± Δa) + (b ± Δb) = (a + b) ± (Δa + Δb)", say:"þegar mæligildi eru lögð saman leggjast óvissurnar líka saman", u:"5,4 ± 0,1 g + 3,6 ± 0,1 g = 9,0 ± 0,2 g", m:"Óvissur geta bara stækkað — þær styttast aldrei út. Marktækur munur þarf að vera stærri en óvissan.", ch:"v12", ci:9},
+  {exam:true, n:"Markverðir stafir", eq:"trix: skrifa á staðalformi og telja stafina", say:"markverðir stafir eru stafirnir sem skipta máli. Skrifaðu töluna á staðalformi og teldu", u:"609,40 → 5 · 15,65 → 4 · 0,35 → 2 · 0,07 → 1", m:"Núll fremst (vinstra megin) telja ekki. Núll á milli stafa og aftast telja.", ch:"v12", ci:11},
+  {exam:true, n:"Breytur", eq:"y = f(x) &nbsp;·&nbsp; x = frumbreyta, y = fylgibreyta", say:"y er fall af x. x er frumbreyta og y fylgibreyta", u:"úrkoma (x) → rennsli í á (y)", m:"Þú breytir frumbreytunni og mælir fylgibreytuna.", ch:"v11", ci:9},
+  {n:"Hraði", eq:"hraði = vegalengd ÷ tími", say:"hraði er vegalengd deilt með tíma", u:"m/s", m:"Hversu langt á hverri sekúndu.", ch:"hreyfing", ci:0},
+  {n:"Kraftur (2. lögmál Newtons)", eq:"kraftur = massi × hröðun &nbsp;·&nbsp; F = m · a", say:"kraftur er massi sinnum hröðun", u:"N (njúton)", m:"Meiri massi eða meiri hröðun → meiri kraft þarf.", ch:"hreyfing", ci:3},
+  {n:"Þyngd", eq:"þyngd = massi × þyngdarhröðun &nbsp;·&nbsp; F<sub>þ</sub> = m · g", say:"þyngd er massi sinnum þyngdarhröðun", u:"N · g ≈ 9,8 m/s²", m:"Massi (kg) breytist ekki. Þyngd (N) fer eftir þyngdaraflinu.", ch:"hreyfing", ci:3},
+  {n:"Þrýstingur", eq:"þrýstingur = kraftur ÷ flatarmál", say:"þrýstingur er kraftur deilt með flatarmáli", u:"Pa = N/m²", m:"Lítill flötur = mikill þrýstingur.", ch:"hreyfing", ci:6},
+  {n:"Sætistala og massatala", eq:"sætistala = róteindir<br>massatala = róteindir + nifteindir", say:"sætistala er fjöldi róteinda. Massatala er róteindir plús nifteindir", u:"talning", m:"Sætistalan segir HVAÐA frumefni. Massatalan hversu ÞUNGT.", ch:"lotukerfi", ci:2},
+  {n:"Efnajafna", eq:"hvarfefni → myndefni", say:"hvarfefni gefa myndefni", u:"jafn mörg atóm báðum megin", m:"Massinn varðveitist.", ch:"efnahvorf", ci:2}
 ];
 const NUMBERS = [
-  {v:"g ≈ 9,8 m/s²", l:"Þyngdarhröðun — oft námundað í 10"},
-  {v:"1 g/cm³", l:"Eðlismassi vatns. Léttara flýtur, þyngra sekkur"},
-  {v:"3 × 10⁸ m/s", l:"Ljóshraði — 300.000.000 m/s"},
-  {v:"pH 7", l:"Hlutlaust (hreint vatn). Lægra = súrt, hærra = basískt"},
-  {v:"0 °C · 100 °C", l:"Vatn: bræðslumark og suðumark"},
-  {v:"H₂O · CO₂ · NaCl · O₂", l:"Vatn · koltvíoxíð · matarsalt · súrefnisgas"}
+  {v:"1000 kg/m³", l:"Eðlismassi vatns (= 1 g/cm³). Ís 920, bensín 800, stál 7800"},
+  {v:"kg · m · s", l:"SI-grunneiningar: massi, lengd, tími (+ A og K)"},
+  {v:"k = 1000 · m = 0,001", l:"kíló og milli. c = 0,01, µ = 0,000001"},
+  {v:"1 klst = 3600 s", l:"Fyrir einingabreytingar: 60 mín × 60 s"},
+  {v:"1 cm³ = 1 mL", l:"1 dm³ = 1 L · 1 m³ = 1000 L"},
+  {v:"1808 → 1898 → 1911", l:"Dalton → Thomson → Rutherford → Bohr → rafeindaský"},
+  {v:"1798 · 1977", l:"Jenner og kúabólan · síðasta bólusóttartilfellið (Sómalía)"},
+  {v:"6 skref", l:"Athugun, greining, tilgáta, tilraun, líkan, útgáfa"}
 ];
 const UNITS = [
   {q:"Lengd", u:"metri (m)"}, {q:"Massi", u:"kílógramm (kg)"}, {q:"Tími", u:"sekúnda (s)"},
-  {q:"Kraftur og þyngd", u:"njúton (N)"}, {q:"Vinna og orka", u:"júl (J)"}, {q:"Afl", u:"vatt (W)"},
-  {q:"Þrýstingur", u:"paskal (Pa)"}, {q:"Hraði", u:"m/s"}, {q:"Hröðun", u:"m/s²"}, {q:"Eðlismassi", u:"g/cm³"}
+  {q:"Rafstraumur", u:"amper (A)"}, {q:"Hitastig", u:"kelvin (K)"}, {q:"Rúmmál", u:"m³ (lítri = dm³)"},
+  {q:"Eðlismassi", u:"kg/m³"}, {q:"Kraftur", u:"njúton (N)"}, {q:"Vinna og orka", u:"júl (J)"}, {q:"Afl", u:"vatt (W)"},
+  {q:"Rafhleðsla", u:"kúlomb (C)"}, {q:"Þrýstingur", u:"paskal (Pa)"}
 ];
 const EXAMPLES = [
-  {t:"Eðlismassi steins", q:"Steinn vegur 150 g og rúmmálið er 50 cm³. Hver er eðlismassinn?", steps:["Formúla: eðlismassi = massi ÷ rúmmál","Setja inn tölurnar: 150 ÷ 50","Reikna: 150 ÷ 50 = 3"], ans:"3 g/cm³. Það er meira en vatn (1 g/cm³), svo steinninn sekkur.", ch:0},
-  {t:"Staðalform", q:"Skrifaðu 45.000 í staðalformi.", steps:["Færðu kommuna þar til talan er á milli 1 og 10: 4,5","Teldu sætin sem kommurnar færðust: 4 sæti","Það verður veldið: 4,5 × 10⁴"], ans:"4,5 × 10⁴", ch:0},
-  {t:"Hraði hjólreiðamanns", q:"Þú hjólar 600 m á 2 mínútum. Hver er hraðinn í m/s?", steps:["Breyta mínútum í sekúndur: 2 mín = 120 s","Formúla: hraði = vegalengd ÷ tími","Reikna: 600 ÷ 120 = 5"], ans:"5 m/s", ch:1},
-  {t:"Kraftur á kerru", q:"Þú ýtir 20 kg kerru svo hún fær hröðunina 2 m/s². Hve stór er krafturinn?", steps:["Formúla: F = m · a","Setja inn: 20 × 2","Reikna: 40"], ans:"40 N", ch:1},
-  {t:"Þyngd manneskju", q:"Manneskja er 60 kg. Hver er þyngd hennar á jörðinni (g ≈ 10 m/s²)?", steps:["Formúla: þyngd = massi × g","Setja inn: 60 × 10","Reikna: 600"], ans:"600 N. Massinn er samt alltaf 60 kg — líka á tunglinu, þar væri þyngdin bara minni.", ch:1},
-  {t:"Þrýstingur undir kassa", q:"Kassi ýtir með 500 N á gólf. Botnflöturinn er 0,25 m². Hver er þrýstingurinn?", steps:["Formúla: þrýstingur = kraftur ÷ flatarmál","Setja inn: 500 ÷ 0,25","Reikna: 500 ÷ 0,25 = 2000"], ans:"2000 Pa", ch:1},
-  {t:"Sætistala og massatala", q:"Natríumatóm hefur 11 róteindir og 12 nifteindir. Hver er sætistalan og massatalan?", steps:["Sætistala = fjöldi róteinda = 11","Massatala = róteindir + nifteindir = 11 + 12","Reikna: 23"], ans:"Sætistala 11, massatala 23.", ch:4},
-  {t:"Að stilla efnajöfnu", q:"Stilltu jöfnuna H₂ + O₂ → H₂O.", steps:["Teldu atómin: vinstra 2 H og 2 O, hægra 2 H og 1 O — súrefnið passar ekki","Settu 2 fyrir framan H₂O: nú eru 4 H og 2 O hægra megin","Settu 2 fyrir framan H₂: nú eru 4 H og 2 O vinstra megin líka"], ans:"2H₂ + O₂ → 2H₂O — jafn mörg atóm báðum megin ✓", ch:6}
+  {exam:true, t:"Eðlismassi steins", q:"Steinn er 2 kg og rúmmálið 0,0008 m³. Hver er eðlismassinn? Flýtur hann?", steps:["Formúla: ρ = m ÷ V","Setja inn: 2 ÷ 0,0008","Reikna: 2500 kg/m³","Bera saman við vatn (1000 kg/m³): 2500 er hærra"], ans:"2500 kg/m³ — hærra en vatn, steinninn sekkur.", ch:"v12"},
+  {exam:true, t:"Staðalform", q:"Skrifaðu 45.000 m og 0,0032 s á staðalformi.", steps:["45.000: færðu kommuna þar til einn stafur er fyrir framan: 4,5","Teldu sætin: 4 → 4,5 × 10⁴ m","0,0032: færðu kommuna 3 sæti til hægri: 3,2","Lítil tala = neikvætt veldi → 3,2 × 10⁻³ s"], ans:"4,5 × 10⁴ m og 3,2 × 10⁻³ s", ch:"v12"},
+  {exam:true, t:"km/klst í m/s", q:"Bíll ekur á 90 km/klst. Hvað er það í m/s?", steps:["Breyta km í m: 90 km = 90.000 m","Breyta klst í s: 1 klst = 3600 s","Deila: 90.000 ÷ 3600"], ans:"25 m/s", ch:"v12"},
+  {exam:true, t:"Forskeyti", q:"Breyttu 2,5 km í metra og 350 mm í metra.", steps:["kíló = 1000 → 2,5 × 1000 = 2500 m","milli = 0,001 → 350 × 0,001 = 0,35 m"], ans:"2500 m og 0,35 m", ch:"v12"},
+  {exam:true, t:"Óvissa við samlagningu", q:"Vog hefur óvissuna 0,1 g. Þú vigtar 12,3 g og 7,9 g. Heildarmassi með óvissu?", steps:["Leggja saman gildin: 12,3 + 7,9 = 20,2 g","Leggja saman óvissurnar: 0,1 + 0,1 = 0,2 g"], ans:"20,2 ± 0,2 g", ch:"v12"},
+  {exam:true, t:"Aflestraróvissa", q:"Reglustika hefur mm-bil. Þú mælir 14,3 cm. Hvernig skrifar þú niðurstöðuna?", steps:["Minnsta bil er 1 mm = 0,1 cm","Óvissa = helmingur: 0,05 cm"], ans:"14,30 ± 0,05 cm", ch:"v12"},
+  {exam:true, t:"Markverðir stafir", q:"Hversu marga markverða stafi hafa 0,0450 m og 3200 g?", steps:["0,0450 á staðalformi: 4,50 × 10⁻² → núllin fremst telja ekki, núllið aftast telur","Það gefur 3 markverða stafi","3200 á staðalformi: 3,2 × 10³ → 2 markverðir stafir (núllin eru bara sæti)"], ans:"3 stafir og 2 stafir", ch:"v12"},
+  {exam:true, t:"Marktækur munur", q:"Tvær plöntur mælast 24,6 cm og 24,9 cm með reglustiku með cm-bilum. Er marktækur munur?", steps:["Óvissa = ½ × 1 cm = 0,5 cm","Munurinn: 24,9 − 24,6 = 0,3 cm","Bera saman: 0,3 cm er minna en 0,5 cm"], ans:"Nei — munurinn er minni en óvissan, ekki marktækur.", ch:"v12"},
+  {t:"Kraftur á kerru", q:"Þú ýtir 20 kg kerru svo hún fær hröðunina 2 m/s². Hve stór er krafturinn?", steps:["Formúla: F = m · a","Setja inn: 20 × 2","Reikna: 40"], ans:"40 N", ch:"hreyfing"},
+  {t:"Sætistala og massatala", q:"Natríumatóm hefur 11 róteindir og 12 nifteindir. Hver er sætistalan og massatalan?", steps:["Sætistala = fjöldi róteinda = 11","Massatala = 11 + 12"], ans:"Sætistala 11, massatala 23.", ch:"lotukerfi"}
 ];
 
-/* ---- NÁMSÁÆTLUN (3 dagar + prófdagur) ---- */
+/* ---- NÁMSÁÆTLUN (3 dagar + prófdagur) — prófið er úr 1. kafla ---- */
 const PLAN = [
-  {title:"Dagur 1", sub:"Grunnurinn — eðlisfræðin", tasks:[
-    {t:"1. kafli — læra hugtökin og taka próf", ch:0},
-    {t:"2. kafli — læra hugtökin og taka próf", ch:1},
-    {t:"3. kafli — læra hugtökin og taka próf", ch:2},
-    {t:"Skoða formúlublaðið einu sinni í rólegheitum", go:"formulas"}]},
-  {title:"Dagur 2", sub:"Efnafræðin byrjar", tasks:[
-    {t:"4. kafli — læra hugtökin og taka próf", ch:3},
-    {t:"5. kafli — læra hugtökin og taka próf", ch:4},
-    {t:"Spjöld: fara aftur yfir kafla 1–3", go:"chapter", i:0, tab:"spjold"},
-    {t:"Prófaæfing — 10 blandaðar spurningar", go:"exam"}]},
-  {title:"Dagur 3", sub:"Klára og æfa", tasks:[
-    {t:"6. kafli — læra hugtökin og taka próf", ch:5},
-    {t:"7. kafli — læra hugtökin og taka próf", ch:6},
+  {title:"Dagur 1", sub:"Vísindi og mælingar", tasks:[
+    {t:"1.1 Hvað eru vísindi? — læra hugtökin og taka próf", ch:"v11"},
+    {t:"1.2 Tölur, einingar og mælingar — læra og taka próf", ch:"v12"},
+    {t:"Skoða formúlublaðið (forskeyti, staðalform, óvissa)", go:"formulas"}]},
+  {title:"Dagur 2", sub:"Atómið, vandamál og gervivísindi", tasks:[
+    {t:"1.3 Þróun atómkenningarinnar — læra og taka próf", ch:"v13"},
+    {t:"1.4 Vandamál við vísindatilraunir — læra og taka próf", ch:"v14"},
+    {t:"1.5 Skoðanir og gervivísindi — læra og taka próf", ch:"v15"},
+    {t:"Spjöld: 1.1 og 1.2 aftur", go:"chapter", i:"v11", tab:"spjold"},
+    {t:"Reiknidæmin á formúlublaðinu", go:"formulas"}]},
+  {title:"Dagur 3", sub:"Æfa og festa", tasks:[
     {t:"Æfa veiku hugtökin (spjöld)", go:"weak"},
-    {t:"Reiknidæmin á formúlublaðinu", go:"formulas"},
-    {t:"Prófaæfing — 20 blandaðar spurningar", go:"exam"}]},
+    {t:"Prófaæfing — 20 spurningar úr 1. kafla", go:"exam"},
+    {t:"Fara yfir það sem þú klikkaðir á („Rifja upp“)", go:"weak"},
+    {t:"Prófaæfing — allar spurningar", go:"exam"}]},
   {title:"Prófdagur", sub:"Stutt og rólegt", tasks:[
     {t:"Formúlublaðið — 10 mínútur", go:"formulas"},
     {t:"Prófaæfing — 10 spurningar", go:"exam"},
@@ -696,6 +891,9 @@ function saveData(){ store.save(DATA); }
 function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function ccv(ch){ return 'var('+ch.cc+')'; }
+function chIdx(id){ return typeof id==='number' ? id : CHAPTERS.findIndex(c=>c.id===id); }
+function isExam(ch){ return (SITE.examChapters||[]).includes(ch.id); }
+function examChs(){ const e=CHAPTERS.filter(isExam); return e.length?e:CHAPTERS; }
 function plain(html){ return String(html).replace(/<[^>]+>/g," ").replace(/&nbsp;/g," ").replace(/\s+/g," ").trim(); }
 function firstSentence(s){ const m = s.match(/^(.+?[.!?])(\s|$)/); return m ? m[1] : s; }
 function daysToExam(){ if(!SITE.examDate) return null; const now=new Date(); const t=new Date(SITE.examDate+"T00:00:00"); const a=new Date(now.getFullYear(),now.getMonth(),now.getDate()); return Math.round((t-a)/86400000); }
@@ -769,8 +967,8 @@ function chProg(ch){
   const pct = Math.round(((learned + quizDone) / (total + 1)) * 100);
   return {pct, learned, total, quizBest:rec.quizBest, quizN:rec.quizN, quizPct:rec.quizPct};
 }
-function readiness(){ let s=0; CHAPTERS.forEach(ch=>{ const r=DATA.ch[ch.id]; s += (r&&r.quizPct)||0; }); return Math.round(s/CHAPTERS.length); }
-function autoDone(i){ const ch=CHAPTERS[i]; const r=DATA.ch[ch.id]; return !!(r && (r.learned||[]).length>=ch.concepts.length && r.quizPct!=null); }
+function readiness(){ const E=examChs(); let s=0; E.forEach(ch=>{ const r=DATA.ch[ch.id]; s += (r&&r.quizPct)||0; }); return Math.round(s/E.length); }
+function autoDone(i){ const ch=CHAPTERS[chIdx(i)]; if(!ch) return false; const r=DATA.ch[ch.id]; return !!(r && (r.learned||[]).length>=ch.concepts.length && r.quizPct!=null); }
 
 /* ---- Leiðsögn (smellir sem eiga við hvar sem er) ---- */
 function goTo(name, extra){
@@ -778,13 +976,13 @@ function goTo(name, extra){
   else if(name==="weak") renderWeak();
   else if(name==="formulas") renderFormulas();
   else if(name==="glossary") renderGlossary();
-  else if(name==="chapter") renderChapter(extra&&extra.i!=null?extra.i:0, extra&&extra.tab||'lera', extra&&extra.step);
+  else if(name==="chapter") renderChapter(extra&&extra.i!=null?chIdx(extra.i):0, extra&&extra.tab||'lera', extra&&extra.step);
   else renderHome();
 }
 view.addEventListener('click', e=>{
   const go = e.target.closest('[data-go]'); if(go){ goTo(go.dataset.go); return; }
   const pl = e.target.closest('[data-plan]'); if(pl){ const k=pl.dataset.plan; DATA.plan[k]=!DATA.plan[k]; saveData(); renderHome(); return; }
-  const gp = e.target.closest('[data-goplan]'); if(gp){ const p=gp.dataset.goplan.split('-'); const t=PLAN[+p[0]].tasks[+p[1]]; if(t.ch!=null) renderChapter(t.ch,'lera'); else if(t.go) goTo(t.go, t); return; }
+  const gp = e.target.closest('[data-goplan]'); if(gp){ const p=gp.dataset.goplan.split('-'); const t=PLAN[+p[0]].tasks[+p[1]]; if(t.ch!=null) renderChapter(chIdx(t.ch),'lera'); else if(t.go) goTo(t.go, t); return; }
   const rv = e.target.closest('[data-rev]'); if(rv){ const p=rv.dataset.rev.split(':'); renderChapter(+p[0],'lera', +p[1]+1); return; }
   const rs = e.target.closest('#resumeBtn'); if(rs && DATA.last){ renderChapter(DATA.last.i, DATA.last.tab||'lera'); return; }
 });
@@ -792,13 +990,13 @@ view.addEventListener('click', e=>{
 /* ---- FORSÍÐA ---- */
 function renderHome(){
   stopSpeak(); window.scrollTo(0,0);
-  let done=0; CHAPTERS.forEach(ch=>{ done+=chProg(ch).pct; });
-  const overall = Math.round(done/CHAPTERS.length);
+  const E=examChs(); let done=0; E.forEach(ch=>{ done+=chProg(ch).pct; });
+  const overall = Math.round(done/E.length);
   const hour = new Date().getHours();
   const greet = hour<11?"Góðan daginn":hour<18?"Góðan dag":"Gott kvöld";
   const days = daysToExam(); const ready = readiness(); const nWeak = weakItems().length;
   let examTxt = null;
-  if(days!=null && days>=0){ examTxt = days===0?"Prófið er í dag!":days===1?"Prófið er á morgun":`Prófið er eftir ${days} daga`; }
+  if(days!=null && days>=0){ examTxt = (days===0?"Prófið er í dag!":days===1?"Prófið er á morgun":`Prófið er eftir ${days} daga`) + (SITE.examLabel?` · ${SITE.examLabel}`:''); }
   let html = `
   <section class="hero">
     <div class="eyebrow">${esc(SITE.eyebrow||'Námsvefur')}</div>
@@ -835,12 +1033,17 @@ function renderHome(){
   html += `<div class="sec-title">📚 Kaflarnir</div>
   <div class="overall">
     <div class="ring" style="--p:${overall}"><i>${overall}%</i></div>
-    <div class="txt"><b>Heildarframvinda</b>
+    <div class="txt"><b>Framvinda fyrir prófið</b>
       <span>${overall===0?"Þú ert að byrja — flott!":overall<100?"Haltu áfram, þú ert á góðri leið.":"Vá! Þú hefur klárað allt. 🎉"}</span>
     </div>
   </div>`;
   html += `<div class="chapters">`;
+  let curPart = null;
   CHAPTERS.forEach((ch,i)=>{
+    if(ch.part && ch.part !== curPart){
+      curPart = ch.part;
+      html += `</div><div class="part-head"><div class="pt">${esc(ch.part)}</div><div class="rule"></div></div><div class="chapters">`;
+    }
     const p = chProg(ch);
     html += `
     <button class="chapter" style="--cc:${ccv(ch)}" data-i="${i}">
@@ -854,6 +1057,11 @@ function renderHome(){
     </button>`;
   });
   html += `</div>`;
+  /* Myndbönd kennarans */
+  const vids = []; CHAPTERS.forEach(ch=>(ch.videos||[]).forEach(v=>vids.push({ch,v})));
+  if(vids.length){
+    html += `<div class="sec-title">🎬 Myndbönd kennarans <small>af Innu — opnast á YouTube</small></div><div class="vlist">${vids.map(x=>`<a class="vitem" style="--cc:${ccv(x.ch)}" href="${esc(x.v.url)}" target="_blank" rel="noopener"><span class="vic">▶</span><span><b>${esc(x.v.t)}</b><small>${esc(x.ch.kicker)} · ${esc(x.ch.title)}</small></span></a>`).join("")}</div>`;
+  }
   view.innerHTML = html;
   view.querySelectorAll('.chapter').forEach(el=>el.addEventListener('click',()=>renderChapter(+el.dataset.i)));
 }
@@ -921,6 +1129,7 @@ function renderLearn(startStep){
         ${ch.intro.map(p=>`<p>${esc(p)}</p>`).join("")}
         <div id="listenSlot" style="margin-top:6px"></div>
         <div class="audio-note"><span class="ic">🎧</span><div><b>Hlustaðu líka á bókina</b><br><span>${esc(ch.listen)}</span></div></div>
+        ${(ch.videos||[]).length?`<div class="vlist" style="margin-top:12px">${ch.videos.map(v=>`<a class="vitem" style="--cc:${ccv(ch)}" href="${esc(v.url)}" target="_blank" rel="noopener"><span class="vic">▶</span><span><b>${esc(v.t)}</b><small>opnast á YouTube</small></span></a>`).join("")}</div>`:''}
       </div>
       <div class="step-meta" style="--cc:${ccv(ch)}"><span class="of">Yfirlit</span><span class="dots">${dots(-1)}</span></div>
       <div class="nav-row"><button class="btn primary wide" style="--cc:${ccv(ch)}" id="startL">Byrja á hugtökunum ›</button></div>`;
@@ -1065,7 +1274,8 @@ function renderQuiz(){
 /* ---- PRÓFAÆFING (blandað úr köflum) ---- */
 function renderExam(){
   const panel = pageShell({icon:"🎯", kicker:"Prófaæfing", title:"Blandaðar spurningar", cc:"var(--c0)"});
-  const sel = new Set(Array.isArray(DATA.exam.sel) && DATA.exam.sel.length ? DATA.exam.sel : CHAPTERS.map(c=>c.id));
+  const ids = CHAPTERS.map(c=>c.id); const saved = Array.isArray(DATA.exam.sel) ? DATA.exam.sel.filter(id=>ids.includes(id)) : [];
+  const sel = new Set(saved.length ? saved : examChs().map(c=>c.id));
   let n = DATA.exam.n || 10;
   function drawCfg(){
     const bank = CHAPTERS.filter(c=>sel.has(c.id)).reduce((a,c)=>a+c.quiz.length,0);
@@ -1073,7 +1283,7 @@ function renderExam(){
     <div class="card" style="--cc:var(--c0)">
       <p style="margin-bottom:6px">Spurningarnar koma í tilviljunarröð og svarmöguleikarnir stokkast — alveg eins og í alvöru prófi. Þau hugtök sem þú klikkar á fara sjálfkrafa í <b>Veiku hugtökin</b>.</p>
       ${DATA.exam.best!=null?`<p style="color:var(--muted);font-size:.92rem">Besta prófaæfing hingað til: <b>${DATA.exam.best}%</b></p>`:''}
-      <div class="cfg-lbl">Hvaða kaflar eru í prófinu?</div>
+      <div class="cfg-lbl">Hvaða kaflar? ${SITE.examLabel?`(prófið er úr: ${esc(SITE.examLabel)})`:''}</div>
       <div class="checks" id="chChecks">${CHAPTERS.map(c=>`<button class="chk" style="--cc:${ccv(c)}" data-id="${c.id}" aria-pressed="${sel.has(c.id)}"><span class="dot"></span>${esc(c.kicker)}</button>`).join("")}</div>
       <div class="cfg-lbl">Hversu margar spurningar?</div>
       <div class="seg" id="nSeg"><button data-n="10" aria-pressed="${n===10}">10</button><button data-n="20" aria-pressed="${n===20}">20</button><button data-n="999" aria-pressed="${n===999}">Allar (${bank})</button></div>
@@ -1127,22 +1337,24 @@ function renderWeak(){
 /* ---- FORMÚLUBLAÐ ---- */
 function renderFormulas(){
   const panel = pageShell({icon:"📐", kicker:"Yfirlit", title:"Formúlublað", cc:"var(--c4)"});
-  let html = `<div class="sec-title" style="margin-top:4px">📐 Formúlurnar</div><div class="flist" id="flist"></div>
+  let html = `<div class="sec-title" style="margin-top:4px">🎯 Fyrir prófið — 1. kafli</div><div class="flist" id="flist"></div>
+  <div class="sec-title">📐 Síðar á önninni <small>ekki í prófinu núna</small></div><div class="flist" id="flist2"></div>
   <div class="sec-title">🔢 Tölur sem gott er að muna</div><div class="numbers">${NUMBERS.map(x=>`<div class="n"><b>${esc(x.v)}</b><span>${esc(x.l)}</span></div>`).join("")}</div>
   <div class="sec-title">📏 Einingar</div><div class="units">${UNITS.map(x=>`<div><span>${esc(x.q)}</span><span>${esc(x.u)}</span></div>`).join("")}</div>
-  <div class="sec-title">🧮 Reiknidæmi — skref fyrir skref <small>eitt skref í einu</small></div><div class="flist" id="exlist"></div>`;
+  <div class="sec-title">🧮 Reiknidæmi fyrir prófið <small>eitt skref í einu</small></div><div class="flist" id="exlist"></div>
+  <div class="sec-title">🧮 Reiknidæmi — síðar á önninni</div><div class="flist" id="exlist2"></div>`;
   panel.innerHTML = html;
-  const fl = document.getElementById('flist');
+  const fl = document.getElementById('flist'), fl2 = document.getElementById('flist2');
   FORMULAS.forEach(f=>{
-    const ch = CHAPTERS[f.ch]; const el = document.createElement('div'); el.className='fitem'; el.style.setProperty('--cc', ccv(ch));
+    const ch = CHAPTERS[chIdx(f.ch)]; if(!ch) return; const el = document.createElement('div'); el.className='fitem'; el.style.setProperty('--cc', ccv(ch));
     el.innerHTML = `<div class="fn">${esc(f.n)} <span class="page-badge">${esc(ch.kicker)}</span></div><div class="feq">${f.eq}</div><div class="fu">Eining: ${esc(f.u)}</div><div class="fm">${esc(f.m)}</div><div class="row"></div>`;
     const row = el.querySelector('.row'); row.appendChild(listenBtn(f.n+". "+f.say+". Eining: "+f.u+". "+f.m,'sm ghost'));
-    const lb = document.createElement('button'); lb.className='linkbtn'; lb.textContent='Skoða í kafla ›'; lb.addEventListener('click',()=>renderChapter(f.ch,'lera',f.ci+1)); row.appendChild(lb);
-    fl.appendChild(el);
+    const lb = document.createElement('button'); lb.className='linkbtn'; lb.textContent='Skoða í kafla ›'; lb.addEventListener('click',()=>renderChapter(chIdx(f.ch),'lera',f.ci+1)); row.appendChild(lb);
+    (f.exam?fl:fl2).appendChild(el);
   });
-  const ex = document.getElementById('exlist');
+  const ex = document.getElementById('exlist'), ex2 = document.getElementById('exlist2');
   EXAMPLES.forEach(e=>{
-    const ch = CHAPTERS[e.ch]; const el = document.createElement('div'); el.className='fitem'; el.style.setProperty('--cc', ccv(ch));
+    const ch = CHAPTERS[chIdx(e.ch)]; if(!ch) return; const el = document.createElement('div'); el.className='fitem'; el.style.setProperty('--cc', ccv(ch));
     el.innerHTML = `<div class="fn">${esc(e.t)} <span class="page-badge">${esc(ch.kicker)}</span></div><div class="fm">${esc(e.q)}</div><div class="steps"></div><div class="row"></div>`;
     const steps = el.querySelector('.steps'); const row = el.querySelector('.row'); let shown=0;
     const btn = document.createElement('button'); btn.className='btn ghost'; btn.style.cssText='padding:10px 16px;font-size:.95rem'; btn.textContent='Sýna fyrsta skref ›';
@@ -1153,7 +1365,7 @@ function renderFormulas(){
     });
     row.appendChild(btn);
     row.appendChild(listenBtn(e.t+". "+e.q+" "+e.steps.map((s,k)=>"Skref "+(k+1)+": "+s).join(". ")+". Svar: "+e.ans,'sm ghost'));
-    ex.appendChild(el);
+    (e.exam?ex:ex2).appendChild(el);
   });
 }
 
@@ -1162,11 +1374,12 @@ function renderGlossary(){
   const panel = pageShell({icon:"📖", kicker:"Yfirlit", title:"Orðalisti", cc:"var(--c2)"});
   const all = []; CHAPTERS.forEach((ch,i)=>ch.concepts.forEach((c,ci)=>all.push({ch,i,ci,c})));
   all.sort((a,b)=>a.c.t.localeCompare(b.c.t,'is'));
-  panel.innerHTML = `<input class="search" id="gq" type="search" placeholder="Leita að hugtaki…" autocomplete="off"><div class="gl" id="gl"></div>`;
-  const gl = document.getElementById('gl');
+  panel.innerHTML = `<input class="search" id="gq" type="search" placeholder="Leita að hugtaki…" autocomplete="off"><div class="checks" id="gscope"><button class="chk" style="--cc:var(--c0)" data-s="exam" aria-pressed="true"><span class="dot"></span>Bara 1. kafli (prófið)</button><button class="chk" style="--cc:var(--c4)" data-s="all" aria-pressed="false"><span class="dot"></span>Öll bókin</button></div><div class="gl" id="gl"></div>`;
+  const gl = document.getElementById('gl'); let scope='exam';
+  panel.querySelectorAll('#gscope .chk').forEach(b=>b.addEventListener('click',()=>{ scope=b.dataset.s; panel.querySelectorAll('#gscope .chk').forEach(x=>x.setAttribute('aria-pressed', String(x===b))); draw(document.getElementById('gq').value); }));
   function draw(q){
     q = (q||"").trim().toLowerCase(); gl.innerHTML='';
-    const list = all.filter(x=>!q || x.c.t.toLowerCase().includes(q) || x.c.d.toLowerCase().includes(q));
+    const list = all.filter(x=>(scope==='all'||isExam(x.ch)) && (!q || x.c.t.toLowerCase().includes(q) || x.c.d.toLowerCase().includes(q)));
     if(!list.length){ gl.innerHTML = `<div class="empty">Ekkert fannst.</div>`; return; }
     list.forEach(x=>{
       const el = document.createElement('div'); el.className='gitem'; el.style.setProperty('--cc', ccv(x.ch));
